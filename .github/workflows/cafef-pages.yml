@@ -1,6 +1,11 @@
 name: Update CafeF and publish VietLedger
 on:
   workflow_dispatch:
+    inputs:
+      rebuild_only:
+        description: Republish the last public data without checking CafeF
+        type: boolean
+        default: false
   schedule:
     # UTC: equivalent to 00, 09, 12, 15, 18, 21 in Vietnam.
     - cron: '0 2,5,8,11,14,17 * * *'
@@ -18,6 +23,7 @@ jobs:
       DATA_DIR: /tmp/vietledger-cloud-data
       PUBLIC_SITE_URL: https://vietledger.pages.dev/
       PUBLIC_CLOUD_SCHEDULE: ${{ vars.ENABLE_CAFEF_SCHEDULE }}
+      REBUILD_ONLY: ${{ github.event_name == 'workflow_dispatch' && inputs.rebuild_only }}
     steps:
       - uses: actions/checkout@v7
         with:
