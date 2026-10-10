@@ -18,6 +18,9 @@ const {db,catalog,syncCompany}=await import('./core.mjs');
 try{
   const manifest=JSON.parse(await downloadPublic('manifest.json'));
   console.log('Khôi phục dữ liệu trước lượt cập nhật:',await restorePublic(db,manifest,downloadPublic));
+  if(process.env.REBUILD_ONLY==='true'){
+    console.log('Xuất bản lại dữ liệu đã công bố; giữ nguyên thời điểm kiểm tra nguồn.');
+  }else{
   await catalog();
   const companies=db.prepare('SELECT symbol FROM companies ORDER BY symbol').all();
   const previousRun=db.prepare('SELECT coalesce(max(id),0) n FROM runs').get().n;
@@ -34,4 +37,5 @@ try{
   if(Object.values(counts).reduce((a,b)=>a+b,0)!==companies.length||counts.running)throw Error('Lượt cập nhật chưa xử lý đủ danh mục.');
   if(((counts.error||0)+(counts.partial||0))/companies.length>0.1||(counts.empty||0)/companies.length>0.25)throw Error('Nguồn lỗi hoặc rỗng trên diện rộng; giữ nguyên website đã xuất bản.');
   console.log('Hoàn tất lượt cập nhật:',JSON.stringify(counts));
+  }
 }finally{db.close();}
