@@ -1,0 +1,32 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {calculateRatios,daysInPeriod,decimal} from './ratios.mjs';
+const labels={BSheet:{'100':'Tài sản ngắn hạn','110':'Tiền và tương đương tiền','131':'Phải thu khách hàng','140':'Hàng tồn kho','270':'TỔNG CỘNG TÀI SẢN','300':'Nợ phải trả','310':'Nợ ngắn hạn','311':'Phải trả người bán','320':'Vay ngắn hạn','338':'Vay dài hạn','400':'Vốn chủ sở hữu'},IncSta:{'10':'Doanh thu thuần','11':'Giá vốn','20':'Lợi nhuận gộp','23':'Chi phí lãi vay','30':'LN HĐKD','50':'LNTT','60':'LNST','70':'Lãi cơ bản trên cổ phiếu'},CashFlow:{'20':'Lưu chuyển tiền thuần từ hoạt động kinh doanh','21':'Tiền chi đầu tư'}};
+const report=(kind,period,values,extra={})=>({kind,period,source:'CafeF',scope:'source-unspecified',basis:period.includes('Q')?(kind==='CashFlow'?'ytd':'quarter'):'annual',issues:[],url:'https://cafef.vn/test',rows:Object.entries(values).map(([code,value])=>({code,value:value==null?null:String(value),label:labels[kind][code]||code,unit:code==='70'?'VND/share':'VND'})),...extra});
+const dataset=()=>[
+ report('BSheet','2023',{'100':120,'110':30,'131':30,'140':40,'270':200,'300':100,'310':60,'311':30,'320':40,'338':20,'400':100}),
+ report('BSheet','2024',{'100':160,'110':50,'131':50,'140':60,'270':300,'300':150,'310':80,'311':50,'320':50,'338':30,'400':150}),
+ report('IncSta','2023',{'10':300,'60':30}),
+ report('IncSta','2024',{'10':400,'11':250,'20':150,'23':5,'30':75,'50':60,'60':50,'70':3000}),
+ report('CashFlow','2024',{'20':90,'21':-30}),
+ report('BSheet','2024-Q1',{'100':130,'131':35,'140':45,'270':220,'311':35,'400':110}),
+ report('BSheet','2024-Q2',{'100':150,'131':45,'140':55,'270':260,'311':45,'400':130}),
+ report('IncSta','2024-Q2',{'10':100,'11':80,'20':20,'60':12}),
+ report('CashFlow','2024-Q1',{'20':10,'21':-3}),
+ report('CashFlow','2024-Q2',{'20':25,'21':-8})
+];
+function cell(data,p,code){return calculateRatios(data,p.includes('Q')?'quarter':'year').find(r=>r.period===p).rows.find(r=>r.code===code);}
+test('ROE/ROA năm dùng số dư bình quân và LNST cùng phạm vi',()=>{assert.equal(cell(dataset(),'2024','roe').display,'40.00');assert.equal(cell(dataset(),'2024','roa').display,'20.00');assert.equal(cell(dataset(),'2024','gross_margin').display,'37.50');});
+test('ROE quý dùng riêng quý, không nhân bốn',()=>{const c=cell(dataset(),'2024-Q2','roe');assert.equal(c.display,'10.00');assert.deepEqual(c.inputs.filter(i=>i.kind==='BSheet').map(i=>i.period).sort(),['2024-Q1','2024-Q2']);});
+test('Quý 1 lấy số dư đầu năm từ BCTC năm trước nếu thiếu Q4',()=>{const d=[...dataset(),report('IncSta','2024-Q1',{'10':80,'60':10})];assert.equal(cell(d,'2024-Q1','roe').display,'9.52');assert.ok(cell(d,'2024-Q1','roe').inputs.some(i=>i.kind==='BSheet'&&i.period==='2023'));});
+test('Dòng tiền Q2 lấy chênh lệch YTD và cùng kỳ với mẫu số',()=>{assert.equal(cell(dataset(),'2024-Q2','cash_profit').display,'1.25');assert.equal(cell(dataset(),'2024-Q2','cash_margin').display,'15.00');const missing=dataset().filter(r=>r.kind!=='CashFlow'||r.period!=='2024-Q1');assert.equal(cell(missing,'2024-Q2','cash_profit').display,null);assert.match(cell(missing,'2024-Q2','cash_profit').reason,/2024-Q1/);});
+test('Ngày quay vòng phản ánh quý thực tế và năm nhuận',()=>{assert.equal(daysInPeriod('2024'),366);assert.equal(daysInPeriod('2023'),365);assert.equal(daysInPeriod('2024-Q1'),91);assert.equal(daysInPeriod('2023-Q1'),90);assert.equal(cell(dataset(),'2024-Q2','dso').display,'36.40');assert.equal(cell(dataset(),'2024-Q2','dio').display,'56.88');assert.equal(cell(dataset(),'2024-Q2','dpo').display,'45.50');assert.equal(cell(dataset(),'2024-Q2','cash_cycle').display,'47.78');});
+test('Tăng trưởng dùng kỳ cùng năm trước, không dùng quý liền trước',()=>{const d=[...dataset(),report('IncSta','2023-Q2',{'10':80,'60':-5})];assert.equal(cell(d,'2024-Q2','revenue_growth').display,'25.00');assert.equal(cell(d,'2024-Q2','profit_growth').display,null);});
+test('Không thay missing bằng 0, không chia mẫu số 0/âm',()=>{let d=dataset();d.find(r=>r.period==='2024'&&r.kind==='BSheet').rows.find(r=>r.code==='338').value=null;assert.equal(cell(d,'2024','debt_equity').display,null);d.find(r=>r.period==='2024'&&r.kind==='IncSta').rows.find(r=>r.code==='23').value='0';assert.equal(cell(d,'2024','interest_coverage').display,null);});
+test('Chặn dữ liệu cảnh báo, lệch phạm vi và mẫu ngân hàng',()=>{let d=dataset();d.find(r=>r.period==='2024'&&r.kind==='BSheet').issues=['Mã và nhãn nguồn lỗi'];assert.equal(cell(d,'2024','roa').display,null);assert.equal(cell(d,'2024','net_margin').display,'12.50');d=dataset();d.find(r=>r.period==='2023'&&r.kind==='BSheet').scope='separate';assert.equal(cell(d,'2024','roe').display,null);d=dataset();d.find(r=>r.period==='2024'&&r.kind==='IncSta').rows.find(r=>r.code==='10').label='Thu nhập lãi thuần';assert.equal(cell(d,'2024','net_margin').display,null);});
+test('Không ghép YTD khác phạm vi hoặc làm tròn số tiền trước khi tính',()=>{const d=dataset();d.find(r=>r.kind==='CashFlow'&&r.period==='2024-Q1').scope='separate';assert.equal(cell(d,'2024-Q2','cash_profit').display,null);assert.equal(decimal({n:9007199254740993123n,d:3n}),'3002399751580331041.00');assert.equal(decimal({n:-1n,d:200n}),'-0.01');assert.equal(decimal({n:-1n,d:1000n}),'0.00');});
+test('EPS giữ đồng/CP và chỉ lấy nguồn CafeF',()=>{assert.equal(cell(dataset(),'2024','eps').display,'3000');const d=dataset();d.find(r=>r.kind==='IncSta'&&r.period==='2024').source='Other';assert.equal(cell(d,'2024','net_margin').display,null);});
+test('Chênh lệch phép cộng vẫn tính theo CafeF và kèm cảnh báo',()=>{const d=dataset();d.find(r=>r.kind==='BSheet'&&r.period==='2024').issues=['Tổng tài sản khác tổng nguồn vốn.'];const r=cell(d,'2024','roa');assert.equal(r.display,'20.00');assert.equal(r.status,'calculated-warning');assert.equal(r.warnings.length,1);assert.match(r.warnings[0],/CafeF/);});
+test('Q1/Q2 2026 được tính tạm từ CafeF, giữ cảnh báo và không mở rộng sang kỳ khác',()=>{const d=dataset().map(r=>({...r,period:r.period.replace('2024','2026').replace('2023','2025'),provisional:true,issues:['Mã và nhãn CafeF chưa xác minh']}));const r=cell(d,'2026-Q2','cash_profit');assert.equal(r.display,'1.25');assert.equal(r.status,'calculated-warning');assert.ok(r.warnings.length);assert.equal(cell(d,'2026-Q2','roe').display,'10.00');assert.equal(cell(d,'2026','roe').display,null);d.find(r=>r.kind==='CashFlow'&&r.period==='2026-Q1').rows.find(r=>r.code==='20').value=null;assert.equal(cell(d,'2026-Q2','cash_profit').display,null);});
+
+
