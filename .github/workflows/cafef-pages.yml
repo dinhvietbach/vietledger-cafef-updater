@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 175
     env:
-      DATA_DIR: ${{ runner.temp }}/vietledger-cloud-data
+      DATA_DIR: /tmp/vietledger-cloud-data
       PUBLIC_SITE_URL: https://vietledger.pages.dev/
       PUBLIC_CLOUD_SCHEDULE: ${{ vars.ENABLE_CAFEF_SCHEDULE }}
     steps:
