@@ -4,6 +4,7 @@ import {createHash} from 'node:crypto';
 import {gzipSync} from 'node:zlib';
 import {ROOT,db,getReport} from './core.mjs';
 import {earningsPeriods,summarizeEarnings} from './earnings.mjs';
+import {readIndustries,withIndustries,industryMetadata} from './cafef-industries.mjs';
 
 const generatedAt=new Date().toISOString();
 const release=path.join(ROOT,'release');
@@ -17,14 +18,15 @@ const assets=[];
 const earnings=Object.fromEntries(earningsPeriods(generatedAt).map(period=>[period,{period,generatedAt,companies:[]}])) , earningsAssets=[];
 db.exec('BEGIN'); // A coherent read snapshot while the local updater continues in WAL mode.
 try{
-  const companies=db.prepare(`SELECT c.*,
+  const industryCatalog=readIndustries(db);
+  const companies=withIndustries(db.prepare(`SELECT c.*,
     (SELECT count(*) FROM reports r WHERE r.symbol=c.symbol) reports,
     (SELECT status FROM runs WHERE symbol=c.symbol AND finished IS NOT NULL ORDER BY id DESC LIMIT 1) status,
     (SELECT finished FROM runs WHERE symbol=c.symbol AND finished IS NOT NULL ORDER BY id DESC LIMIT 1) updated,
     (SELECT max(period) FROM reports WHERE symbol=c.symbol AND kind!='CafeFRatios') latest,
     (SELECT count(*) FROM series_status s WHERE s.symbol=c.symbol AND status='success') series,
     (SELECT count(*) FROM series_status s WHERE s.symbol=c.symbol AND status='empty') emptySeries
-    FROM companies c ORDER BY c.symbol`).all();
+    FROM companies c ORDER BY c.symbol`).all(),industryCatalog);
   if(!companies.length)throw Error('Chưa có danh mục để xuất.');
   const cover=db.prepare('SELECT * FROM series_status WHERE symbol=? ORDER BY kind,frequency');
   for(let i=0;i<companies.length;i+=4){
@@ -66,7 +68,7 @@ try{
     scheduler:{enabled:cloudSchedule,timeZone:'Asia/Ho_Chi_Minh',times:['00:00','09:00','12:00','15:00','18:00','21:00'],
       note:cloudSchedule?'Lịch kiểm tra CafeF: 00:00 · 09:00 · 12:00 · 15:00 · 18:00 · 21:00 giờ Việt Nam. Giờ bắt đầu có thể trễ; dữ liệu mới xuất bản sau khi lượt quét hoàn tất.':'Bản dữ liệu công khai. Lịch tự cập nhật trực tuyến chưa được kích hoạt.'}};
   if(status.reports!==sourceReports)throw Error(`Xuất thiếu bảng: ${sourceReports}/${status.reports}.`);
-  write('manifest.json',JSON.stringify({schema:1,version,generatedAt,companies,status,earnings:earningsIndex}));
+  write('manifest.json',JSON.stringify({schema:1,version,generatedAt,companies,status,earnings:earningsIndex,industries:industryMetadata(industryCatalog)}));
   let html=fs.readFileSync(path.join(ROOT,'public/index.html'),'utf8');
   html=html.replace('<script src="/app.js"','<script src="/public-data.js" defer></script><script src="/app.js"');
   html=html.replace('● Máy chủ cá nhân','● Truy cập công khai');

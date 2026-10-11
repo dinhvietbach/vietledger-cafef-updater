@@ -6,6 +6,7 @@ import {createHash} from 'node:crypto';
 import {sourceUrl,parseApi,parseExact,moneyDisplay,shareDisplay,publishedUnit} from './cafef-api.mjs';
 import {sectorOf,supplementUrl} from './cafef-sectors.mjs';
 import {storeSeries} from './report-store.mjs';
+import {refreshIndustries} from './cafef-industries.mjs';
 export const ROOT=path.dirname(fileURLToPath(import.meta.url));
 export const DATA=process.env.DATA_DIR?path.resolve(process.env.DATA_DIR):path.join(ROOT,'data');
 fs.mkdirSync(path.join(DATA,'raw'),{recursive:true});
@@ -53,7 +54,11 @@ export async function download(url,force=false){
  db.prepare('INSERT OR IGNORE INTO revisions VALUES(?,?,?,?)').run(hash,url,new Date().toISOString(),archive);
  return {text:body.toString('utf8'),file:archive,hash};
 }
-export async function catalog(){const {text}=await download('https://cafefnew.mediacdn.vn/Search/company.json',true);return importCatalog(JSON.parse(text.replace(/^\uFEFF/,'')));}
+export async function catalog(){
+ const {text}=await download('https://cafefnew.mediacdn.vn/Search/company.json',true),count=importCatalog(JSON.parse(text.replace(/^\uFEFF/,'')));
+ try{await refreshIndustries(db,async url=>JSON.parse((await download(url,true)).text));}catch(error){console.warn('Giữ phân ngành đã lưu:',error.message);}
+ return count;
+}
 export function excludedInstrument(symbol,name){return /^(?:chứng quyền|quỹ\s|chứng chỉ quỹ|trái phiếu)/i.test(name)||/^C[A-Z]{3}\d{4}$/.test(symbol);}
 export function pruneInstruments(){
  const excluded=db.prepare('SELECT symbol,name FROM companies').all().filter(c=>excludedInstrument(c.symbol,c.name));

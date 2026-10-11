@@ -5,10 +5,17 @@ import {createHash} from 'node:crypto';
 import {gunzipSync} from 'node:zlib';
 import {fileURLToPath} from 'node:url';
 import {companyResponse} from './public-data.mjs';
+import {INDUSTRY_NAMES,INDUSTRY_SOURCE} from './cafef-industries.mjs';
 const root=path.dirname(fileURLToPath(import.meta.url));
 const {out,audit}=JSON.parse(fs.readFileSync(path.join(root,'release/latest-public-build.json')));
 const expected=JSON.parse(fs.readFileSync(audit));
 const manifest=JSON.parse(fs.readFileSync(path.join(out,'manifest.json')));
+if(manifest.industries){
+  assert.equal(manifest.industries.source,INDUSTRY_SOURCE);
+  assert.ok(Number.isFinite(Date.parse(manifest.industries.checkedAt)));
+  assert.ok(manifest.companies.some(c=>c.industryId!=null));
+}
+for(const c of manifest.companies)assert.equal(c.industryName,c.industryId==null?null:INDUSTRY_NAMES[c.industryId]);
 let companies=0,reports=0,cells=0;
 const seen=new Set();
 for(const asset of expected.assets){
