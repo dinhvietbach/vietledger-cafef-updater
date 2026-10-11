@@ -33,6 +33,10 @@
     const m=await manifest(u.pathname==='/api/status');
     if(u.pathname==='/api/companies')return m.companies;
     if(u.pathname==='/api/status')return m.status;
+    if(u.pathname==='/api/earnings'){
+      const period=u.searchParams.get('period'),asset=m.earnings?.[period];
+      return asset?chunk(asset):{period,generatedAt:m.generatedAt,companies:[],pending:true};
+    }
     const symbol=(u.searchParams.get('symbol')||'HPG').toUpperCase();
     const c=m.companies.find(x=>x.symbol===symbol);
     if(!c)throw Error('Không tìm thấy doanh nghiệp.');
