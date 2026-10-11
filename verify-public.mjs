@@ -30,6 +30,19 @@ for(const asset of expected.assets){
   }
 }
 assert.equal(companies,expected.companies);assert.equal(reports,expected.reports);assert.equal(cells,expected.cells);
+assert.equal(Object.keys(manifest.earnings).length,expected.earningsAssets.length);
+for(const asset of expected.earningsAssets){
+  const buffer=fs.readFileSync(path.join(out,asset.path));
+  assert.equal(createHash('sha256').update(buffer).digest('hex'),asset.sha256);
+  const season=JSON.parse(gunzipSync(buffer));
+  assert.equal(season.period,asset.period);assert.equal(manifest.earnings[asset.period],'/'+asset.path);
+  assert.equal(season.companies.length,companies);
+  assert.equal(new Set(season.companies.map(c=>c.symbol)).size,companies);
+  for(const c of season.companies)for(const m of Object.values(c.metrics)){
+    assert.ok(m.current.value===null||typeof m.current.value==='string');
+    if(!c.available)assert.equal(m.current.value,null);
+  }
+}
 const fileList=fs.readdirSync(out,{recursive:true}).filter(p=>fs.statSync(path.join(out,p)).isFile());
 assert.equal(fileList.length,expected.files);assert.ok(fileList.length<=1000);
 assert.ok(!fileList.some(p=>/sqlite|login|\.env|auth|server|\.ps1/.test(p)));

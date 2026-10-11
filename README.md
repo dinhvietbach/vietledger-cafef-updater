@@ -13,4 +13,6 @@ Required configuration after repository creation:
 
 Vietnam target times: 00:00, 09:00, 12:00, 15:00, 18:00, 21:00 (UTC+7). GitHub cron may be delayed or skipped during load and public repository schedules may be disabled after inactivity. Use standard free GitHub-hosted runners in an approved public repository, not larger paid runners.
 
+The newest-quarter earnings view compares income statements against the same quarter last year, the preceding quarter and cumulative Q1-to-current-quarter figures. Eight recent quarters are indexed. Exact source decimals are retained; missing quarters, nonpositive growth bases and differing scopes are disclosed. Per-company detail includes all income-statement rows and source links. Period labels follow CafeF and may refer to non-calendar fiscal years.
+
 The website data is public company data from CafeF; copying fidelity is not independent financial verification. Historical raw archives remain on the owner's local machine. Cloud runs retain source URLs and hashes in the public dataset; temporary raw files are discarded with the CI runner.
