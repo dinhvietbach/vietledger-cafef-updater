@@ -33,7 +33,7 @@ jobs:
           node-version: '24'
           package-manager-cache: false
       - name: Test data preservation and formulas
-        run: node --test public-restore.test.mjs public-data.test.mjs ratios.test.mjs report-store.test.mjs cafef-api.test.mjs sectors.test.mjs
+        run: node --test earnings.test.mjs public-restore.test.mjs public-data.test.mjs ratios.test.mjs report-store.test.mjs cafef-api.test.mjs sectors.test.mjs
       - name: Restore previous data and check CafeF
         run: node --use-system-ca cloud-sync.mjs
       - name: Build and verify all public reports
