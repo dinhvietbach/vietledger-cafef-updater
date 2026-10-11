@@ -25,7 +25,7 @@ test('missing quarters are never substituted with zero or with a prior quarter',
 });
 test('negative and zero bases use a clear explanation instead of misleading growth',()=>{
   assert.equal(growth('100','0').reason,'Nền bằng 0');
-  assert.equal(growth('100','-50').reason,'Từ lỗ sang lãi');
+  assert.equal(growth('100','-50').reason,'Nền âm');
   assert.equal(growth('-10','-50').reason,'Nền âm');
   assert.equal(growth('-10','50').value,'-120.00');
 });

@@ -52,7 +52,7 @@ export function growth(current,base,reason=null){
   if(reason)return {value:null,reason};
   if(!numeric(current)||!numeric(base))return {value:null,reason:'Thiếu số liệu so sánh.'};
   const a=q(current),b=q(base);
-  if(b.n<=0n)return {value:null,reason:b.n===0n?'Nền bằng 0':a.n>0n?'Từ lỗ sang lãi':a.n===0n?'Từ lỗ về hòa vốn':'Nền âm'};
+  if(b.n<=0n)return {value:null,reason:b.n===0n?'Nền bằng 0':'Nền âm'};
   return {value:decimal({n:(a.n*b.d-b.n*a.d)*100n,d:a.d*b.n},2),reason:null};
 }
 function cumulative(map,period,getter){
