@@ -33,7 +33,7 @@
     return `<td class="${percent?(Number(value)>0?'earn-up':Number(value)<0?'earn-down':''):''} ${key==='current'||key==='ytd'?'earn-focus':''}" title="${h(percent?'(Kỳ này / kỳ so sánh − 1) × 100':v.value+' · số gốc')}">${percent&&Number(value)>0?'+':''}${number(value)}${percent?'%':''}</td>`;
   }
   const cells=m=>fields.map(k=>cell(m?.[k],k)).join('');
-  function headers(first){return `<thead><tr><th scope="col">${first}</th>${titles(el('earn-period').value).map((x,i)=>`<th scope="col" class="${i===0||i===5?'earn-focus':''}">${h(x)}</th>`).join('')}</tr></thead>`;}
+  function headers(first,documents=false){return `<thead><tr><th scope="col">${first}</th>${titles(el('earn-period').value).map((x,i)=>`<th scope="col" class="${i===0||i===5?'earn-focus':''}">${h(x)}</th>`).join('')}${documents?'<th scope="col">Nguồn báo cáo tài chính</th>':''}</tr></thead>`;}
   function currentMetric(c){return c.metrics?.[el('earn-metric').value];}
   function render(){
     if(!data)return;
@@ -64,18 +64,20 @@
     const pages=Math.max(1,Math.ceil(visible.length/size));page=Math.min(page,pages);
     const groupCounts=new Map();for(const c of visible)groupCounts.set(industryKey(c),(groupCounts.get(industryKey(c))||0)+1);
     let previousIndustry=null;
-    el('earn-table').innerHTML=headers('Doanh nghiệp / chỉ tiêu')+'<tbody>'+visible.slice((page-1)*size,page*size).map(c=>{
+    el('earn-table').innerHTML=headers('Doanh nghiệp / chỉ tiêu',true)+'<tbody>'+visible.slice((page-1)*size,page*size).map(c=>{
       const m=currentMetric(c);
-      const group=sort==='industry'&&previousIndustry!==industryKey(c)?`<tr class="earn-industry-group"><th colspan="9" scope="row"><strong>${h(industryName(c))}</strong><span>${number(groupCounts.get(industryKey(c)))} doanh nghiệp trong bộ lọc</span></th></tr>`:'';previousIndustry=industryKey(c);
-      return group+`<tr><td><button class="earn-company" data-symbol="${h(c.symbol)}" ${!c.available?'disabled':''}>${h(c.symbol)} <span>↗</span></button><span class="tag">${h(c.exchange)}</span><small class="earn-company-name">${h(c.name)}</small><small class="earn-industry-label">${h(industryName(c))}</small><small>${c.available?h(scope(c.scope))+' · '+h(sectors[c.sector]||'Theo CafeF'):'Chưa có KQKD kỳ này'}${c.issues?.length?' · ⚠ Có cảnh báo nguồn':''}</small>${c.available?'<small class="earn-metric-label">'+h(m?.label)+'</small>':''}</td>${cells(m)}</tr>`;
-    }).join('')+(visible.length?'':`<tr><td colspan="9" class="empty">Không có doanh nghiệp phù hợp với bộ lọc.</td></tr>`)+'</tbody>';
+      const group=sort==='industry'&&previousIndustry!==industryKey(c)?`<tr class="earn-industry-group"><th colspan="10" scope="row"><strong>${h(industryName(c))}</strong><span>${number(groupCounts.get(industryKey(c)))} doanh nghiệp trong bộ lọc</span></th></tr>`:'';previousIndustry=industryKey(c);
+      return group+`<tr><td><button class="earn-company" data-symbol="${h(c.symbol)}" ${!c.available?'disabled':''}>${h(c.symbol)} <span>↗</span></button><span class="tag">${h(c.exchange)}</span><small class="earn-company-name">${h(c.name)}</small><small class="earn-industry-label">${h(industryName(c))}</small><small>${c.available?h(scope(c.scope))+' · '+h(sectors[c.sector]||'Theo CafeF'):'Chưa có KQKD kỳ này'}${c.issues?.length?' · ⚠ Có cảnh báo nguồn':''}</small>${c.available?'<small class="earn-metric-label">'+h(m?.label)+'</small>':''}</td>${cells(m)}<td class="earn-documents">${c.available?window.VietLedgerGrowth.sources(c,data.research?.[c.symbol]):'Chưa có báo cáo'}</td></tr>`;
+    }).join('')+(visible.length?'':`<tr><td colspan="10" class="empty">Không có doanh nghiệp phù hợp với bộ lọc.</td></tr>`)+'</tbody>';
     el('earn-count').textContent=`${number(visible.length)} doanh nghiệp · ${groupCounts.size} nhóm ngành · Trang ${page}/${pages}`;
     el('earn-prev').disabled=page<=1;el('earn-next').disabled=page>=pages;
     el('earn-export').disabled=!visible.length;
     el('earn-table').querySelectorAll('.earn-company').forEach(b=>b.onclick=()=>showDetail(b.dataset.symbol));
+    window.VietLedgerGrowth.render({data,filtered:visible,onDetail:showDetail});
   }
   async function loadSeason(){
     const ticket=++seq;detailSeq++;selectedSymbol=null;el('earn-detail').hidden=true;
+    window.VietLedgerGrowth.clear();data=null;
     el('earn-error').hidden=true;el('earn-table').innerHTML='<tbody><tr><td class="empty">Đang đọc KQKD từ CafeF…</td></tr></tbody>';
     el('earn-export').disabled=true;
     const p=el('earn-period').value;el('earn-title').textContent=`Cập nhật báo cáo KQKD quý ${p.at(-1)}`;el('earn-year').textContent=p.slice(0,4);
