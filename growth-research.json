@@ -1,0 +1,82 @@
+{
+  "CTD:2026-Q3": {
+    "symbol": "CTD",
+    "period": "2026-Q3",
+    "scope": "consolidated",
+    "publishedAt": "2026-04-24T00:00:00+07:00",
+    "fiscalPeriod": "01/01–31/03/2026",
+    "articleUrl": "https://www.coteccons.vn/investor-relations-vn/danh-sach-quan-he-co-dong/bao-cao-tai-chinh/bao-cao-tai-chinh-quy-3-2026-tu-01-01-2026-31-03-2026/",
+    "documentTitle": "CTD · BCTC hợp nhất Q3 FY2026 (01/01–31/03/2026), giải trình trong thuyết minh",
+    "attachments": [
+      {
+        "url": "https://www.coteccons.vn/media/w31hzwoc/20260424-ctd-bctc-hop-nhat-q32026-giai-trinh-trong-tm-1.pdf",
+        "title": "BCTC hợp nhất và thuyết minh"
+      }
+    ],
+    "businessNote": "Coteccons cho biết hiệu quả thi công và quản trị được cải thiện dù chi phí vật liệu, nhân công tăng. Lợi nhuận gộp tăng nhanh hơn doanh thu là điểm hỗ trợ kết quả quý. Backlog 65.500 tỷ đồng là thông tin về việc làm tương lai, chưa phải doanh thu đã ghi nhận.",
+    "businessSources": [
+      {
+        "title": "Coteccons · Công bố KQKD 24/04/2026",
+        "url": "https://old2026.coteccons.vn/coteccons-cong-bo-ket-qua-kinh-doanh-quy-iii-nam-tai-chinh-2026/"
+      },
+      {
+        "title": "Bản tin nhà đầu tư Q3 FY2026",
+        "url": "https://www.coteccons.vn/media/0a1ezyoc/newsletter-q3-fy2026-vie-1.pdf"
+      }
+    ],
+    "reviewedAt": "2026-10-11",
+    "sourceStatus": "found",
+    "fingerprint": "[\"consolidated\",\"enterprise\",\"6409416446902\",\"5002815167852\",\"118931756167\",\"57136263043\"]"
+  },
+  "TCO:2026-Q3": {
+    "symbol": "TCO",
+    "period": "2026-Q3",
+    "scope": "consolidated",
+    "publishedAt": "2026-07-30T00:00:00+07:00",
+    "articleUrl": "https://nmquan.vn/data/ma/TCO/cong-bo/28094399-bctc-hop-nhat-quy-3-2026-kem-giai-trinh",
+    "documentTitle": "BCTC hợp nhất Q3/2026 và giải trình",
+    "attachments": [
+      {
+        "url": "https://staticfile.hsx.vn/Uploads/UploadDocuments/2484981/20260730%20-%20TCO%20-%20BCTC%20hop%20nhat%20Quy%203%202026%20kem%20giai%20trinh.pdf",
+        "title": "BCTC hợp nhất Q3/2026 và giải trình"
+      }
+    ],
+    "sourceStatus": "found",
+    "reviewedAt": "2026-10-12",
+    "dateSource": "https://nmquan.vn/data/ma/TCO/cong-bo/28094399-bctc-hop-nhat-quy-3-2026-kem-giai-trinh"
+  },
+  "FIR:2026-Q3": {
+    "symbol": "FIR",
+    "period": "2026-Q3",
+    "scope": "consolidated",
+    "publishedAt": "2026-07-30T00:00:00+07:00",
+    "articleUrl": "https://nmquan.vn/data/ma/FIR/cong-bo/28058821-bao-cao-tai-chinh-hop-nhat-q3-2026",
+    "documentTitle": "BCTC hợp nhất Q3/2026",
+    "attachments": [
+      {
+        "url": "https://staticfile.hsx.vn/Uploads/UploadDocuments/2484942/20260730%20-%20FIR%20-%20Bao%20cao%20tai%20chinh%20hop%20nhat%20Q3%202026.pdf",
+        "title": "BCTC hợp nhất Q3/2026"
+      }
+    ],
+    "sourceStatus": "found",
+    "reviewedAt": "2026-10-12",
+    "dateSource": "https://nmquan.vn/data/ma/FIR/cong-bo/28058821-bao-cao-tai-chinh-hop-nhat-q3-2026"
+  },
+  "TIX:2026-Q3": {
+    "symbol": "TIX",
+    "period": "2026-Q3",
+    "scope": "source-unspecified",
+    "publishedAt": "2026-07-16T00:00:00+07:00",
+    "articleUrl": "https://nmquan.vn/data/ma/TIX/cong-bo/28096534-bctc-quy-3-2026-ndtc-01-10-2025-30-09-2026-cks-tv",
+    "documentTitle": "BCTC Q3/2026 · niên độ 01/10/2025–30/09/2026",
+    "attachments": [
+      {
+        "url": "https://staticfile.hsx.vn/Uploads/UploadDocuments/2479717/20260716%20-%20TIX%20-%20BCTC%20QUY%203%202026%20(NDTC%2001.10.2025%20-%2030.09.2026)%20cks%20TV.pdf",
+        "title": "BCTC Q3/2026 · niên độ 01/10/2025–30/09/2026"
+      }
+    ],
+    "sourceStatus": "found",
+    "reviewedAt": "2026-10-12",
+    "dateSource": "https://nmquan.vn/data/ma/TIX/cong-bo/28096534-bctc-quy-3-2026-ndtc-01-10-2025-30-09-2026-cks-tv"
+  }
+}

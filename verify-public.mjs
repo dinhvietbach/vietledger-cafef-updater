@@ -6,6 +6,7 @@ import {gunzipSync} from 'node:zlib';
 import {fileURLToPath} from 'node:url';
 import {companyResponse} from './public-data.mjs';
 import {INDUSTRY_NAMES,INDUSTRY_SOURCE} from './cafef-industries.mjs';
+import {qualifiesGrowth,safeSourceUrl} from './growth.mjs';
 const root=path.dirname(fileURLToPath(import.meta.url));
 const {out,audit}=JSON.parse(fs.readFileSync(path.join(root,'release/latest-public-build.json')));
 const expected=JSON.parse(fs.readFileSync(audit));
@@ -45,6 +46,9 @@ for(const asset of expected.earningsAssets){
   assert.equal(season.period,asset.period);assert.equal(manifest.earnings[asset.period],'/'+asset.path);
   assert.equal(season.companies.length,companies);
   assert.equal(new Set(season.companies.map(c=>c.symbol)).size,companies);
+  assert.deepEqual(Object.keys(season.analysis).sort(),season.companies.filter(c=>qualifiesGrowth(c)).map(c=>c.symbol).sort());
+  for(const [symbol,a] of Object.entries(season.analysis)){assert.ok(Array.isArray(a.evidence)&&Array.isArray(a.cautions));if(a.researchStatus==='verified')assert.ok(a.businessNote&&a.businessSources.length);}
+  for(const [symbol,r] of Object.entries(season.research)){assert.equal(r.symbol,symbol);assert.equal(r.period,season.period);for(const url of [r.articleUrl,...(r.attachments||[]).map(a=>a.url)].filter(Boolean))assert.ok(safeSourceUrl(url));}
   for(const c of season.companies)for(const m of Object.values(c.metrics)){
     assert.ok(m.current.value===null||typeof m.current.value==='string');
     if(!c.available)assert.equal(m.current.value,null);

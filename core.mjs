@@ -7,6 +7,7 @@ import {sourceUrl,parseApi,parseExact,moneyDisplay,shareDisplay,publishedUnit} f
 import {sectorOf,supplementUrl} from './cafef-sectors.mjs';
 import {storeSeries} from './report-store.mjs';
 import {refreshIndustries} from './cafef-industries.mjs';
+import {refreshCompanyResearch} from './growth-research.mjs';
 export const ROOT=path.dirname(fileURLToPath(import.meta.url));
 export const DATA=process.env.DATA_DIR?path.resolve(process.env.DATA_DIR):path.join(ROOT,'data');
 fs.mkdirSync(path.join(DATA,'raw'),{recursive:true});
@@ -122,6 +123,7 @@ export async function syncCompany(symbol,{full=false}={}){
   finally{progress.done++;updateJobs();await pause(200);}
  }
  const summary=`Đã kiểm tra 7 nhóm dữ liệu: ${seriesWithData} nhóm có số liệu, ${empty} nhóm CafeF chưa có dữ liệu từ 2016. ${changes.added} bảng mới, ${changes.revised} điều chỉnh, ${changes.unchanged} không đổi, ${changes.removed} không còn trong phản hồi nguồn.`;
+ try{await refreshCompanyResearch(db,symbol,getReport(symbol,'IncSta','quarter'),download);}catch(error){console.warn(symbol,'Chưa cập nhật được nguồn giải trình:',error.message);}
  const message=summary+(errors.length?'\n'+errors.join('\n'):'');
  const state=errors.length?(seriesWithData||empty?'partial':'error'):seriesWithData?'success':'empty';
  db.prepare('UPDATE runs SET finished=?,status=?,message=? WHERE id=?').run(new Date().toISOString(),state,message,run);jobs.error=errors.length?message:null;

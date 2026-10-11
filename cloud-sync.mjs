@@ -2,6 +2,8 @@
 import path from 'node:path';
 import {restorePublic} from './public-restore.mjs';
 import {restoreIndustries,refreshIndustries,readIndustries} from './cafef-industries.mjs';
+import {restoreResearch,refreshCompanyResearch} from './growth-research.mjs';
+import {latestEarningsPeriod} from './earnings.mjs';
 
 if(process.env.CI!=='true'||!process.env.DATA_DIR)throw Error('Chỉ chạy trong CI với DATA_DIR riêng.');
 const target=path.resolve(process.env.DATA_DIR);
@@ -15,15 +17,17 @@ async function downloadPublic(asset){
     catch(error){if(attempt===2)throw error;await new Promise(resolve=>setTimeout(resolve,2000*(attempt+1)));}
   }
 }
-const {db,catalog,syncCompany,download}=await import('./core.mjs');
+const {db,catalog,syncCompany,download,getReport}=await import('./core.mjs');
 try{
   const manifest=JSON.parse(await downloadPublic('manifest.json'));
   console.log('Khôi phục dữ liệu trước lượt cập nhật:',await restorePublic(db,manifest,downloadPublic));
   restoreIndustries(db,manifest);
+  restoreResearch(db,manifest);
   if(process.env.REBUILD_ONLY==='true'){
     console.log('Xuất bản lại dữ liệu đã công bố; giữ nguyên thời điểm kiểm tra nguồn.');
     try{await refreshIndustries(db,async url=>JSON.parse((await download(url,true)).text));}
     catch(error){if(!readIndustries(db))throw error;console.warn('Giữ phân ngành đã lưu:',error.message);}
+    for(const {symbol} of db.prepare("SELECT DISTINCT symbol FROM reports WHERE kind='IncSta' AND period=?").all(latestEarningsPeriod()))await refreshCompanyResearch(db,symbol,getReport(symbol,'IncSta','quarter'),download);
   }else{
   await catalog();
   const companies=db.prepare('SELECT symbol FROM companies ORDER BY symbol').all();
