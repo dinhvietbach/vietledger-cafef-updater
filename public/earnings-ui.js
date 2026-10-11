@@ -7,6 +7,15 @@
   const number=s=>s==null?'—':new Intl.NumberFormat('vi-VN',{maximumFractionDigits:2}).format(Number(s));
   const scope=s=>s==='consolidated'?'Hợp nhất':s==='separate'?'Riêng lẻ':'Phạm vi chưa xác nhận';
   const sectors={enterprise:'Doanh nghiệp',bank:'Ngân hàng',security:'Chứng khoán',insurance:'Bảo hiểm'};
+  const industryKey=c=>c.industryId==null?'unknown':String(c.industryId);
+  const industryName=c=>c.industryName||'Chưa phân ngành';
+  const industryOrder=new Intl.Collator('vi');
+  function industryOptions(){
+    const select=el('earn-industry'),selected=select.value||'all';
+    const groups=[...new Map(companies.map(c=>[industryKey(c),industryName(c)])).entries()].sort((a,b)=>a[0]==='unknown'?1:b[0]==='unknown'?-1:industryOrder.compare(a[1],b[1]));
+    select.innerHTML='<option value="all">Tất cả ngành</option>'+groups.map(([id,name])=>`<option value="${h(id)}">${h(name)}</option>`).join('');
+    select.value=groups.some(([id])=>id===selected)?selected:'all';
+  }
   let ready=false,data=null,seq=0,page=1,visible=[],version='',detailSeq=0,selectedSymbol=null;
   const size=50;
   const fields=['current','yearAgo','yoy','previous','qoq','ytd','priorYtd','ytdGrowth'];
@@ -41,21 +50,26 @@
     el('earn-growing-note').textContent=`/ ${number(comparable.length)} mã đủ số so sánh LNST cùng kỳ`;
     el('earn-pending-note').hidden=available>0;
     el('earn-pending-note').textContent=`Chưa có KQKD ${label(p)} trong bản dữ liệu này. Bảng sẽ nhận số mới sau mỗi lượt cập nhật CafeF. Anh có thể chọn quý trước để tra cứu.`;
-    const query=el('earn-search').value.trim().toLocaleLowerCase('vi'),exchange=el('earn-exchange').value,state=el('earn-state').value;
+    const query=el('earn-search').value.trim().toLocaleLowerCase('vi'),exchange=el('earn-exchange').value,state=el('earn-state').value,industry=el('earn-industry').value;
     const index=new Map(data.companies.map(c=>[c.symbol,c]));
-    visible=companies.map(c=>({...c,...index.get(c.symbol)})).filter(c=>(!query||(c.symbol+' '+c.name).toLocaleLowerCase('vi').includes(query))&&(exchange==='all'||exchange===c.exchange)&&(state==='all'||state==='available'&&c.available||state==='pending'&&!c.available));
+    visible=companies.map(c=>({...c,...index.get(c.symbol)})).filter(c=>(!query||(c.symbol+' '+c.name).toLocaleLowerCase('vi').includes(query))&&(exchange==='all'||exchange===c.exchange)&&(industry==='all'||industry===industryKey(c))&&(state==='all'||state==='available'&&c.available||state==='pending'&&!c.available));
     const sort=el('earn-sort').value;
     visible.sort((a,b)=>{
       if(sort==='symbol')return a.symbol.localeCompare(b.symbol);
-      const av=currentMetric(a)?.[sort]?.[sort==='current'?'display':'value'],bv=currentMetric(b)?.[sort]?.[sort==='current'?'display':'value'];
+      if(sort==='industry'&&industryKey(a)!==industryKey(b))return industryKey(a)==='unknown'?1:industryKey(b)==='unknown'?-1:industryOrder.compare(industryName(a),industryName(b));
+      const metricSort=sort==='industry'?'current':sort;
+      const av=currentMetric(a)?.[metricSort]?.[metricSort==='current'?'display':'value'],bv=currentMetric(b)?.[metricSort]?.[metricSort==='current'?'display':'value'];
       return av==null&&bv==null?a.symbol.localeCompare(b.symbol):av==null?1:bv==null?-1:Number(bv)-Number(av)||a.symbol.localeCompare(b.symbol);
     });
     const pages=Math.max(1,Math.ceil(visible.length/size));page=Math.min(page,pages);
+    const groupCounts=new Map();for(const c of visible)groupCounts.set(industryKey(c),(groupCounts.get(industryKey(c))||0)+1);
+    let previousIndustry=null;
     el('earn-table').innerHTML=headers('Doanh nghiệp / chỉ tiêu')+'<tbody>'+visible.slice((page-1)*size,page*size).map(c=>{
       const m=currentMetric(c);
-      return `<tr><td><button class="earn-company" data-symbol="${h(c.symbol)}" ${!c.available?'disabled':''}>${h(c.symbol)} <span>↗</span></button><span class="tag">${h(c.exchange)}</span><small class="earn-company-name">${h(c.name)}</small><small>${c.available?h(scope(c.scope))+' · '+h(sectors[c.sector]||'Theo CafeF'):'Chưa có KQKD kỳ này'}${c.issues?.length?' · ⚠ Có cảnh báo nguồn':''}</small>${c.available?'<small class="earn-metric-label">'+h(m?.label)+'</small>':''}</td>${cells(m)}</tr>`;
+      const group=sort==='industry'&&previousIndustry!==industryKey(c)?`<tr class="earn-industry-group"><th colspan="9" scope="row"><strong>${h(industryName(c))}</strong><span>${number(groupCounts.get(industryKey(c)))} doanh nghiệp trong bộ lọc</span></th></tr>`:'';previousIndustry=industryKey(c);
+      return group+`<tr><td><button class="earn-company" data-symbol="${h(c.symbol)}" ${!c.available?'disabled':''}>${h(c.symbol)} <span>↗</span></button><span class="tag">${h(c.exchange)}</span><small class="earn-company-name">${h(c.name)}</small><small class="earn-industry-label">${h(industryName(c))}</small><small>${c.available?h(scope(c.scope))+' · '+h(sectors[c.sector]||'Theo CafeF'):'Chưa có KQKD kỳ này'}${c.issues?.length?' · ⚠ Có cảnh báo nguồn':''}</small>${c.available?'<small class="earn-metric-label">'+h(m?.label)+'</small>':''}</td>${cells(m)}</tr>`;
     }).join('')+(visible.length?'':`<tr><td colspan="9" class="empty">Không có doanh nghiệp phù hợp với bộ lọc.</td></tr>`)+'</tbody>';
-    el('earn-count').textContent=`${number(visible.length)} doanh nghiệp · Trang ${page}/${pages}`;
+    el('earn-count').textContent=`${number(visible.length)} doanh nghiệp · ${groupCounts.size} nhóm ngành · Trang ${page}/${pages}`;
     el('earn-prev').disabled=page<=1;el('earn-next').disabled=page>=pages;
     el('earn-export').disabled=!visible.length;
     el('earn-table').querySelectorAll('.earn-company').forEach(b=>b.onclick=()=>showDetail(b.dataset.symbol));
@@ -79,7 +93,7 @@
       if(ticket!==detailSeq)return;
       const rows=lib.incomeDetail(reports,p),report=reports.find(r=>r.period===p&&!r.missing);
       el('earn-detail-title').textContent=`${symbol} · ${companies.find(c=>c.symbol===symbol)?.name||''}`;
-      el('earn-detail-subtitle').textContent=`KQKD ${label(p)} · ${scope(report?.scope)} · Tỷ đồng, riêng EPS: đồng/CP`;
+      el('earn-detail-subtitle').textContent=`${industryName(companies.find(c=>c.symbol===symbol)||{})} · KQKD ${label(p)} · ${scope(report?.scope)} · Tỷ đồng, riêng EPS: đồng/CP`;
       el('earn-detail-table').innerHTML=headers('Chỉ tiêu kết quả kinh doanh')+'<tbody>'+rows.map(row=>`<tr class="${row.level===0?'major':''}"><td>${h(row.label)}${row.unit==='VND/share'?'<small>Đồng/CP · không cộng EPS lũy kế</small>':''}</td>${cells(row)}</tr>`).join('')+'</tbody>';
       const y=+p.slice(0,4),q=+p.at(-1),wanted=new Set([q===1?`${y-1}-Q4`:`${y}-Q${q-1}`,...Array.from({length:q},(_,i)=>`${y}-Q${i+1}`),...Array.from({length:q},(_,i)=>`${y-1}-Q${i+1}`)]);
       el('earn-detail-sources').innerHTML='<h3>Nguồn số liệu dùng để so sánh</h3>'+reports.filter(r=>wanted.has(r.period)&&!r.missing).map(r=>`<div class="earn-source"><a href="${h(r.url)}" target="_blank" rel="noopener">CafeF ${label(r.period)} ↗</a><span>${h(scope(r.scope))} · Thu thập ${h(new Date(r.updated).toLocaleString('vi-VN',{timeZone:'Asia/Ho_Chi_Minh'}))}</span>${r.issues?.length?'<p>⚠ '+r.issues.map(h).join(' ')+'</p>':''}</div>`).join('');
@@ -87,7 +101,7 @@
   }
   function exportCSV(){
     const metric=el('earn-metric').selectedOptions[0].textContent;
-    const rows=[['Mã CK','Doanh nghiệp','Sàn','Trạng thái','Phạm vi','Chỉ tiêu','Đơn vị',...titles(el('earn-period').value)],...visible.map(c=>{const m=currentMetric(c);return [c.symbol,c.name,c.exchange,c.available?'Đã có tại CafeF':'Chưa có',scope(c.scope),m?.label||metric,'Tỷ đồng / %',...fields.map(k=>m?.[k]?.value==null?m?.[k]?.reason||'Chưa có dữ liệu':growthKeys.includes(k)?m[k].value+'%':m[k].display)];}),[],['Nguồn','CafeF'],['Lũy kế','Tổng số riêng quý Q1 đến quý được chọn. Không thay số thiếu bằng 0.'],['Nhãn kỳ','Theo CafeF; niên độ tài chính doanh nghiệp có thể khác năm dương lịch.']];
+    const rows=[['Mã CK','Doanh nghiệp','Sàn','Ngành (CafeF)','Trạng thái','Phạm vi','Chỉ tiêu','Đơn vị',...titles(el('earn-period').value)],...visible.map(c=>{const m=currentMetric(c);return [c.symbol,c.name,c.exchange,industryName(c),c.available?'Đã có tại CafeF':'Chưa có',scope(c.scope),m?.label||metric,'Tỷ đồng / %',...fields.map(k=>m?.[k]?.value==null?m?.[k]?.reason||'Chưa có dữ liệu':growthKeys.includes(k)?m[k].value+'%':m[k].display)];}),[],['Nguồn','CafeF'],['Phân ngành','Danh mục doanh nghiệp CafeF; mã chưa có phân loại được ghi Chưa phân ngành.'],['Lũy kế','Tổng số riêng quý Q1 đến quý được chọn. Không thay số thiếu bằng 0.'],['Nhãn kỳ','Theo CafeF; niên độ tài chính doanh nghiệp có thể khác năm dương lịch.']];
     const safe=s=>'"'+String(s??'').replace(/^([=+@\t\r\n])/,' $1').replace(/"/g,'""')+'"';
     const url=URL.createObjectURL(new Blob(['\ufeff'+rows.map(r=>r.map(safe).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'})),a=document.createElement('a');
     a.href=url;a.download=`KQKD_${el('earn-period').value}_${el('earn-metric').value}.csv`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
@@ -98,8 +112,9 @@
       el('earn-period').innerHTML=lib.earningsPeriods().map(p=>`<option value="${p}">${label(p)}</option>`).join('');
       el('earn-metric').innerHTML=lib.EARNINGS_METRICS.map(m=>`<option value="${m.key}" ${m.key==='profit'?'selected':''}>${h(m.label)}</option>`).join('');
       el('earn-exchange').innerHTML='<option value="all">Tất cả sàn</option>'+[...new Set(companies.map(c=>c.exchange))].sort().map(s=>`<option>${h(s)}</option>`).join('');
+      industryOptions();
       el('earn-period').onchange=loadSeason;
-      for(const id of ['earn-search','earn-exchange','earn-state','earn-sort','earn-metric'])el(id).addEventListener(id==='earn-search'?'input':'change',()=>{page=1;render();});
+      for(const id of ['earn-search','earn-exchange','earn-industry','earn-state','earn-sort','earn-metric'])el(id).addEventListener(id==='earn-search'?'input':'change',()=>{page=1;render();});
       el('earn-prev').onclick=()=>{page--;render();};el('earn-next').onclick=()=>{page++;render();};
       el('earn-retry').onclick=loadSeason;el('earn-export').onclick=exportCSV;
       el('earn-detail-close').onclick=()=>{detailSeq++;selectedSymbol=null;el('earn-detail').hidden=true;};
@@ -112,6 +127,6 @@
     if(!ready)return;
     const lib=await module,periods=lib.earningsPeriods(),oldLatest=el('earn-period').options[0]?.value;
     if(oldLatest!==periods[0]){const selected=el('earn-period').value;el('earn-period').innerHTML=periods.map(p=>`<option value="${p}">${label(p)}</option>`).join('');if(selected!==oldLatest&&periods.includes(selected))el('earn-period').value=selected;version='';}
-    if(version!==nextVersion){version=nextVersion;await loadSeason();}
+    if(version!==nextVersion){version=nextVersion;industryOptions();await loadSeason();}
   }};
 })();
