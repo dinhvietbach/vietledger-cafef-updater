@@ -120,6 +120,7 @@
       el('earn-prev').onclick=()=>{page--;render();};el('earn-next').onclick=()=>{page++;render();};
       el('earn-retry').onclick=loadSeason;el('earn-export').onclick=exportCSV;
       el('earn-detail-close').onclick=()=>{detailSeq++;selectedSymbol=null;el('earn-detail').hidden=true;};
+      el('earn-open-charts').onclick=()=>{if(selectedSymbol)window.openCompanyCharts(selectedSymbol);};
       el('earn-open-report').onclick=()=>{if(!selectedSymbol)return;document.querySelector('.nav[data-view="reports"]').click();frequency='quarter';el('frequency').value='quarter';kind='IncSta';document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.kind==='IncSta'));choose(selectedSymbol);};
       ready=true;
     }
