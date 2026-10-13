@@ -86,13 +86,13 @@ try{
   if(start<0||end<start)throw Error('Không tìm thấy phần mô tả cập nhật.');
   html=html.slice(0,start)+'<h3>Cập nhật dữ liệu</h3><p>Trang công khai cho phép mọi người tra cứu báo cáo và chỉ số mà không cần tài khoản. Thời điểm xuất bản dữ liệu được ghi trên trang; thời điểm kiểm tra nguồn của từng doanh nghiệp có ở mục Độ phủ dữ liệu. Lịch dự kiến gồm 00:00, 09:00, 12:00, 15:00, 18:00 và 21:00 theo giờ Việt Nam. Việc cập nhật trực tuyến chỉ hoạt động sau khi được cấu hình và kiểm tra thành công. Khi chưa có bản cập nhật mới, trang tiếp tục hiển thị dữ liệu đã công bố.</p>'+html.slice(end);
   write('index.html',html);
-  for(const file of ['app.js','style.css','ratios-ui.js','ratios.css','public-data.js','earnings-ui.js','earnings.css','growth-ui.js'])fs.copyFileSync(path.join(ROOT,'public',file),path.join(out,file));
-  for(const file of ['ratios.mjs','public-data.mjs','earnings.mjs','growth.mjs'])fs.copyFileSync(path.join(ROOT,file),path.join(out,file));
+  for(const file of ['app.js','style.css','ratios-ui.js','ratios.css','public-data.js','earnings-ui.js','earnings.css','growth-ui.js','financial-charts.js','financial-charts.css'])fs.copyFileSync(path.join(ROOT,'public',file),path.join(out,file));
+  for(const file of ['ratios.mjs','public-data.mjs','earnings.mjs','growth.mjs','financial-charts.mjs'])fs.copyFileSync(path.join(ROOT,file),path.join(out,file));
   write('404.html','<!doctype html><html lang="vi"><meta charset="utf-8"><title>Không tìm thấy</title><p>Không tìm thấy trang. <a href="/">Về VietLedger</a></p></html>');
   write('_headers',`/*\n  Cache-Control: no-cache\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  X-Frame-Options: SAMEORIGIN\n  Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'self'\n/data/*\n  Content-Type: application/octet-stream\n  Cache-Control: public, max-age=31536000, immutable\n`);
   write('robots.txt','User-agent: *\nAllow: /\n');
   write('.nojekyll','');
-  const files=assets.length+earningsAssets.length+18;
+  const files=assets.length+earningsAssets.length+21;
   if(files>1000)throw Error('Gói vượt 1.000 tệp cho phương thức tải lên bằng trình duyệt.');
   const report={out,generatedAt,companies:companies.length,reports:sourceReports,cells:sourceCells,compressedDataBytes:bytes,maxAssetBytes:maxAsset,files,assets,earningsAssets};
   fs.writeFileSync(out+'.audit.json',JSON.stringify(report,null,2));

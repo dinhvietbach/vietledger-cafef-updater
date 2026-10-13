@@ -7,6 +7,7 @@ import {fileURLToPath} from 'node:url';
 import {companyResponse} from './public-data.mjs';
 import {INDUSTRY_NAMES,INDUSTRY_SOURCE} from './cafef-industries.mjs';
 import {qualifiesGrowth,safeSourceUrl} from './growth.mjs';
+import {buildFinancialCharts} from './financial-charts.mjs';
 const root=path.dirname(fileURLToPath(import.meta.url));
 const {out,audit}=JSON.parse(fs.readFileSync(path.join(root,'release/latest-public-build.json')));
 const expected=JSON.parse(fs.readFileSync(audit));
@@ -34,6 +35,11 @@ for(const asset of expected.assets){
       const ratios=companyResponse(data,'/api/ratios',frequency);
       assert.ok(Array.isArray(ratios));
       if(symbol==='HPG')assert.ok(ratios.length>0);
+      const all=Object.fromEntries(['IncSta','BSheet','CashFlow'].map(k=>[k,companyResponse(data,'/api/reports',frequency,k)]));
+      all.Ratios=ratios;all.AnnualBSheet=data.reports.BSheet.year;
+      const charts=buildFinancialCharts(all,{frequency,from:2016,limit:0});
+      assert.equal(charts.charts.length,13);assert.ok(charts.periods.length>0);
+      for(const c of charts.charts)for(const s of c.series){assert.equal(s.points.length,charts.periods.length);for(const p of s.points){assert.ok(p.value===null||/^-?\d+(?:\.\d+)?$/.test(p.value));if(p.value!==null)assert.ok(p.sources.length>0);}}
     }
   }
 }
