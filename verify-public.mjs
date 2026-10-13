@@ -18,7 +18,7 @@ if(manifest.industries){
   assert.ok(manifest.companies.some(c=>c.industryId!=null));
 }
 for(const c of manifest.companies)assert.equal(c.industryName,c.industryId==null?null:INDUSTRY_NAMES[c.industryId]);
-let companies=0,reports=0,cells=0;
+let companies=0,reports=0,cells=0,valuationCompanies=0;
 const seen=new Set();
 for(const asset of expected.assets){
   const buffer=fs.readFileSync(path.join(out,asset.path));
@@ -27,6 +27,8 @@ for(const asset of expected.assets){
   for(const [symbol,data] of Object.entries(chunk)){
     assert.ok(!seen.has(symbol),'Duplicate company');seen.add(symbol);companies++;
     assert.equal(manifest.companies.find(c=>c.symbol===symbol)?.asset,'/'+asset.path);
+    if(data.valuationSnapshots?.some(s=>s.values.pe!==null||s.values.pb!==null))valuationCompanies++;
+    for(const s of data.valuationSnapshots||[]){assert.equal(s.symbol,symbol);assert.equal(s.source,'CafeF');assert.ok(Number.isFinite(Date.parse(s.checkedAt)));assert.equal(s.url,`https://cafef.vn/du-lieu/Ajax/PageNew/ChiSoTaiChinh.ashx?Symbol=${symbol}`);for(const v of Object.values(s.values))assert.ok(v===null||typeof v==='string'&&/^-?\d+(?:\.\d+)?$/.test(v));}
     for(const kinds of Object.values(data.reports))for(const periods of Object.values(kinds))for(const r of periods)if(!r.missing){
       reports++;cells+=r.rows.length;
       for(const row of r.rows)assert.ok(row.value===null||typeof row.value==='string','Source precision must be retained');
@@ -36,10 +38,10 @@ for(const asset of expected.assets){
       assert.ok(Array.isArray(ratios));
       if(symbol==='HPG')assert.ok(ratios.length>0);
       const all=Object.fromEntries(['IncSta','BSheet','CashFlow'].map(k=>[k,companyResponse(data,'/api/reports',frequency,k)]));
-      all.Ratios=ratios;all.AnnualBSheet=data.reports.BSheet.year;
+      all.Ratios=ratios;all.AnnualBSheet=data.reports.BSheet.year;all.AnnualCafeFRatios=data.reports.CafeFRatios.year;all.Valuations=data.valuationSnapshots||[];
       const charts=buildFinancialCharts(all,{frequency,from:2016,limit:0});
-      assert.equal(charts.charts.length,13);assert.ok(charts.periods.length>0);
-      for(const c of charts.charts)for(const s of c.series){assert.equal(s.points.length,charts.periods.length);for(const p of s.points){assert.ok(p.value===null||/^-?\d+(?:\.\d+)?$/.test(p.value));if(p.value!==null)assert.ok(p.sources.length>0);}}
+      assert.equal(charts.charts.length,16);assert.ok(charts.periods.length>0);
+      for(const c of charts.charts)for(const s of c.series){assert.equal(s.points.length,(c.periods||charts.periods).length);for(const p of s.points){assert.ok(p.value===null||/^-?\d+(?:\.\d+)?$/.test(p.value));if(p.value!==null)assert.ok(p.sources.length>0);}}
     }
   }
 }

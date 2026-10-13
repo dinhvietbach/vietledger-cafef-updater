@@ -7,6 +7,7 @@ export function publishedRatios(reports) {
 }
 
 export function companyResponse(company, endpoint, frequency='year', kind='IncSta') {
+  if(endpoint==='/api/valuations')return company.valuationSnapshots||[];
   if(endpoint==='/api/coverage')return company.coverage;
   if(!['year','quarter'].includes(frequency))throw Error('Kỳ báo cáo không hợp lệ.');
   if(endpoint==='/api/reports'){

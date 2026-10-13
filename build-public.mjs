@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import {readValuations} from './market-valuations.mjs';
 import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {gzipSync} from 'node:zlib';
@@ -44,7 +45,7 @@ try{
           for(const r of data)if(!r.missing){sourceReports++;sourceCells+=r.rows.length;}
         }
       }
-      bundle[c.symbol]={reports,coverage:cover.all(c.symbol)};
+      bundle[c.symbol]={reports,coverage:cover.all(c.symbol),valuationSnapshots:readValuations(db,c.symbol)};
       for(const [period,season] of Object.entries(earnings)){
         const summary=summarizeEarnings(c,reports.IncSta.quarter,period),record=research[`${c.symbol}:${period}`];
         season.companies.push(summary);

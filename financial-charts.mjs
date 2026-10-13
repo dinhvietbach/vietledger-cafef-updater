@@ -4,6 +4,31 @@ import {decimal,previousPeriod} from './ratios.mjs';
 const numeric=v=>typeof v==='string'&&/^-?\d+(?:\.\d+)?$/.test(v);
 const frac=v=>{const s=String(v),[a,b='']=s.replace(/^-/,'').split('.');return {n:BigInt(a+b)*(s.startsWith('-')?-1n:1n),d:10n**BigInt(b.length)};};
 const missing=reason=>({value:null,raw:null,reason,sources:[],warnings:[]});
+function valuationCharts(all,{from,to,limit}){
+  const annual=(all.AnnualCafeFRatios||all.CafeFRatios||[]).filter(r=>!r.missing&&/^\d{4}$/.test(r.period)&&+r.period>=+from&&+r.period<=+to);
+  const available=annual.map(r=>r.period).sort();let years=[];
+  if(available.length)for(let y=+available[0];y<=+available.at(-1);y++)years.push(String(y));
+  if(limit>0)years=years.slice(-limit);
+  const annualPoint=(code,p)=>{
+    const r=annual.find(r=>r.period===p),row=r?.rows.find(r=>r.code===code);
+    if(!r||r.mappingBlocked||!row||!numeric(row.value)||row.display===null||row.sourceZero||Number(row.value)===0)return missing('CafeF chưa công bố chỉ số năm này hoặc đang hiển thị dấu gạch.');
+    const share=['EPS','BV'].includes(code),units=share?['thousand-VND/share','nghìn đồng/CP']:['times','lần'];
+    if(!units.includes(row.unit))return missing('Chưa xác nhận đơn vị của chỉ số CafeF.');
+    const v=frac(row.value);return {value:decimal({n:v.n*(share?1000n:1n),d:v.d},2),raw:row.value,reason:null,formula:share?'Số CafeF công bố (nghìn đồng/CP) × 1.000 = đồng/CP.':'P/E theo năm do CafeF công bố; không suy ra giá lịch sử.',sources:[source(r,row)],warnings:r.issues||[]};
+  };
+  const annualSeries=(code,label,unit)=>({key:code,label,unit,type:'line',axis:'left',points:years.map(p=>({period:p,...annualPoint(code,p)}))});
+  let snapshots=(all.Valuations||[]).filter(r=>/^\d{4}-\d{2}-\d{2}$/.test(r.date)&&+r.date.slice(0,4)>=+from&&+r.date.slice(0,4)<=+to).sort((a,b)=>a.date.localeCompare(b.date));
+  if(limit>0)snapshots=snapshots.slice(-limit);
+  const dailySeries=code=>({key:'market_'+code,label:code==='pe'?'P/E':'P/B',unit:'lần',type:'line',axis:'left',points:snapshots.map(s=>{
+    const v=s.values[code],reason=!numeric(v)||Number(v)===0?'CafeF chưa công bố chỉ số tại lần kiểm tra này.':null;
+    return {period:s.date,...(reason?missing(reason):{value:decimal(frac(v),2),raw:v,reason:null,formula:`Giữ nguyên ${code==='pe'?'P/E':'P/B'} CafeF công bố. ${s.basisNote||''} Kiểm tra: ${new Date(s.checkedAt).toLocaleString('vi-VN',{timeZone:'Asia/Ho_Chi_Minh'})} (giờ Việt Nam).${s.priceAt?' Ngày giá tham chiếu của CafeF: '+new Date(s.priceAt).toLocaleString('vi-VN',{timeZone:'Asia/Ho_Chi_Minh'})+'.':''}`,sources:[{period:s.date,kind:'MarketValuation',label:code==='pe'?'P/E':'P/B',raw:v,unit:'lần',url:s.url,scope:'source-unspecified',checkedAt:s.checkedAt}],warnings:[]})};
+  })});
+  return [
+    {id:'market-valuation',title:'Định giá P/E và P/B',group:'Định giá',frequency:'day',periods:snapshots.map(s=>s.date),note:'Chỉ số CafeF tại từng ngày kiểm tra, giữ lần cập nhật cuối trong ngày. Lịch sử bắt đầu từ khi thu thập; không phải định giá cuối quý/năm. P/E, P/B có thể được nguồn cập nhật khác thời điểm với giá.',series:[dailySeries('pe'),dailySeries('pb')]},
+    {id:'annual-pe',title:'P/E theo năm',group:'Định giá',frequency:'year',periods:years,note:'Chuỗi năm do CafeF công bố, tách riêng với định giá theo ngày. Không gán P/E năm cho từng quý.',series:[annualSeries('PE','P/E','lần')]},
+    {id:'annual-per-share',title:'EPS và giá trị sổ sách trên cổ phiếu',group:'Định giá',frequency:'year',periods:years,note:'EPS và giá trị sổ sách/CP theo năm do CafeF công bố. Đã đổi từ nghìn đồng sang đồng/CP; không phải số riêng quý.',series:[annualSeries('EPS','EPS năm','đồng/CP'),annualSeries('BV','Giá trị sổ sách/CP','đồng/CP')]},
+  ];
+}
 const normalized=s=>s.normalize('NFKC').replace(/^\s*(?:[A-ZIVX]+\.?|\d+(?:\.\d+)*\.?)\s+/i,'').replace(/\s+/g,' ').trim();
 const patterns={
   assets:/^(?:tổng cộng tài sản|tổng tài sản)(?:\s*\([^)]*\))?$/i,
@@ -118,5 +143,6 @@ export function buildFinancialCharts(all,{frequency='quarter',from=2016,to=new D
     chart('leverage','Cơ cấu nợ và vốn','Chỉ số tài chính','Tỷ trọng trên tổng tài sản; chỉ dùng đầu vào đủ số và cùng phạm vi.',[rate('liabilities_assets','Nợ phải trả / Tài sản'),rate('equity_assets','Vốn chủ sở hữu / Tài sản')]),
     chart('liquidity','Khả năng thanh toán','Chỉ số tài chính','Hệ số nhanh giản lược = (tài sản ngắn hạn − tồn kho) / nợ ngắn hạn.',[rate('current_ratio','Hiện hành','lần'),rate('quick_ratio','Nhanh','lần'),rate('cash_ratio','Bằng tiền','lần')]),
     chart('eps','Thu nhập trên cổ phiếu','Chỉ số tài chính','EPS do CafeF công bố, đơn vị đồng/CP; không cộng EPS các quý và không thay dấu gạch bằng 0.',[money('eps','EPS cơ bản',income,'bar')]),
+    ...valuationCharts(all,{from,to,limit}),
   ]};
 }

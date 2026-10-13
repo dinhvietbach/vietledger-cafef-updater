@@ -1,3 +1,4 @@
+import {initValuations,saveValuation} from './market-valuations.mjs';
 import {createHash} from 'node:crypto';
 import {gunzipSync} from 'node:zlib';
 
@@ -11,6 +12,8 @@ export function sourceReport(report){
 export async function restorePublic(db,manifest,loadAsset){
   if(manifest.schema!==1||!Array.isArray(manifest.companies)||!manifest.companies.length)throw Error('Bản dữ liệu công khai không hợp lệ.');
   for(const table of ['reports','companies','runs','checks','series_status'])if(db.prepare(`SELECT count(*) n FROM ${table}`).get().n)throw Error('Chỉ khôi phục vào cơ sở dữ liệu mới, trống.');
+  initValuations(db);
+  if(db.prepare('SELECT count(*) n FROM market_valuations').get().n)throw Error('Chỉ khôi phục định giá vào dữ liệu trống.');
   const companies=new Map(manifest.companies.map(c=>[c.symbol,c]));
   if(companies.size!==manifest.companies.length)throw Error('Danh mục có mã trùng.');
   const groups=new Map();
@@ -36,6 +39,7 @@ export async function restorePublic(db,manifest,loadAsset){
         const c=companies.get(symbol),data=bundle[symbol];
         if(!data?.reports)throw Error('Thiếu doanh nghiệp trong gói.');
         company.run(symbol,c.name,c.exchange,c.url);
+        for(const snapshot of data.valuationSnapshots||[]){if(snapshot.symbol!==symbol)throw Error('Mã định giá không khớp.');saveValuation(db,snapshot);}
         let companyReports=0;
         for(const [kind,frequencies] of Object.entries(data.reports)){
           if(!['BSheet','IncSta','CashFlow','CafeFRatios'].includes(kind))throw Error('Loại báo cáo chưa hỗ trợ.');

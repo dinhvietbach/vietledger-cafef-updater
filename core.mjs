@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import {initValuations,refreshValuation} from './market-valuations.mjs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {DatabaseSync} from 'node:sqlite';
@@ -27,6 +28,7 @@ CREATE TABLE IF NOT EXISTS series_status(symbol TEXT,kind TEXT,frequency TEXT,st
 CREATE TABLE IF NOT EXISTS excluded_instruments(symbol TEXT PRIMARY KEY,name TEXT,reason TEXT);
 CREATE INDEX IF NOT EXISTS runs_symbol_id ON runs(symbol,id DESC);
 PRAGMA busy_timeout=10000;`);
+initValuations(db);
 export const clean=s=>s.replace(/<[^>]*>/g,'').replace(/&nbsp;|&#160;/g,' ').replace(/&amp;/g,'&').replace(/&#(\d+);/g,(_,n)=>String.fromCodePoint(+n)).trim();
 export function number(s){s=clean(s);if(!s||/^(?:-|—|n\/a)$/i.test(s))return null;let neg=s.startsWith('(')&&s.endsWith(')');s=s.replace(/[().\s]/g,'');if(!/^-?\d+$/.test(s))throw Error('Định dạng số chưa hỗ trợ: '+s);return (BigInt(s)*(neg?-1n:1n)).toString();}
 export function billions(s){if(s===null||s===undefined)return null;let n=BigInt(s),sign=n<0n?-1n:1n;n=n*sign;return (sign*((n+500000000n)/1000000000n)).toString();}
@@ -124,6 +126,7 @@ export async function syncCompany(symbol,{full=false}={}){
  }
  const summary=`Đã kiểm tra 7 nhóm dữ liệu: ${seriesWithData} nhóm có số liệu, ${empty} nhóm CafeF chưa có dữ liệu từ 2016. ${changes.added} bảng mới, ${changes.revised} điều chỉnh, ${changes.unchanged} không đổi, ${changes.removed} không còn trong phản hồi nguồn.`;
  try{await refreshCompanyResearch(db,symbol,getReport(symbol,'IncSta','quarter'),download);}catch(error){console.warn(symbol,'Chưa cập nhật được nguồn giải trình:',error.message);}
+ try{await refreshValuation(db,symbol,download);}catch(error){console.warn(symbol,'Giữ bản định giá đã lưu:',error.message);}
  const message=summary+(errors.length?'\n'+errors.join('\n'):'');
  const state=errors.length?(seriesWithData||empty?'partial':'error'):seriesWithData?'success':'empty';
  db.prepare('UPDATE runs SET finished=?,status=?,message=? WHERE id=?').run(new Date().toISOString(),state,message,run);jobs.error=errors.length?message:null;

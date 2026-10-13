@@ -1,5 +1,6 @@
 // Run by CI only. Previous public data remains available if this job fails.
 import path from 'node:path';
+import {refreshValuation} from './market-valuations.mjs';
 import {restorePublic} from './public-restore.mjs';
 import {restoreIndustries,refreshIndustries,readIndustries} from './cafef-industries.mjs';
 import {restoreResearch,refreshCompanyResearch} from './growth-research.mjs';
@@ -28,6 +29,10 @@ try{
     try{await refreshIndustries(db,async url=>JSON.parse((await download(url,true)).text));}
     catch(error){if(!readIndustries(db))throw error;console.warn('Giữ phân ngành đã lưu:',error.message);}
     for(const {symbol} of db.prepare("SELECT DISTINCT symbol FROM reports WHERE kind='IncSta' AND period=?").all(latestEarningsPeriod()))await refreshCompanyResearch(db,symbol,getReport(symbol,'IncSta','quarter'),download);
+    const companies=db.prepare('SELECT symbol FROM companies ORDER BY symbol').all();let index=0,done=0,errors=0;
+    async function valuationWorker(){while(index<companies.length){const {symbol}=companies[index++];try{await refreshValuation(db,symbol,download);}catch(error){errors++;console.warn(symbol,'Giữ định giá đã lưu:',error.message);}done++;if(done%100===0||done===companies.length)console.log('Định giá CafeF:',done,'/',companies.length,'; lỗi:',errors);await new Promise(r=>setTimeout(r,250));}}
+    await Promise.all(Array.from({length:4},valuationWorker));
+    if(errors>companies.length*.25)console.warn('Nguồn định giá lỗi trên diện rộng; dữ liệu cũ được giữ với ngày kiểm tra gốc.');
   }else{
   await catalog();
   const companies=db.prepare('SELECT symbol FROM companies ORDER BY symbol').all();

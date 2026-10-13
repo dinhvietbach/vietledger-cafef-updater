@@ -9,6 +9,22 @@ const bs=(period,assets,equity,extra={})=>report('BSheet',period,[row('270','T�
 const model=(all,opts={})=>buildFinancialCharts(all,{from:2016,to:2027,limit:0,...opts});
 const point=(d,chart,key,p)=>d.charts.find(c=>c.id===chart).series.find(s=>s.key===key).points.find(x=>x.period===p);
 
+test('valuation years stay independent of quarterly statements and convert per-share thousands exactly',()=>{
+  const annual=p=>report('CafeFRatios',p,[row('PE','P/E','13.2',{unit:'times'}),row('PB','P/B','0',{unit:'times',sourceZero:true,display:null}),row('EPS','EPS','1.975',{unit:'thousand-VND/share'}),row('BV','BV','15.3',{unit:'thousand-VND/share'})]);
+  const all={IncSta:[income('2026-Q1','123')],AnnualCafeFRatios:[annual('2023'),annual('2025')]};
+  const d=model(all);assert.equal(d.charts.length,16);assert.deepEqual(d.charts.find(c=>c.id==='annual-pe').periods,['2023','2024','2025']);
+  assert.equal(point(d,'annual-pe','PE','2025').value,'13.20');assert.equal(point(d,'annual-pe','PE','2024').value,null);
+  assert.equal(point(d,'annual-per-share','EPS','2025').value,'1975.00');assert.equal(point(d,'annual-per-share','BV','2025').value,'15300.00');
+  assert.equal(point(d,'annual-pe','PE','2026-Q1'),undefined);
+  assert.equal(model(all,{from:2026}).charts.find(c=>c.id==='annual-pe').periods.length,0);
+});
+test('daily P/B is taken directly from published observations, never inferred from P/E or price',()=>{
+  const snapshot={date:'2026-10-13',checkedAt:'2026-10-13T12:00:00Z',priceAt:'2026-10-12T08:00:00Z',values:{pe:'7.54',pb:'1.24'},url:'https://cafef.vn/source',basisNote:'EPS tới Quý II năm 2026'};
+  const d=model({Valuations:[snapshot]});const chart=d.charts.find(c=>c.id==='market-valuation');assert.equal(d.periods.length,0);assert.deepEqual(chart.periods,['2026-10-13']);assert.equal(chart.frequency,'day');assert.equal(point(d,chart.id,'market_pb',snapshot.date).value,'1.24');assert.match(point(d,chart.id,'market_pe',snapshot.date).formula,/Quý II/);
+  snapshot.values.pb=null;assert.equal(point(model({Valuations:[snapshot]}),chart.id,'market_pb',snapshot.date).value,null);
+  assert.equal(model({Valuations:[snapshot]},{to:2025}).charts.find(c=>c.id===chart.id).periods.length,0);
+});
+
 test('cash flow uses exact cumulative differences, including negative quarter and year boundary',()=>{
   const rs=[cash('2025-Q4','10000000000'),cash('2026-Q1','6816755450021.10'),cash('2026-Q2','12070435627786.31'),cash('2026-Q3','10000000000000.01')];
   assert.equal(cashPoint(rs,'2026-Q1','cfo','quarter').raw,'6816755450021.10');

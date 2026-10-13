@@ -5,6 +5,7 @@ import {createHash} from 'node:crypto';
 import {gzipSync} from 'node:zlib';
 import {restorePublic,sourceReport} from './public-restore.mjs';
 import {storeSeries} from './report-store.mjs';
+import {parseValuation,readValuations} from './market-valuations.mjs';
 
 function fixture(){
   const db=new DatabaseSync(':memory:');
@@ -34,4 +35,11 @@ test('corruption or incomplete restore rolls back the entire snapshot',async()=>
   await assert.rejects(restorePublic(s.db,s.manifest,async()=>s.bytes),/Tổng số bảng/);
   for(const table of ['companies','reports','runs','checks'])assert.equal(s.db.prepare(`SELECT count(*) n FROM ${table}`).get().n,0);
   s.db.close();
+});
+
+test('public deployment round-trip preserves daily valuation history and source timestamps',async()=>{
+ const s=fixture(),bundle=JSON.parse((await import('node:zlib')).gunzipSync(s.bytes));
+ const snapshot=parseValuation('HPG',{Success:true,Data:[{Code:'P/E',Text:'P/E',Value:'7.54'},{Code:'Beta',Text:'P/B',Value:'1.24'}]}, {},'2026-10-13T12:00:00Z');
+ bundle.HPG.valuationSnapshots=[snapshot];const bytes=gzipSync(JSON.stringify(bundle));s.manifest.companies[0].asset='/data/'+createHash('sha256').update(bytes).digest('hex')+'.bin';
+ await restorePublic(s.db,s.manifest,async()=>bytes);assert.deepEqual(readValuations(s.db,'HPG'),[snapshot]);s.db.close();
 });
