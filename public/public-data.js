@@ -33,6 +33,7 @@
     const m=await manifest(u.pathname==='/api/status');
     if(u.pathname==='/api/companies')return m.companies;
     if(u.pathname==='/api/status')return m.status;
+    if(u.pathname==='/api/analysis-reports')return m.analysis?.asset?chunk(m.analysis.asset):{schema:1,complete:false,checkedAt:null,totalAtSource:0,items:[]};
     if(u.pathname==='/api/earnings'){
       const period=u.searchParams.get('period'),asset=m.earnings?.[period];
       return asset?chunk(asset):{period,generatedAt:m.generatedAt,companies:[],pending:true};
