@@ -8,10 +8,17 @@ import {companyResponse} from './public-data.mjs';
 import {INDUSTRY_NAMES,INDUSTRY_SOURCE} from './cafef-industries.mjs';
 import {qualifiesGrowth,safeSourceUrl} from './growth.mjs';
 import {buildFinancialCharts} from './financial-charts.mjs';
+import {validateAnalysisArchive} from './cafef-analysis.mjs';
 const root=path.dirname(fileURLToPath(import.meta.url));
 const {out,audit}=JSON.parse(fs.readFileSync(path.join(root,'release/latest-public-build.json')));
 const expected=JSON.parse(fs.readFileSync(audit));
 const manifest=JSON.parse(fs.readFileSync(path.join(out,'manifest.json')));
+const analysisBuffer=fs.readFileSync(path.join(out,expected.analysisAsset.path));
+assert.equal(createHash('sha256').update(analysisBuffer).digest('hex'),expected.analysisAsset.sha256);
+assert.equal(manifest.analysis.asset,'/'+expected.analysisAsset.path);
+const analysisArchive=validateAnalysisArchive(JSON.parse(gunzipSync(analysisBuffer)));
+assert.equal(analysisArchive.items.length,manifest.analysis.count);
+assert.equal(manifest.analysis.checkedAt,analysisArchive.checkedAt);
 if(manifest.industries){
   assert.equal(manifest.industries.source,INDUSTRY_SOURCE);
   assert.ok(Number.isFinite(Date.parse(manifest.industries.checkedAt)));

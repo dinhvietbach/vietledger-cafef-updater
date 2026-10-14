@@ -5,6 +5,7 @@ import {restorePublic} from './public-restore.mjs';
 import {restoreIndustries,refreshIndustries,readIndustries} from './cafef-industries.mjs';
 import {restoreResearch,refreshCompanyResearch} from './growth-research.mjs';
 import {latestEarningsPeriod} from './earnings.mjs';
+import {restoreAnalysis,refreshAnalysis,readAnalysis} from './cafef-analysis.mjs';
 
 if(process.env.CI!=='true'||!process.env.DATA_DIR)throw Error('Chỉ chạy trong CI với DATA_DIR riêng.');
 const target=path.resolve(process.env.DATA_DIR);
@@ -24,6 +25,9 @@ try{
   console.log('Khôi phục dữ liệu trước lượt cập nhật:',await restorePublic(db,manifest,downloadPublic));
   restoreIndustries(db,manifest);
   restoreResearch(db,manifest);
+  await restoreAnalysis(db,manifest,downloadPublic);
+  try{const archive=await refreshAnalysis(db,undefined,{force:true,progress:p=>{if(p.page%25===0||p.loaded===p.total)console.log('Báo cáo phân tích CafeF:',p.loaded,'/',p.total);}});console.log('Kho báo cáo phân tích:',archive.items.length);}
+  catch(error){if(!readAnalysis(db).complete)throw error;console.warn('Giữ kho báo cáo phân tích đã lưu:',error.message);}
   if(process.env.REBUILD_ONLY==='true'){
     console.log('Xuất bản lại dữ liệu đã công bố; giữ nguyên thời điểm kiểm tra nguồn.');
     try{await refreshIndustries(db,async url=>JSON.parse((await download(url,true)).text));}
