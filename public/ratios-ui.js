@@ -1,6 +1,6 @@
 function isRatioMode(){return ['Ratios','CafeFRatios'].includes(kind);}
 function formatRatio(value){if(value===null||value===undefined)return '—';const s=String(value),negative=s.startsWith('-'),[whole,decimal]=s.replace(/^-/,'').split('.');return `${negative?'-':''}${BigInt(whole).toLocaleString('vi-VN')}${decimal?','+decimal:''}`;}
-function ratioVisibleRows(rs){const all=rs[0]?.rows||[];const group=kind==='CafeFRatios'?'all':$('#ratio-group').value,search=$('#row-filter').value.toLocaleLowerCase('vi');return all.filter(r=>(group==='all'||r.group===group)&&(!$('#compact').checked||r.main)&&r.label.toLocaleLowerCase('vi').includes(search));}
+function ratioVisibleRows(rs){const all=rs.at(-1)?.rows||[];const group=kind==='CafeFRatios'?'all':$('#ratio-group').value,search=$('#row-filter').value.toLocaleLowerCase('vi');return all.filter(r=>(group==='all'||r.group===group)&&(!$('#compact').checked||r.main)&&r.label.toLocaleLowerCase('vi').includes(search));}
 function prepareTableMode(){const ratio=isRatioMode();$('#ratio-options').hidden=!ratio||kind==='CafeFRatios';$('#ratio-conventions').hidden=!ratio||kind==='CafeFRatios';$('.legend').hidden=ratio;$('.below').hidden=ratio;$('.unit-label').innerHTML=ratio?'ĐƠN VỊ HIỂN THỊ<strong>%, lần, ngày · theo từng chỉ số</strong>':'ĐƠN VỊ HIỂN THỊ<strong>Tỷ đồng · theo CafeF</strong>';$('#row-filter').placeholder=ratio?'Tìm ROE, thanh khoản, dòng tiền…':'Tìm chỉ tiêu báo cáo…';}
 function renderRatioTable(){
  const rs=selected(),rows=ratioVisibleRows(rs);$('#quality-warning').hidden=true;

@@ -18,11 +18,12 @@
   }
   let ready=false,data=null,seq=0,page=1,visible=[],version='',detailSeq=0,selectedSymbol=null;
   const size=50;
-  const fields=['current','yearAgo','yoy','previous','qoq','ytd','priorYtd','ytdGrowth'];
+  const fields=['yearAgo','previous','current','yoy','qoq','priorYtd','ytd','ytdGrowth'];
   const growthKeys=['yoy','qoq','ytdGrowth'];
   function titles(p){
     const y=+p.slice(0,4),q=+p.at(-1),prev=q===1?`${y-1}-Q4`:`${y}-Q${q-1}`;
-    return [label(p),`Cùng kỳ Q${q}/${y-1}`,'Tăng trưởng cùng kỳ',`Quý trước ${label(prev)}`,'Tăng trưởng quý trước',`Lũy kế ${q*3}T/${y}`,`Lũy kế ${q*3}T/${y-1}`,'Tăng trưởng lũy kế'];
+    const names={current:label(p),yearAgo:`Cùng kỳ Q${q}/${y-1}`,yoy:'Tăng trưởng cùng kỳ',previous:`Quý trước ${label(prev)}`,qoq:'Tăng trưởng quý trước',ytd:`Lũy kế ${q*3}T/${y}`,priorYtd:`Lũy kế ${q*3}T/${y-1}`,ytdGrowth:'Tăng trưởng lũy kế'};
+    return fields.map(key=>names[key]);
   }
   function cell(v,key){
     if(!v||v.value==null){
@@ -33,7 +34,7 @@
     return `<td class="${percent?(Number(value)>0?'earn-up':Number(value)<0?'earn-down':''):''} ${key==='current'||key==='ytd'?'earn-focus':''}" title="${h(percent?'(Kỳ này / kỳ so sánh − 1) × 100':v.value+' · số gốc')}">${percent&&Number(value)>0?'+':''}${number(value)}${percent?'%':''}</td>`;
   }
   const cells=m=>fields.map(k=>cell(m?.[k],k)).join('');
-  function headers(first,documents=false){return `<thead><tr><th scope="col">${first}</th>${titles(el('earn-period').value).map((x,i)=>`<th scope="col" class="${i===0||i===5?'earn-focus':''}">${h(x)}</th>`).join('')}${documents?'<th scope="col">Nguồn báo cáo tài chính</th>':''}</tr></thead>`;}
+  function headers(first,documents=false){return `<thead><tr><th scope="col">${first}</th>${titles(el('earn-period').value).map((x,i)=>`<th scope="col" class="${['current','ytd'].includes(fields[i])?'earn-focus':''}">${h(x)}</th>`).join('')}${documents?'<th scope="col">Nguồn báo cáo tài chính</th>':''}</tr></thead>`;}
   function currentMetric(c){return c.metrics?.[el('earn-metric').value];}
   function render(){
     if(!data)return;
