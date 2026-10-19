@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import {parseTrade,parseVsa,mergeSteel,emptySteel,seriesDefinition,growthAt,monthRange,seriesCoverage} from './steel-data.mjs';
+import {parseTrade,parseVsa,mergeSteel,emptySteel,seriesDefinition,growthAt,monthRange,seriesCoverage,periodRange,periodLabel,selectSteelSeries} from './steel-data.mjs';
 const context={period:'2023-01',url:'https://comtradeapi.un.org/test',checkedAt:'2026-10-19T00:00:00Z'};
 const row=(cmdCode,netWgt,primaryValue,extra={})=>({period:202301,reporterCode:704,partnerCode:0,partner2Code:0,customsCode:'C00',motCode:0,flowCode:'M',cmdCode,netWgt,primaryValue,isNetWgtEstimated:false,classificationCode:'H6',...extra});
 const trade=rows=>parseTrade({count:rows.length,data:rows},context);
@@ -52,4 +52,42 @@ test('Failed source refresh preserves every saved historical point and reports f
  assert.deepEqual(after.series,before.series);assert.match(after.checks.worldbank.error,/fixture offline/);assert.ok(after.checks.worldbank.lastSuccess);
  // Only the single file produced by this isolated test is removed.
  fs.unlinkSync(path.join(dir,'steel.json'));fs.rmdirSync(dir);
+});
+
+test('Workbook import preserves periods, source cells, product scope and missing versus zero',()=>{
+ const data=JSON.parse(fs.readFileSync(new URL('./steel-seed.json',import.meta.url)));
+ const find=(product,metric,frequency='month',entity='industry',segment='total')=>data.series.find(s=>s.basis==='workbook'&&s.product===product&&s.metric===metric&&s.frequency===frequency&&s.entity===entity&&s.segment===segment&&!s.label.includes('Update KQKD'));
+ const value=(s,p)=>s?.observations.find(o=>o.period===p)?.value;
+ assert.equal(value(find('coated','production'),'2016-01'),261325);
+ assert.equal(value(find('coated','production'),'2025-06'),434444);
+ assert.equal(value(find('coated','inventory','quarter'),'2016-Q1'),150698);
+ assert.equal(value(find('coated','inventory_sum','quarter'),'2016-Q1'),487193);
+ assert.equal(value(find('hrc','production','quarter'),'2016-Q1'),25656);
+ assert.equal(value(find('flat_steel','production','quarter'),'2016-Q1'),811049);
+ assert.equal(value(find('crc','production','quarter'),'2016-Q1'),785393);
+ assert.equal(value(find('iron','price'),'2017-01'),80.9);
+ assert.equal(value(find('coated','inventory','month','NKG','zinc'),'2017-07'),undefined);
+ assert.equal(value(find('hrc','production','quarter','HPG'),'2016-Q1'),0);
+ assert.equal(value(find('construction','production','quarter','HPG','section'),'2016-Q1'),undefined);
+ const imported=data.series.filter(s=>s.basis==='workbook');assert.equal(imported.reduce((n,s)=>n+s.observations.length,0),24708);
+ for(const s of imported)for(const p of s.observations){assert.ok(p.raw.sheet&&p.raw.cell&&p.raw.file);assert.ok(p.value>=0);if(s.label.includes('Update KQKD'))assert.ok(p.period<='2025-Q3');}
+ assert.equal(data.sources.workbook.comparisons.length,4);
+ assert.equal(data.sources.workbook.validation.formulaChecks,4943);
+});
+
+test('Monthly, quarterly and annual filters and growth do not mix periods or companies',()=>{
+ const data=JSON.parse(fs.readFileSync(new URL('./steel-seed.json',import.meta.url)));
+ const chosen=selectSteelSeries(data.series,{product:'hrc',frequency:'quarter',entity:'HPG',tab:'volume',source:'workbook',metric:'production'});
+ assert.ok(chosen.length>0);assert.ok(chosen.every(s=>s.entity==='HPG'&&s.frequency==='quarter'&&s.product==='hrc'));
+ assert.deepEqual(periodRange('2024-01','2025-06','quarter'),['2024-Q1','2024-Q2','2024-Q3','2024-Q4','2025-Q1','2025-Q2']);
+ assert.equal(periodLabel('2025-Q2'),'Q2/2025');assert.equal(periodLabel('2024'),'2024');
+ assert.equal(growthAt([{period:'2024-Q2',value:100},{period:'2025-Q2',value:150}],'2025-Q2',12),50);
+ assert.equal(growthAt([{period:'2023',value:100},{period:'2024',value:125}],'2024',12),25);
+ assert.equal(growthAt([{period:'2024-Q1',value:100},{period:'2025-Q2',value:150}],'2025-Q2',12),null);
+});
+
+test('A later workbook import survives restoration of an older public snapshot',()=>{
+ const make=(value,checkedAt)=>({id:'coated.production.workbook.quarter.industry.total',product:'coated',metric:'production',basis:'workbook',frequency:'quarter',observations:[{period:'2025-Q2',value,url:'https://vietledger.pages.dev/steel-workbook-source.csv',source:'workbook',checkedAt}]});
+ const newer=mergeSteel(emptySteel(),[make(30,'2026-10-20T00:00:00Z')]);
+ assert.equal(mergeSteel(newer,[make(20,'2026-10-19T00:00:00Z')]).series[0].observations[0].value,30);
 });

@@ -4,6 +4,22 @@ Monthly workspace with charts, tables, point-level sources, coverage and CSV.
 Sources are checked with the existing six daily Vietnam schedule windows.
 The browser reads the published snapshot; it does not scrape third parties.
 
+## User workbook import (19 October 2026)
+
+`DATA UPDATE THEP.xlsx` adds 24,708 observations: 11,069 monthly, 13,589 quarterly and 50 annual. Workbook data stays in distinct series with file/sheet/cell provenance and the original cached value/formula. The public CSV contains only the imported industry data, not the full private workbook or financial model.
+
+- Coated steel monthly production, regional sales, exports, inventory and calculated total sales: January 2016–June 2025. Company and coating subtypes are retained.
+- Construction and hot/cold-rolled quarterly operating data: Q1/2016–Q2/2025, with company/product detail. HRC and CRC never share an HRC-only label.
+- HPG quarterly data in Update KQKD through Q3/2025 stays separately identified; annual actual operating rows from REV use A columns only.
+- Four price series in Sheet8: January 2017–April 2025, USD/tonne. No unsupported monthly-average or incoterm assumption is added.
+- Construction market shares are converted from fractions to percent.
+
+The monthly coated headers were stored as dates in 2025 with the intended two-digit year in the day field. All 114 mappings are established by the quarterly SUM references, not guessed from dates. 4,943 formula results and 3,155 monthly-to-quarter sums were checked independently.
+
+Quarterly inventory totals in the workbook sum three monthly stocks. These are retained as `inventory_sum`, explicitly not quarter-end inventory; `inventory` uses the final monthly stock. Four distinct negative inventory cells are recorded as issues and excluded from charts. Four March/April 2023 differences against existing VSA/KIS observations remain visible in the source comparison, with both series preserved.
+
+The file import is a snapshot, not a file watcher. Existing Internet sources keep their schedule. Imports survive cloud restoration; newer workbook timestamps take precedence over older snapshots. Forecast/model assumptions, unlabelled Last Price data, ambiguous prices and financial statement tabs are not relabelled as actual industry data.
+
 ## Coverage at initial publication (19 October 2026)
 
 - World Bank iron ore: 141 monthly averages, January 2015–September 2026.
