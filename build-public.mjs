@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import {readSteel} from './steel-sources.mjs';
 import {readValuations} from './market-valuations.mjs';
 import {readAnalysis,validateAnalysisArchive} from './cafef-analysis.mjs';
 import path from 'node:path';
@@ -77,14 +78,19 @@ try{
   write(analysisName,analysisBody);bytes+=analysisBody.length;maxAsset=Math.max(maxAsset,analysisBody.length);
   const analysis={asset:'/'+analysisName,count:analysisArchive.items.length,checkedAt:analysisArchive.checkedAt};
   const analysisAsset={path:analysisName,sha256:digest(analysisBody),bytes:analysisBody.length,count:analysis.count};
-  const version=digest(JSON.stringify({companies,earningsIndex,analysis}));
+  const steelArchive=readSteel();
+  const steelBody=gzipSync(JSON.stringify(steelArchive),{level:6}),steelName='data/'+digest(steelBody)+'.bin';
+  if(steelBody.length>25*1024*1024)throw Error('Dữ liệu ngành vượt giới hạn.');
+  write(steelName,steelBody);bytes+=steelBody.length;maxAsset=Math.max(maxAsset,steelBody.length);
+  const steel={asset:'/'+steelName,updatedAt:steelArchive.updatedAt},steelAsset={path:steelName,bytes:steelBody.length,sha256:digest(steelBody)};
+  const version=digest(JSON.stringify({companies,earningsIndex,analysis,steel}));
   const cloudSchedule=process.env.PUBLIC_CLOUD_SCHEDULE==='true';
   const status={public:true,generatedAt,lastFinished:version,catalog:companies.length,loaded:companies.filter(c=>c.reports>0).length,
     reports:db.prepare('SELECT count(*) n FROM reports').get().n,jobs:{running:false,active:[]},batch:null,runs:[],
     scheduler:{enabled:cloudSchedule,timeZone:'Asia/Ho_Chi_Minh',times:['00:00','09:00','12:00','15:00','18:00','21:00'],
       note:cloudSchedule?'Lịch kiểm tra CafeF: 00:00 · 09:00 · 12:00 · 15:00 · 18:00 · 21:00 giờ Việt Nam. Giờ bắt đầu có thể trễ; dữ liệu mới xuất bản sau khi lượt quét hoàn tất.':'Bản dữ liệu công khai. Lịch tự cập nhật trực tuyến chưa được kích hoạt.'}};
   if(status.reports!==sourceReports)throw Error(`Xuất thiếu bảng: ${sourceReports}/${status.reports}.`);
-  write('manifest.json',JSON.stringify({schema:1,version,generatedAt,companies,status,earnings:earningsIndex,industries:industryMetadata(industryCatalog),research,analysis}));
+  write('manifest.json',JSON.stringify({schema:1,version,generatedAt,companies,status,earnings:earningsIndex,industries:industryMetadata(industryCatalog),research,analysis,steel}));
   let html=fs.readFileSync(path.join(ROOT,'public/index.html'),'utf8');
   html=html.replace('<script src="/app.js"','<script src="/public-data.js" defer></script><script src="/app.js"');
   html=html.replace('● Máy chủ cá nhân','● Truy cập công khai');
@@ -94,15 +100,15 @@ try{
   if(start<0||end<start)throw Error('Không tìm thấy phần mô tả cập nhật.');
   html=html.slice(0,start)+'<h3>Cập nhật dữ liệu</h3><p>Trang công khai cho phép mọi người tra cứu báo cáo và chỉ số mà không cần tài khoản. Thời điểm xuất bản dữ liệu được ghi trên trang; thời điểm kiểm tra nguồn của từng doanh nghiệp có ở mục Độ phủ dữ liệu. Lịch dự kiến gồm 00:00, 09:00, 12:00, 15:00, 18:00 và 21:00 theo giờ Việt Nam. Việc cập nhật trực tuyến chỉ hoạt động sau khi được cấu hình và kiểm tra thành công. Khi chưa có bản cập nhật mới, trang tiếp tục hiển thị dữ liệu đã công bố.</p>'+html.slice(end);
   write('index.html',html);
-  for(const file of ['analysis-ui.js','analysis.css','app.js','style.css','ratios-ui.js','ratios.css','public-data.js','earnings-ui.js','earnings.css','growth-ui.js','financial-charts.js','financial-charts.css'])fs.copyFileSync(path.join(ROOT,'public',file),path.join(out,file));
-  for(const file of ['analysis-data.mjs','ratios.mjs','public-data.mjs','earnings.mjs','growth.mjs','financial-charts.mjs'])fs.copyFileSync(path.join(ROOT,file),path.join(out,file));
+  for(const file of ['steel-ui.js','steel.css','analysis-ui.js','analysis.css','app.js','style.css','ratios-ui.js','ratios.css','public-data.js','earnings-ui.js','earnings.css','growth-ui.js','financial-charts.js','financial-charts.css'])fs.copyFileSync(path.join(ROOT,'public',file),path.join(out,file));
+  for(const file of ['steel-data.mjs','analysis-data.mjs','ratios.mjs','public-data.mjs','earnings.mjs','growth.mjs','financial-charts.mjs'])fs.copyFileSync(path.join(ROOT,file),path.join(out,file));
   write('404.html','<!doctype html><html lang="vi"><meta charset="utf-8"><title>Không tìm thấy</title><p>Không tìm thấy trang. <a href="/">Về VietLedger</a></p></html>');
   write('_headers',`/*\n  Cache-Control: no-cache\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  X-Frame-Options: SAMEORIGIN\n  Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'self'\n/data/*\n  Content-Type: application/octet-stream\n  Cache-Control: public, max-age=31536000, immutable\n`);
   write('robots.txt','User-agent: *\nAllow: /\n');
   write('.nojekyll','');
   const files=fs.readdirSync(out,{recursive:true}).filter(f=>fs.statSync(path.join(out,f)).isFile()).length;
   if(files>1000)throw Error('Gói vượt 1.000 tệp cho phương thức tải lên bằng trình duyệt.');
-  const report={out,generatedAt,companies:companies.length,reports:sourceReports,cells:sourceCells,compressedDataBytes:bytes,maxAssetBytes:maxAsset,files,assets,earningsAssets,analysisAsset};
+  const report={out,generatedAt,companies:companies.length,reports:sourceReports,cells:sourceCells,compressedDataBytes:bytes,maxAssetBytes:maxAsset,files,assets,earningsAssets,analysisAsset,steelAsset};
   fs.writeFileSync(out+'.audit.json',JSON.stringify(report,null,2));
   fs.writeFileSync(path.join(release,'latest-public-build.json'),JSON.stringify({out,audit:out+'.audit.json'},null,2));
   console.log(JSON.stringify({...report,assets:undefined},null,2));

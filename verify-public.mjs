@@ -13,6 +13,7 @@ const root=path.dirname(fileURLToPath(import.meta.url));
 const {out,audit}=JSON.parse(fs.readFileSync(path.join(root,'release/latest-public-build.json')));
 const expected=JSON.parse(fs.readFileSync(audit));
 const manifest=JSON.parse(fs.readFileSync(path.join(out,'manifest.json')));
+if(expected.steelAsset){const buffer=fs.readFileSync(path.join(out,expected.steelAsset.path));assert.equal(createHash('sha256').update(buffer).digest('hex'),expected.steelAsset.sha256);assert.equal(manifest.steel.asset,'/'+expected.steelAsset.path);const steel=JSON.parse(gunzipSync(buffer));assert.equal(steel.schema,1);assert.ok(steel.series.some(s=>s.observations.length));for(const s of steel.series)for(const o of s.observations){assert.ok(Number.isFinite(o.value)&&o.value>=0);assert.ok(o.url.startsWith('https://'));}}
 const analysisBuffer=fs.readFileSync(path.join(out,expected.analysisAsset.path));
 assert.equal(createHash('sha256').update(analysisBuffer).digest('hex'),expected.analysisAsset.sha256);
 assert.equal(manifest.analysis.asset,'/'+expected.analysisAsset.path);

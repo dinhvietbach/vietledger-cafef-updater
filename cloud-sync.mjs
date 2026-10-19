@@ -1,5 +1,7 @@
 // Run by CI only. Previous public data remains available if this job fails.
 import path from 'node:path';
+import {gunzipSync} from 'node:zlib';
+import {restoreSteel,refreshSteel} from './steel-sources.mjs';
 import {refreshValuation} from './market-valuations.mjs';
 import {restorePublic} from './public-restore.mjs';
 import {restoreIndustries,refreshIndustries,readIndustries} from './cafef-industries.mjs';
@@ -24,10 +26,12 @@ try{
   const manifest=JSON.parse(await downloadPublic('manifest.json'));
   console.log('Khôi phục dữ liệu trước lượt cập nhật:',await restorePublic(db,manifest,downloadPublic));
   restoreIndustries(db,manifest);
+  if(manifest.steel?.asset)restoreSteel(JSON.parse(gunzipSync(await downloadPublic(manifest.steel.asset))));
   restoreResearch(db,manifest);
   await restoreAnalysis(db,manifest,downloadPublic);
   try{const archive=await refreshAnalysis(db,undefined,{force:true,progress:p=>{if(p.page%25===0||p.loaded===p.total)console.log('Báo cáo phân tích CafeF:',p.loaded,'/',p.total);}});console.log('Kho báo cáo phân tích:',archive.items.length);}
   catch(error){if(!readAnalysis(db).complete)throw error;console.warn('Giữ kho báo cáo phân tích đã lưu:',error.message);}
+  await refreshSteel({reports:readAnalysis(db).items});
   if(process.env.REBUILD_ONLY==='true'){
     console.log('Xuất bản lại dữ liệu đã công bố; giữ nguyên thời điểm kiểm tra nguồn.');
     try{await refreshIndustries(db,async url=>JSON.parse((await download(url,true)).text));}
