@@ -41,3 +41,17 @@ HRC proxy HS 7208 also includes hot-rolled plate; construction 7213+7214 require
 `steel-pdf.py` uses pinned pypdf 6.10.0. PDFs remain on the original host and are downloaded only to private temporary collection storage; the public site contains factual observations, metadata and source links.
 
 `steel-seed.json` bootstraps the public source package. Each cloud run restores the last public steel asset before merging source updates. The static build verifies asset hashes and observation validity. Existing financial statements are exported through the unchanged snapshot pipeline.
+# Historical expansion (20 October 2026)
+
+The public archive contains 28,110 observations, including 24,708 workbook points and 573 additional reviewed observations. Original spreadsheet models are not published; only the existing approved steel extract is included.
+
+- Australia REQ historical workbook: 524 points from January 2015, monthly USD/t FOB market benchmarks and AUD/t aggregate export unit values kept separate. The iron ore netback changes from 62% Fe through December 2025 to 61% Fe from January 2026; these are separate series. Premium hard coking coal observations stop at November 2023 because subsequent source cells are `na`. REQ discovery is checked daily within the existing schedule; failure preserves the archive.
+- SteelOnline: 12 month/grade/region observations captured from a public 30-day chart, refreshed at the existing six times daily. These are the latest observed quote within a month, not monthly means. A 12 June 2021 article describes factory prices excluding VAT; the current quote table does not reconfirm those terms and is an intermediary quote, not an HPG disclosure.
+- BigMint: three explicitly dated December 2025 HRC CNF Vietnam quotes, visually verified on page 18 of the public 2 January 2026 daily report. Public free historical access is incomplete; no paid content is bypassed.
+- BVSC: 20 actual HPG monthly sales values on page 1 of 7 April 2022 report.
+- VSA: 14 values from the September 2015 table image. Construction production is withheld because the table and narrative disagree. No YTD figure is divided into months.
+
+The combined display maps only reviewed monthly coated-steel industry totals from Excel and VSA/KIS. It retains source alternatives and flags four unequal observations. Other prices, frequencies, entities, product grades and customs scopes remain distinct. The year coverage matrix explicitly identifies missing periods from 2015.
+
+The fixture `fixtures/req-australia-extract.xlsx` contains a small public-source extract of REQ tables 21 and 22, headers and source footnotes. It tests blank XML cells, missing observations, units and the Fe transition. It contains no user workbook data.
+

@@ -51,6 +51,24 @@ export function mergeSteel(previous,incoming,{now=new Date().toISOString()}={}){
 }
 export function growthAt(observations,period,months){const now=observations.find(o=>o.period===period);const d=new Date(periodMonth(period)+'-01T00:00:00Z');d.setUTCMonth(d.getUTCMonth()-months);const m=d.toISOString().slice(0,7),key=period.includes('Q')?m.slice(0,4)+'-Q'+Math.ceil(Number(m.slice(5))/3):period.length===4?m.slice(0,4):m;const prev=observations.find(o=>o.period===key);return now&&prev&&prev.value>0?(now.value/prev.value-1)*100:null;}
 export function seriesCoverage(series,to=new Date().toISOString().slice(0,7)){const months=periodRange('2015-01',to,series.frequency);const points=series.observations.filter(o=>months.includes(o.period));return {count:points.length,total:months.length,first:points[0]?.period||null,last:points.at(-1)?.period||null,missing:months.filter(m=>!points.some(o=>o.period===m))};}
+// Only the reviewed monthly coated-steel totals share a usable comparison mapping.
+// Customs, prices, product subsegments and differing frequencies remain separate.
+export function combineSteelSeries(series){
+ const groups=new Map(),other=[];
+ for(const s of series){const metric=s.metric==='exports'?'vsa_exports':s.metric;
+  const matched=s.product==='coated'&&(s.frequency||'month')==='month'&&(s.entity||'industry')==='industry'&&(s.segment||'total')==='total'&&s.unit==='tấn'&&['production','sales','vsa_exports'].includes(metric)&&(s.basis==='vsa'||s.id===`coated.${s.metric}.workbook.month.industry.total`);
+  if(!matched){other.push(s);continue;}if(!groups.has(metric))groups.set(metric,[]);groups.get(metric).push(s);
+ }
+ for(const [metric,parts] of groups){if(parts.length<2){other.push(...parts);continue;}const s=seriesDefinition('coated',metric,'combined');s.label+=' · tổng hợp nguồn';s.sourceLabel='VSA / KIS + Excel';s.scope='Tổng hợp tham khảo tôn mạ tháng: nguồn VSA/KIS và dòng tổng trong Excel. File không ghi liên kết nguồn gốc; từng điểm vẫn giữ nguồn riêng, không mặc định mọi khác biệt là lỗi.';s.method='Ưu tiên VSA trực tiếp, sau đó KIS trích VSA, rồi Excel khi kỳ đó chưa có số công bố. Chênh lệch được giữ để đối chiếu, không lấy trung bình. Không nội suy tháng thiếu.';s.frequency='month';const byPeriod=new Map();
+  for(const part of parts)for(const o of part.observations){if(!byPeriod.has(o.period))byPeriod.set(o.period,[]);byPeriod.get(o.period).push({...o,sourceSeriesId:part.id,sourceLabel:part.sourceLabel||'VSA / KIS'});}
+  const priority=o=>o.source==='vsa'?3:o.source==='kis-vsa'?2:1;
+  s.observations=[...byPeriod.entries()].sort(([a],[b])=>a.localeCompare(b)).map(([period,options])=>{options.sort((a,b)=>priority(b)-priority(a));return {...options[0],alternatives:options.slice(1),conflict:options.some(o=>o.value!==options[0].value)};});other.push(s);
+ }return other;
+}
+export function coverageYears(series,to=new Date().toISOString().slice(0,7)){
+ const range=periodRange('2015-01',to,series.frequency),present=new Set(series.observations.map(o=>o.period));
+ return [...new Set(range.map(p=>p.slice(0,4)))].map(year=>{const periods=range.filter(p=>p.startsWith(year));return {year,count:periods.filter(p=>present.has(p)).length,total:periods.length,missing:periods.filter(p=>!present.has(p))};});
+}
 export function cleanText(html){return String(html).replace(/<\/(p|li|h[1-6])>|<br\s*\/?\s*>/gi,'\n').replace(/<[^>]*>/g,' ').replace(/&#(\d+);/g,(_,n)=>String.fromCodePoint(Number(n))).replace(/&nbsp;/g,' ').replace(/&amp;/g,'&').replace(/&quot;/g,'"').normalize('NFC').replace(/[ \t\u00a0]+/g,' ');}
 export function vnNumber(raw){let s=raw.trim();if(/^\d{1,3}(\.\d{3})+$/.test(s))return Number(s.replaceAll('.',''));if(s.includes(','))return Number(s.replaceAll('.','').replace(',','.'));return Number(s);}
 export function parseVsa(post,checkedAt=new Date().toISOString()){

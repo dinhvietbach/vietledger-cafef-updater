@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import {parseAustralia,parseSteelOnlineChart,newestReqEdition} from './steel-extra.mjs';
+import {combineSteelSeries,coverageYears} from './steel-data.mjs';
 import {parseTrade,parseVsa,mergeSteel,emptySteel,seriesDefinition,growthAt,monthRange,seriesCoverage,periodRange,periodLabel,selectSteelSeries} from './steel-data.mjs';
 const context={period:'2023-01',url:'https://comtradeapi.un.org/test',checkedAt:'2026-10-19T00:00:00Z'};
 const row=(cmdCode,netWgt,primaryValue,extra={})=>({period:202301,reporterCode:704,partnerCode:0,partner2Code:0,customsCode:'C00',motCode:0,flowCode:'M',cmdCode,netWgt,primaryValue,isNetWgtEstimated:false,classificationCode:'H6',...extra});
@@ -90,4 +92,31 @@ test('A later workbook import survives restoration of an older public snapshot',
  const make=(value,checkedAt)=>({id:'coated.production.workbook.quarter.industry.total',product:'coated',metric:'production',basis:'workbook',frequency:'quarter',observations:[{period:'2025-Q2',value,url:'https://vietledger.pages.dev/steel-workbook-source.csv',source:'workbook',checkedAt}]});
  const newer=mergeSteel(emptySteel(),[make(30,'2026-10-20T00:00:00Z')]);
  assert.equal(mergeSteel(newer,[make(20,'2026-10-19T00:00:00Z')]).series[0].observations[0].value,30);
+});
+
+test('REQ source cells preserve units, na gaps and the 2026 Fe specification break',()=>{
+ const rows=parseAustralia(fs.readFileSync(new URL('./fixtures/req-australia-extract.xlsx',import.meta.url)),{checkedAt:'2026-10-20T00:00:00Z'});
+ assert.equal(rows.reduce((n,s)=>n+s.observations.length,0),524);
+ const at=id=>rows.find(s=>s.id===id);
+ const iron62=at('iron.price.au-iron-62fe'),iron61=at('iron.price.au-iron-61fe');
+ assert.equal(iron62.observations.length,132);assert.equal(iron62.observations[0].raw.cell,'L313');assert.equal(iron62.observations[0].value,63.25419875);
+ assert.equal(iron62.observations.at(-1).period,'2025-12');assert.equal(iron61.observations[0].period,'2026-01');assert.equal(iron61.observations.length,7);
+ assert.equal(at('coking_coal.price.au-phcc').observations.at(-1).period,'2023-11');assert.equal(at('iron.export_price.au-unit').unit,'AUD/tấn');
+ assert.throws(()=>parseAustralia(Buffer.alloc(0)));assert.throws(()=>parseAustralia(Buffer.alloc(0),{url:'https://example.com/forecast.xlsx'}));
+ assert.equal(newestReqEdition('<a href="/publications/resources-and-energy-quarterly-september-2026">September</a><a href="/publications/resources-and-energy-quarterly-december-2026">Future</a>','2026-10-20'), 'https://www.industry.gov.au/publications/resources-and-energy-quarterly-september-2026');
+});
+test('SteelOnline quotes retain observed dates, exclude future values and never become monthly averages',()=>{
+ const payload={labels:['30-09-2026','01-10-2026','19-10-2026','30-10-2026'],datasets:[{label:'Thép cuộn CB240',data:[14000,14100,14920,16000]}]};
+ const s=parseSteelOnlineChart(payload,{id:12,region:'miền Bắc',checkedAt:'2026-10-20T00:00:00Z'})[0];
+ assert.deepEqual(s.observations.map(o=>[o.period,o.value,o.observedAt]),[['2026-09',14000,'2026-09-30'],['2026-10',14920,'2026-10-19']]);assert.equal(s.unit,'VND/kg');assert.equal(s.observations[0].kind,'dated-quote');
+ assert.throws(()=>parseSteelOnlineChart({...payload,datasets:[{label:'Unknown grade',data:[1,2,3,4]}]},{id:12}));
+});
+test('Combined view retains evidence conflicts and does not blend prices, customs, quarters or companies',()=>{
+ const data=JSON.parse(fs.readFileSync(new URL('./steel-seed.json',import.meta.url)));const combined=combineSteelSeries(data.series);
+ const s=combined.find(s=>s.id==='coated.production.combined'),march=s.observations.find(o=>o.period==='2023-03');
+ assert.equal(march.value,391798);assert.equal(march.conflict,true);assert.equal(march.alternatives[0].value,393340);
+ assert.equal(s.observations.find(o=>o.period==='2016-01').source,'workbook');assert.equal(s.observations.find(o=>o.period==='2015-09').source,'vsa');assert.equal(s.observations.find(o=>o.period==='2015-10'),undefined);
+ for(const raw of data.series.filter(s=>s.basis==='trade'||/price/.test(s.metric)||s.frequency==='quarter'||s.entity==='HPG'))assert.ok(combined.includes(raw));
+ assert.equal(coverageYears(s,'2015-12')[0].count,1);assert.equal(coverageYears(s,'2015-12')[0].missing.length,11);
+ const big=data.series.filter(s=>s.basis.startsWith('bigmint'));assert.equal(big.length,3);assert.ok(big.every(s=>s.observations[0].period==='2025-12'));
 });

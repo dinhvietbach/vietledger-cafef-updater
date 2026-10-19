@@ -5,6 +5,7 @@ import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import {execFileSync} from 'node:child_process';
 import {emptySteel,mergeSteel,parseTrade,parseVsa,seriesDefinition,TRADE_CODES,monthRange,cleanText} from './steel-data.mjs';
+import {parseAustralia,parseSteelOnlineChart,newestReqEdition,AU_PAGE,AU_EDITION,AU_FILE,STEELONLINE_PAGE} from './steel-extra.mjs';
 const ROOT=path.dirname(fileURLToPath(import.meta.url));
 const DATA=process.env.DATA_DIR||path.join(ROOT,'data');
 const FILE=path.join(DATA,'steel.json');
@@ -13,7 +14,15 @@ export const WB_FILE='https://thedocs.worldbank.org/en/doc/74e8be41ceb20fa0da750
 const sha=b=>createHash('sha256').update(b).digest('hex');
 export function readSteel(){let seed=emptySteel();try{seed=JSON.parse(fs.readFileSync(path.join(ROOT,'steel-seed.json'),'utf8'));}catch{}try{const live=JSON.parse(fs.readFileSync(FILE,'utf8'));if(live.schema===1)return live;}catch{}return seed;}
 export function saveSteel(data){fs.mkdirSync(DATA,{recursive:true});const tmp=FILE+'.tmp';fs.writeFileSync(tmp,JSON.stringify(data));fs.renameSync(tmp,FILE);return data;}
-export function restoreSteel(data){if(!data||data.schema!==1||!Array.isArray(data.series))throw Error('Kho dữ liệu ngành không hợp lệ');const seed=readSteel();const merged=mergeSteel(seed,data.series);const docs=new Map([...seed.documents,...(data.documents||[])].map(d=>[d.url,d]));const sources={...seed.sources,...data.sources};if(seed.sources.workbook?.importedAt>(data.sources?.workbook?.importedAt||''))sources.workbook=seed.sources.workbook;return saveSteel({...merged,sources,documents:[...docs.values()].sort((a,b)=>b.publishedAt.localeCompare(a.publishedAt)),checks:{...seed.checks,...data.checks},tradeChecked:{...seed.tradeChecked,...data.tradeChecked},pdfChecked:{...seed.pdfChecked,...data.pdfChecked}});}
+export function restoreSteel(data){
+ if(!data||data.schema!==1||!Array.isArray(data.series))throw Error('Kho dữ liệu ngành không hợp lệ');
+ const seed=readSteel(),merged=mergeSteel(seed,data.series),docs=new Map([...seed.documents,...(data.documents||[])].map(d=>[d.url,d]));
+ const sources={...seed.sources,...data.sources},checks={...seed.checks,...data.checks};
+ for(const [id,s] of Object.entries(seed.sources))if((s.importedAt||s.reviewedAt||'')>(sources[id]?.importedAt||sources[id]?.reviewedAt||''))sources[id]=s;
+ for(const [id,c] of Object.entries(seed.checks))if((c.lastAttempt||'')>(checks[id]?.lastAttempt||''))checks[id]=c;
+ const issues=[...new Map([...(seed.researchIssues||[]),...(data.researchIssues||[])].map(i=>[[i.period,i.product,i.metric,i.url].join('|'),i])).values()];
+ return saveSteel({...merged,sources,researchIssues:issues,documents:[...docs.values()].sort((a,b)=>(b.publishedAt||'').localeCompare(a.publishedAt||'')),checks,tradeChecked:{...seed.tradeChecked,...data.tradeChecked},pdfChecked:{...seed.pdfChecked,...data.pdfChecked}});
+}
 // Read only the public workbook's ZIP/XML; no macros, external links or formulas execute.
 function unzip(buffer){const files={};let end=-1;for(let i=buffer.length-22;i>=Math.max(0,buffer.length-65557);i--)if(buffer.readUInt32LE(i)===0x06054b50){end=i;break;}if(end<0)throw Error('Invalid XLSX ZIP');let pos=buffer.readUInt32LE(end+16);for(let i=0;i<buffer.readUInt16LE(end+10);i++){if(buffer.readUInt32LE(pos)!==0x02014b50)throw Error('Invalid ZIP directory');const method=buffer.readUInt16LE(pos+10),size=buffer.readUInt32LE(pos+20),uncompressed=buffer.readUInt32LE(pos+24),nl=buffer.readUInt16LE(pos+28),el=buffer.readUInt16LE(pos+30),cl=buffer.readUInt16LE(pos+32),offset=buffer.readUInt32LE(pos+42),name=buffer.subarray(pos+46,pos+46+nl).toString();if(uncompressed>20e6)throw Error('Workbook entry too large');const start=offset+30+buffer.readUInt16LE(offset+26)+buffer.readUInt16LE(offset+28);if(name.endsWith('.xml')){const b=buffer.subarray(start,start+size);files[name]=(method===8?inflateRawSync(b,{maxOutputLength:20e6}):b).toString();}pos+=46+nl+el+cl;}return files;}
 const xmlText=s=>s.replace(/<[^>]+>/g,'').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>');
@@ -40,6 +49,22 @@ async function refresh({backfill=false,download=fetchSteel,reports=[]}={}){
  let data=readSteel();const now=new Date().toISOString();
  const sources={worldbank:{name:'World Bank · Pink Sheet',url:WB_PAGE},vsa:{name:'Hiệp hội Thép Việt Nam (VSA)',url:'https://vsa.com.vn/'},comtrade:{name:'UN Comtrade · Việt Nam / Thế giới',url:'https://comtradeplus.un.org/'}};data.sources={...data.sources,...sources};
  async function update(id,fn){const before=data.checks[id]||{};try{await fn();data.checks[id]={...before,lastAttempt:now,lastSuccess:now,error:null};}catch(e){data.checks[id]={...before,lastAttempt:now,error:String(e.message).slice(0,240)};console.warn('DATA NGÀNH',id,e.message);}saveSteel(data);}
+ // REQ publishes quarterly; inspect once a day, retaining the historical archive on failure.
+ if(data.checks.australia?.lastAttempt?.slice(0,10)!==now.slice(0,10))await update('australia',async()=>{
+  const html=(await download(AU_PAGE)).toString(),edition=newestReqEdition(html,now)||AU_EDITION;
+  const page=(await download(edition)).toString(),link=[...page.matchAll(/href=["']([^"']+historical-data\.xlsx)["']/gi)].map(m=>new URL(m[1],edition)).find(u=>u.protocol==='https:'&&u.hostname==='www.industry.gov.au');
+  if(!link)throw Error('REQ chưa tìm thấy bảng lịch sử; giữ số đã lưu');
+  const url=link.href,publishedAt=page.match(/datetime=["'](20\d{2}-\d{2}-\d{2})/)?.[1]||null;
+  data=mergeSteel(data,parseAustralia(await download(url),{url,checkedAt:now,publishedAt}),{now});
+  data.sources.australia={...data.sources.australia,name:'Bộ Công nghiệp Úc · REQ / ABS',url:edition,fileUrl:url,mode:'Tự kiểm tra hằng ngày; bảng nguồn phát hành theo quý.'};
+ });
+ await update('steelonline',async()=>{
+  const incoming=[];for(const [id,region] of [[12,'miền Bắc'],[14,'miền Nam'],[15,'miền Trung']])incoming.push(...parseSteelOnlineChart(JSON.parse((await download(`https://steelonline.vn/api/price-list-chart?id=${id}`)).toString()),{id,region,checkedAt:now}));
+  if(incoming.some(s=>!s.observations.length))throw Error('SteelOnline chưa có báo giá xác minh');
+  data=mergeSteel(data,incoming,{now});data.sources.steelonline={...data.sources.steelonline,name:'SteelOnline · Hòa Phát',url:STEELONLINE_PAGE,mode:'Tự kiểm tra 6 khung giờ; lưu báo giá có ngày, không giả định bình quân tháng.'};
+ });
+ // Keep original brokerage links discoverable even when a chart has no extractable labels.
+ if(reports.length){const docs=new Map(data.documents.map(d=>[d.url,d]));for(const r of reports.filter(r=>/thép/i.test(r.title||'')&&/^https:\/\//.test(r.pdfUrl||r.documentUrl||''))){const url=r.pdfUrl||r.documentUrl;if(!docs.has(url))docs.set(url,{title:r.title,url,publishedAt:r.date||'',source:r.sourceCode||'broker',note:'Báo cáo nguồn; chỉ nhập số có kỳ, đơn vị và phạm vi xác minh. Không chuyển dự báo thành thực tế.'});}data.documents=[...docs.values()].sort((a,b)=>(b.publishedAt||'').localeCompare(a.publishedAt||''));}
  await update('worldbank',async()=>{const html=(await download(WB_PAGE)).toString();const found=html.match(/https:\/\/thedocs\.worldbank\.org\/[^"\s<>]+CMO-Historical-Data-Monthly\.xlsx/i)?.[0]||WB_FILE;data=mergeSteel(data,parseWorldBank(await download(found),{url:found,checkedAt:now}),{now});});
  await update('vsa',async()=>{const docs=new Map(data.documents.map(d=>[d.url,d]));for(let page=1;page<=(backfill?6:1);page++){const url=`https://vsa.com.vn/wp-json/wp/v2/posts?search=${encodeURIComponent('tháng')}&per_page=100&page=${page}`;const posts=JSON.parse((await download(url)).toString());if(!Array.isArray(posts))throw Error('Sai cấu trúc bản tin VSA');for(const p of posts){if(!/thi-truong-thep.*thang|tinh-hinh-san-xuat.*thang/.test(p.slug)||/toan-cau/.test(p.slug))continue;data=mergeSteel(data,parseVsa(p,now),{now});docs.set(p.link,{title:cleanText(p.title.rendered),url:p.link.replace(/^http:/,'https:'),publishedAt:p.date,source:'vsa',note:'Có thể gồm biểu đồ ảnh; dữ liệu chưa đọc được thành số được giữ trong tài liệu nguồn.'});}if(posts.length<100)break;}data.documents=[...docs.values()].sort((a,b)=>b.publishedAt.localeCompare(a.publishedAt));});
  if(reports.length)await update('kis',async()=>{
