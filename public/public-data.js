@@ -30,9 +30,10 @@
     if(post)throw Error('Trang công khai chỉ dùng để tra cứu.');
     const u=new URL(url,location.origin);
     if(u.pathname==='/api/access')return {admin:false,protected:false,public:true};
-    const m=await manifest(u.pathname==='/api/status');
+    const m=await manifest(['/api/status','/api/steel'].includes(u.pathname));
     if(u.pathname==='/api/companies')return m.companies;
     if(u.pathname==='/api/status')return m.status;
+    if(u.pathname==='/api/steel')return m.steel?.asset?chunk(m.steel.asset):{schema:1,series:[],documents:[],sources:{},checks:{}};
     if(u.pathname==='/api/analysis-reports')return m.analysis?.asset?chunk(m.analysis.asset):{schema:1,complete:false,checkedAt:null,totalAtSource:0,items:[]};
     if(u.pathname==='/api/earnings'){
       const period=u.searchParams.get('period'),asset=m.earnings?.[period];
