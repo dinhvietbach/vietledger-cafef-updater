@@ -11,6 +11,7 @@ export const STEEL_PRODUCTS=[
  {id:'scrap',name:'Thép phế liệu',codes:[],scope:'Phạm vi thị trường theo từng nguồn.'},
  {id:'crc',name:'Thép cán nguội (CRC)',codes:[],scope:'Thép cán nguội, tách riêng khỏi HRC.'},
  {id:'flat_steel',name:'Tổng cán nóng & cán nguội',codes:[],scope:'Tổng trong bảng Excel, bao gồm cả cán nóng và cán nguội; không đồng nhất với HRC.'},
+ {id:'coated_pipe',name:'Tổng tôn mạ & ống thép',codes:[],scope:'Tổng hai nhóm tôn mạ và ống thép trong DATA NGÀNH THÉP.xlsx; không phải tổng toàn ngành thép.'},
  {id:'crude_steel',name:'Thép thô',codes:[],scope:'Thép thô, tách riêng thép thành phẩm và phôi thép.'},
  {id:'all_steel',name:'Tổng thép thành phẩm',codes:[],scope:'Tổng sản xuất/bán hàng của các đơn vị trong báo cáo VSA; không tương đương tiêu dùng cuối cùng toàn quốc.'}
 ];

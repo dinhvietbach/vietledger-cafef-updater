@@ -66,3 +66,12 @@ The fixture `fixtures/req-australia-extract.xlsx` contains a small public-source
 - Chỉ báo nội địa, xuất khẩu/bán hàng, tồn kho/bán hàng, bán hàng/sản xuất chỉ ghép cùng tài liệu, kỳ và phạm vi. Bán hàng/sản xuất không phải công suất sử dụng. Kim ngạch lấy từ payload hải quan, tách khỏi báo giá.
 - Bảng tiến độ đếm tháng thực có cho từng sản phẩm từ 2024. Độ phủ từng năm vẫn bắt đầu 2015; dữ liệu còn thiếu không được tự lấp.
 - Cập nhật tự động mở rộng bài VSA có tên “ngành thép / N tháng đầu năm”, giữ kỳ lũy kế; bổ sung bảng nội địa/tồn kho KIS và thư viện báo cáo VietnamBiz mới. Bảng ảnh cần rà soát trước khi đưa vào số liệu; không đánh đồng kiểm tra thành công với có dữ liệu mới.
+
+## Đợt bổ sung tháng và file DATA NGÀNH THÉP
+
+- Nhập 373 điểm năm 2016–2024 từ DATA NGÀNH THÉP.xlsx, nguồn `workbook-industry`, giữ độc lập với 24.708 điểm từ DATA UPDATE THEP. Chỉ nhập lịch sử; loại 2025F–2029F, giá thiếu đơn vị và hiệu suất chưa rõ mẫu số. Dấu gạch/ô trống không đổi thành số 0.
+- Sheet1: “tổng” chỉ là tổng tôn mạ và ống thép. Sheet2 xác định là NKG bằng 9 cặp số tiêu thụ khớp Sheet1. Giữ tọa độ ô, SHA-256, đơn vị và các phép kiểm tra. Có 184 kiểm tra nội bộ khớp; 73/76 tổng năm khớp tổng đủ 12 tháng của file cũ.
+- BCTN NKG 2024 (PDF trang 42) ghi bán hàng tôn mạ 892.252 tấn và tổng tôn + ống 1.022.794 tấn; file lần lượt ghi 882.252 và 1.012.794. Năm 2023 file tổng ghi 860.294 so với BCTN 861.228. Giữ cả hai nguồn, đánh dấu chênh lệch, không ghi đè file gốc.
+- Bổ sung bảng VietnamBiz/VSA tháng 2024–2026 và cột cùng kỳ 2022–2023. Sản xuất, bán hàng, xuất khẩu VSA của thép xây dựng/HRC/tôn mạ/ống thép đủ 12 tháng 2024. Năm 2025 còn tháng 4 ở một số chuỗi; 2026 còn tháng 7–9 và bán hàng tháng 1. Các khoảng trống được hiển thị, không nội suy.
+- Giá HRC 2 mm CFR Việt Nam giữ khác chuỗi SAE1006 CFR Đông Nam Á; thép phế CFR Việt Nam khác CFR Đông Á. Chỉ nhập cột bình quân có nhãn kỳ rõ; bỏ bảng lặp nhãn năm mâu thuẫn và cột “giá hiện tại” không xác định ngày.
+- `steel-reviewed.json` giữ toàn bộ bảng đã đọc, số trang và dấu vết nguồn. Lịch đám mây khôi phục dữ liệu cũ rồi hợp nhất với seed này; các bảng chưa đọc vẫn ở thư viện nguồn và không được coi là tháng đã có số.

@@ -5,6 +5,30 @@ import {mergeSteel,emptySteel,steelIndicators,steelQuality,combineSteelSeries,se
 import {reviewedSeries,parseVsaExpanded,isVsaIndustryPost} from './steel-reviewed.mjs';
 const review=JSON.parse(fs.readFileSync(new URL('./steel-reviewed.json',import.meta.url)));
 const seed=JSON.parse(fs.readFileSync(new URL('./steel-seed.json',import.meta.url)));
+test('Second workbook imports actual annual data, preserves gaps and exposes independent discrepancies',()=>{
+ const rows=seed.series.filter(s=>s.observations.some(o=>o.source==='workbook-industry'));
+ assert.equal(rows.flatMap(s=>s.observations).length,373);
+ assert.ok(rows.every(s=>s.frequency==='year'&&s.observations.every(o=>o.period>='2016'&&o.period<='2024')));
+ const pipeExports=rows.find(s=>s.product==='pipe'&&s.metric==='exports'&&s.entity==='NKG');
+ assert.equal(pipeExports.observations.length,6);
+ assert.ok(!pipeExports.observations.some(o=>o.period==='2024'));
+ const nkg=rows.find(s=>s.product==='coated_pipe'&&s.entity==='NKG'&&s.metric==='sales').observations.find(o=>o.period==='2024');
+ assert.equal(nkg.value,1012794);assert.ok(nkg.conflict);
+ assert.equal(nkg.alternatives.find(a=>a.source==='nkg-official').value,1022794);
+ assert.equal(seed.sources.workbook_industry.validation.matchingChecks,184);
+});
+test('Backfill covers all 2024 months without fabricating unresolved 2026 values',()=>{
+ const q=steelQuality(seed,'2024-01','2024-12');
+ for(const p of ['construction','hrc','coated','pipe'])for(const metric of ['production','sales','vsa_exports'])
+  assert.equal(q.find(x=>x.product===p&&x.metric===metric).count,12);
+ const months=seed.series.filter(s=>s.product==='hrc'&&s.metric==='production'&&s.frequency==='month'&&s.basis==='reviewed-vsa').flatMap(s=>s.observations);
+ assert.equal(months.find(o=>o.period==='2026-06').value,1019576);
+ assert.ok(!months.some(o=>o.period==='2026-09'));
+ const vn=seed.series.find(s=>s.product==='hrc'&&s.basis==='reviewed-2mm-cfr-vietnam');
+ const sea=seed.series.find(s=>s.product==='hrc'&&s.basis==='reviewed-sae1006-cfr-se-asia'&&s.frequency==='month');
+ assert.notEqual(vn.id,sea.id);
+ assert.equal(vn.observations.find(o=>o.period==='2026-05').value,611.3);
+});
 test('Reviewed values preserve period, page, hash, original total and explicit YTD',()=>{
  const rows=reviewedSeries(review),get=(p,m,period,f)=>rows.find(s=>s.product===p&&s.metric===m&&s.frequency===f&&s.observations[0].period===period);
  assert.equal(get('hrc','production','2026-05','month').observations[0].value,1011338);

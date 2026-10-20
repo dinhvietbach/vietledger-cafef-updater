@@ -71,7 +71,7 @@ test('Workbook import preserves periods, source cells, product scope and missing
  assert.equal(value(find('coated','inventory','month','NKG','zinc'),'2017-07'),undefined);
  assert.equal(value(find('hrc','production','quarter','HPG'),'2016-Q1'),0);
  assert.equal(value(find('construction','production','quarter','HPG','section'),'2016-Q1'),undefined);
- const imported=data.series.filter(s=>s.basis==='workbook');assert.equal(imported.reduce((n,s)=>n+s.observations.length,0),24708);
+ const imported=data.series.filter(s=>s.observations.some(o=>o.source==='workbook'));assert.equal(imported.reduce((n,s)=>n+s.observations.length,0),24708);
  for(const s of imported)for(const p of s.observations){assert.ok(p.raw.sheet&&p.raw.cell&&p.raw.file);assert.ok(p.value>=0);if(s.label.includes('Update KQKD'))assert.ok(p.period<='2025-Q3');}
  assert.equal(data.sources.workbook.comparisons.length,4);
  assert.equal(data.sources.workbook.validation.formulaChecks,4943);
@@ -114,7 +114,7 @@ test('SteelOnline quotes retain observed dates, exclude future values and never 
 test('Combined view retains evidence conflicts and does not blend prices, customs, quarters or companies',()=>{
  const data=JSON.parse(fs.readFileSync(new URL('./steel-seed.json',import.meta.url)));const combined=combineSteelSeries(data.series);
  const s=combined.find(s=>s.id==='coated.production.combined'),march=s.observations.find(o=>o.period==='2023-03');
- assert.equal(march.value,391798);assert.equal(march.conflict,true);assert.equal(march.alternatives[0].value,393340);
+ assert.equal(march.value,391798);assert.equal(march.conflict,true);assert.equal(march.alternatives.find(o=>o.source==='workbook').value,393340);
  assert.equal(s.observations.find(o=>o.period==='2016-01').source,'workbook');assert.equal(s.observations.find(o=>o.period==='2015-09').source,'vsa');assert.equal(s.observations.find(o=>o.period==='2015-10'),undefined);
  for(const raw of data.series.filter(s=>s.basis==='trade'||/price/.test(s.metric)||s.frequency==='quarter'||s.entity==='HPG'))assert.ok(combined.includes(raw));
  assert.equal(coverageYears(s,'2015-12')[0].count,1);assert.equal(coverageYears(s,'2015-12')[0].missing.length,11);

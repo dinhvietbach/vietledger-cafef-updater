@@ -10,6 +10,7 @@ export function reviewedSeries(review){
    s.id+='.'+frequency+(t.entity?'.'+t.entity:'');s.frequency=frequency;s.unit=t.unit;s.scope=t.scope;s.entity=t.entity||'industry';s.sourceLabel={'vcbs-vsa':'VCBS trích VSA','vietnambiz-vsa':'VietnamBiz trích VSA','fpts-wsa':'FPTS trích WSA','hpg-official':'Hòa Phát · công bố doanh nghiệp'}[d.source]||d.source;
    if(t.metric==='market_share')s.label=PRODUCT_BY_ID[product].name+' · Thị phần '+t.entity;
    if(t.metric==='capacity')s.label=PRODUCT_BY_ID[product].name+' · Công suất '+t.entity;
+   if(d.source==='nkg-official')s.sourceLabel='Nam Kim · công bố doanh nghiệp';
    s.method='Số công bố tại bảng/nhãn/đoạn đã đọc trực tiếp; giữ độ làm tròn của nguồn. Các báo cáo trích cùng nguồn gốc không phải đối soát độc lập.';
    s.observations=[{period:t.period,value,url:d.url+'#page='+t.page,source:d.source,publishedAt:d.publishedAt,checkedAt:d.reviewedAt,hash:d.hash,kind:t.kind||'reported-table',upstream:d.upstream,raw:{document:t.document,page:t.page,row:i+1,reportedValue:value,sumDifference:t.sumDifference??null},evidence:`Trang ${t.page}; ${t.frequency==='ytd'?'lũy kế từ tháng 1 đến ':''}${t.period}; đơn vị ${t.unit}.`,note:(t.note||'')+(t.sumDifference?` Tổng nhóm chênh ${t.sumDifference} tấn với tổng nguồn; giữ nguyên số gốc.`:'')}];
    return s;
