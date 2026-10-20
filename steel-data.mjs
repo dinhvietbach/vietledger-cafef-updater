@@ -11,6 +11,7 @@ export const STEEL_PRODUCTS=[
  {id:'scrap',name:'Thép phế liệu',codes:[],scope:'Phạm vi thị trường theo từng nguồn.'},
  {id:'crc',name:'Thép cán nguội (CRC)',codes:[],scope:'Thép cán nguội, tách riêng khỏi HRC.'},
  {id:'flat_steel',name:'Tổng cán nóng & cán nguội',codes:[],scope:'Tổng trong bảng Excel, bao gồm cả cán nóng và cán nguội; không đồng nhất với HRC.'},
+ {id:'crude_steel',name:'Thép thô',codes:[],scope:'Thép thô, tách riêng thép thành phẩm và phôi thép.'},
  {id:'all_steel',name:'Tổng thép thành phẩm',codes:[],scope:'Tổng sản xuất/bán hàng của các đơn vị trong báo cáo VSA; không tương đương tiêu dùng cuối cùng toàn quốc.'}
 ];
 export const PRODUCT_BY_ID=Object.fromEntries(STEEL_PRODUCTS.map(p=>[p.id,p]));
@@ -20,7 +21,7 @@ export function emptySteel(){return {schema:1,sector:'steel',requestedFrom:'2015
 export function periodMonth(period){if(/^\d{4}-Q[1-4]$/.test(period))return period.slice(0,4)+'-'+String(Number(period.at(-1))*3).padStart(2,'0');if(/^\d{4}$/.test(period))return period+'-12';return period;}
 export function periodLabel(period){return !period?'—':/^\d{4}-Q[1-4]$/.test(period)?period.slice(5)+'/'+period.slice(0,4):/^\d{4}$/.test(period)?period:period.slice(5)+'/'+period.slice(0,4);}
 export function periodRange(from,to,frequency='month'){const months=monthRange(from,to);return frequency==='quarter'?[...new Set(months.map(m=>m.slice(0,4)+'-Q'+Math.ceil(Number(m.slice(5))/3)))]:frequency==='year'?[...new Set(months.map(m=>m.slice(0,4)))]:months;}
-export function selectSteelSeries(series,{product='all',frequency='month',entity='industry',segment='total',source='all',metric='all',tab='prices',basis='market'}={}){return series.filter(s=>(product==='all'||s.product===product)&&(s.frequency||'month')===frequency&&(entity==='all'||(s.entity||'industry')===entity)&&(segment==='all'||(s.segment||'total')===segment)&&(source==='all'||(source==='workbook'?s.basis==='workbook':s.basis!=='workbook'))&&(metric==='all'||s.metric===metric)&&(tab==='prices'?/price/.test(s.metric)&&(basis==='market'?s.metric==='price':s.metric===basis):tab==='volume'?['production','sales','sales_north','sales_central','sales_south','sales_domestic','vsa_exports','exports','inventory','inventory_sum','market_share'].includes(s.metric)&&!(s.basis==='trade'):tab==='trade'?['imports','exports'].includes(s.metric):true));}
+export function selectSteelSeries(series,{product='all',frequency='month',entity='industry',segment='total',source='all',metric='all',tab='prices',basis='market'}={}){return series.filter(s=>(product==='all'||s.product===product)&&(s.frequency||'month')===frequency&&(entity==='all'||(s.entity||'industry')===entity)&&(segment==='all'||(s.segment||'total')===segment)&&(source==='all'||(source==='workbook'?s.basis==='workbook':s.basis!=='workbook'))&&(metric==='all'||s.metric===metric)&&(tab==='prices'?/price/.test(s.metric)&&(basis==='market'?s.metric==='price':s.metric===basis):tab==='volume'?['production','sales','sales_north','sales_central','sales_south','sales_domestic','vsa_exports','exports','inventory','inventory_sum'].includes(s.metric)&&!(s.basis==='trade'):tab==='trade'?['imports','exports','import_value','export_value','import_price','export_price'].includes(s.metric):tab==='market'?['market_share','capacity'].includes(s.metric):tab==='indicators'?['export_share','inventory_sales','sales_production'].includes(s.metric):true));}
 export function seriesDefinition(product,metric,basis='trade'){
  const p=PRODUCT_BY_ID[product];if(!p)throw Error('Unknown steel product');
  const names={imports:'Nhập khẩu',exports:'Xuất khẩu',import_price:'Đơn giá nhập khẩu',export_price:'Đơn giá xuất khẩu',production:'Sản xuất',sales:'Bán hàng',vsa_exports:'Xuất khẩu thành viên VSA',price:'Giá thị trường'};
@@ -46,7 +47,20 @@ export function parseTrade(payload,{period,url,checkedAt=new Date().toISOString(
 export function mergeSteel(previous,incoming,{now=new Date().toISOString()}={}){
  const result=structuredClone(previous||emptySteel());if(result.schema!==1)throw Error('Sai phiên bản dữ liệu ngành');
  const map=new Map(result.series.map(s=>[s.id,s]));
- for(const next of incoming){const old=map.get(next.id)||{...next,observations:[]};const points=new Map(old.observations.map(o=>[o.period,o]));const pattern=next.frequency==='quarter'?/^\d{4}-Q[1-4]$/:next.frequency==='year'?/^\d{4}$/:/^\d{4}-(0[1-9]|1[0-2])$/;for(const o of next.observations){if(!pattern.test(o.period)||periodMonth(o.period)<'2015-01'||periodMonth(o.period)>now.slice(0,7)||!Number.isFinite(o.value)||o.value<0||!/^https:\/\//.test(o.url))throw Error('Điểm dữ liệu ngành không hợp lệ');const prior=points.get(o.period);const priority=p=>p.source==='workbook'?(p.checkedAt||''):(p.observedAt||'')+'|'+(p.publishedAt||'');if(prior&&priority(o)<priority(prior))continue;points.set(o.period,o);}map.set(next.id,{...old,...next,observations:[...points.values()].sort((a,b)=>a.period.localeCompare(b.period))});}
+ for(const next of incoming){
+  const old=map.get(next.id)||{...next,observations:[]},points=new Map(old.observations.map(o=>[o.period,o]));
+  const pattern=next.frequency==='quarter'?/^\d{4}-Q[1-4]$/:next.frequency==='year'?/^\d{4}$/:/^\d{4}-(0[1-9]|1[0-2])$/;
+  for(const o of next.observations){
+   if(!pattern.test(o.period)||periodMonth(o.period)<'2015-01'||periodMonth(o.period)>now.slice(0,7)||!Number.isFinite(o.value)||o.value<0||!/^https:\/\//.test(o.url))throw Error('Điểm dữ liệu ngành không hợp lệ');
+   const prior=points.get(o.period),priority=p=>p.source==='workbook'?(p.checkedAt||''):(p.observedAt||'')+'|'+(p.publishedAt||'');
+   if(prior&&priority(o)<priority(prior))continue;
+   const revisions=[...(prior?.revisions||[]),...(o.revisions||[])];
+   if(prior&&prior.value!==o.value){const {revisions:ignored,...snapshot}=prior;revisions.push(snapshot);}
+   const unique=[...new Map(revisions.map(r=>[[r.url,r.publishedAt,r.value].join('|'),r])).values()];
+   points.set(o.period,unique.length?{...o,revisions:unique}:o);
+  }
+  map.set(next.id,{...old,...next,observations:[...points.values()].sort((a,b)=>a.period.localeCompare(b.period))});
+ }
  result.series=[...map.values()];result.updatedAt=now;return result;
 }
 export function growthAt(observations,period,months){const now=observations.find(o=>o.period===period);const d=new Date(periodMonth(period)+'-01T00:00:00Z');d.setUTCMonth(d.getUTCMonth()-months);const m=d.toISOString().slice(0,7),key=period.includes('Q')?m.slice(0,4)+'-Q'+Math.ceil(Number(m.slice(5))/3):period.length===4?m.slice(0,4):m;const prev=observations.find(o=>o.period===key);return now&&prev&&prev.value>0?(now.value/prev.value-1)*100:null;}
@@ -56,18 +70,58 @@ export function seriesCoverage(series,to=new Date().toISOString().slice(0,7)){co
 export function combineSteelSeries(series){
  const groups=new Map(),other=[];
  for(const s of series){const metric=s.metric==='exports'?'vsa_exports':s.metric;
-  const matched=s.product==='coated'&&(s.frequency||'month')==='month'&&(s.entity||'industry')==='industry'&&(s.segment||'total')==='total'&&s.unit==='tấn'&&['production','sales','vsa_exports'].includes(metric)&&(s.basis==='vsa'||s.id===`coated.${s.metric}.workbook.month.industry.total`);
-  if(!matched){other.push(s);continue;}if(!groups.has(metric))groups.set(metric,[]);groups.get(metric).push(s);
+  const matched=(s.frequency||'month')==='month'&&(s.entity||'industry')==='industry'&&(s.segment||'total')==='total'&&s.unit==='tấn'&&['production','sales','vsa_exports'].includes(metric)&&(s.basis==='vsa'||s.basis==='reviewed-vsa'||(s.product==='coated'&&s.id===`coated.${s.metric}.workbook.month.industry.total`));
+  const key=s.product+'|'+metric;
+  if(!matched){other.push(s);continue;}if(!groups.has(key))groups.set(key,[]);groups.get(key).push(s);
  }
- for(const [metric,parts] of groups){if(parts.length<2){other.push(...parts);continue;}const s=seriesDefinition('coated',metric,'combined');s.label+=' · tổng hợp nguồn';s.sourceLabel='VSA / KIS + Excel';s.scope='Tổng hợp tham khảo tôn mạ tháng: nguồn VSA/KIS và dòng tổng trong Excel. File không ghi liên kết nguồn gốc; từng điểm vẫn giữ nguồn riêng, không mặc định mọi khác biệt là lỗi.';s.method='Ưu tiên VSA trực tiếp, sau đó KIS trích VSA, rồi Excel khi kỳ đó chưa có số công bố. Chênh lệch được giữ để đối chiếu, không lấy trung bình. Không nội suy tháng thiếu.';s.frequency='month';const byPeriod=new Map();
+ for(const [key,parts] of groups){if(parts.length<2){other.push(...parts);continue;}const [product,metric]=key.split('|');const s=seriesDefinition(product,metric,'combined');s.label+=' · tổng hợp nguồn';s.sourceLabel='VSA / KIS / VietnamBiz'+(product==='coated'?' + Excel':'');s.scope='Thống kê thép thành phẩm VSA theo sản phẩm. '+(product==='coated'?'Bổ sung dòng tổng tôn mạ trong Excel; file chưa ghi liên kết nguồn gốc. ':'')+'Các báo cáo cùng trích VSA không phải các nguồn xác nhận độc lập.';s.method='Ưu tiên VSA trực tiếp, KIS trích VSA, bảng VietnamBiz trích VSA, rồi Excel. Giữ số đối chiếu và chênh lệch; không lấy trung bình, không nội suy.';s.frequency='month';const byPeriod=new Map();
   for(const part of parts)for(const o of part.observations){if(!byPeriod.has(o.period))byPeriod.set(o.period,[]);byPeriod.get(o.period).push({...o,sourceSeriesId:part.id,sourceLabel:part.sourceLabel||'VSA / KIS'});}
-  const priority=o=>o.source==='vsa'?3:o.source==='kis-vsa'?2:1;
+  const priority=o=>o.source==='vsa'?4:o.source==='kis-vsa'?3:o.source==='vietnambiz-vsa'?2:1;
   s.observations=[...byPeriod.entries()].sort(([a],[b])=>a.localeCompare(b)).map(([period,options])=>{options.sort((a,b)=>priority(b)-priority(a));return {...options[0],alternatives:options.slice(1),conflict:options.some(o=>o.value!==options[0].value)};});other.push(s);
  }return other;
 }
 export function coverageYears(series,to=new Date().toISOString().slice(0,7)){
  const range=periodRange('2015-01',to,series.frequency),present=new Set(series.observations.map(o=>o.period));
  return [...new Set(range.map(p=>p.slice(0,4)))].map(year=>{const periods=range.filter(p=>p.startsWith(year));return {year,count:periods.filter(p=>present.has(p)).length,total:periods.length,missing:periods.filter(p=>!present.has(p))};});
+}
+// Indicators only join the same series scope, publisher, document and period.
+// Derived values remain distinct from reported observations and retain both inputs.
+export function steelIndicators(series){
+ const result=[],baseURL=o=>o.url?.split('#')[0],identity=s=>[s.product,s.basis,s.frequency||'month',s.entity||'industry',s.segment||'total',s.unit,s.id.split('.').filter(p=>p!==s.metric).join('.')].join('|');
+ for(const sales of series.filter(s=>s.metric==='sales'&&s.unit==='tấn')){
+  for(const [metric,label,inputMetric,unit,calculate] of [
+   ['sales_domestic','Bán hàng nội địa (tính từ nguồn)','vsa_exports','tấn',(a,b)=>a-b],
+   ['export_share','Tỷ trọng xuất khẩu / bán hàng','vsa_exports','%',(a,b)=>a>0?b/a*100:null],
+   ['inventory_sales','Tồn kho cuối kỳ / bán hàng','inventory','lần',(a,b)=>a>0?b/a:null],
+   ['sales_production','Bán hàng / sản xuất','production','%',(a,b)=>b>0?a/b*100:null]
+  ]){
+   const peer=series.find(s=>identity(s)===identity(sales)&&(s.metric===inputMetric||(inputMetric==='vsa_exports'&&s.basis==='workbook'&&s.metric==='exports')));
+   if(!peer)continue;
+   const method=metric==='sales_domestic'?'Bán hàng − xuất khẩu':metric==='export_share'?'Xuất khẩu / bán hàng × 100':metric==='inventory_sales'?'Tồn kho cuối kỳ / bán hàng':'Bán hàng / sản xuất × 100';
+   const observations=sales.observations.flatMap(a=>{
+    const b=peer.observations.find(o=>o.period===a.period);
+    if(!b||a.source!==b.source||baseURL(a)!==baseURL(b)||a.conflict||b.conflict)return[];
+    if(inputMetric==='vsa_exports'&&b.value>a.value)return[];
+    const value=calculate(a.value,b.value);if(value===null||value<0)return[];
+    return [{period:a.period,value,url:a.url,source:a.source,checkedAt:a.checkedAt,publishedAt:a.publishedAt,kind:'calculated',note:method+'. Tính từ số gốc cùng kỳ và tài liệu; không phải số công bố riêng.',inputs:[{series:sales.id,value:a.value,url:a.url},{series:peer.id,value:b.value,url:b.url}]}];
+   });
+   if(observations.length)result.push({...sales,id:sales.id+'.derived.'+metric,metric,label:PRODUCT_BY_ID[sales.product].name+' · '+label,unit,method,derived:true,observations});
+  }
+ }
+ // Source payload already holds USD trade value; no additional estimate is used.
+ for(const s of series.filter(s=>s.basis==='trade'&&['imports','exports'].includes(s.metric))){
+  const observations=s.observations.filter(o=>Number.isFinite(o.raw?.tradeValueUSD)).map(o=>({...o,value:o.raw.tradeValueUSD,kind:'source-payload'}));
+  if(observations.length)result.push({...s,id:s.id+'.value',metric:s.metric==='imports'?'import_value':'export_value',label:PRODUCT_BY_ID[s.product].name+' · Kim ngạch '+(s.metric==='imports'?'nhập khẩu':'xuất khẩu'),unit:'USD',method:'Kim ngạch primaryValue USD trong cùng bản ghi UN Comtrade; không suy từ giá thị trường.',observations});
+ }
+ return result;
+}
+export function steelQuality(data,from='2024-01',to=new Date().toISOString().slice(0,7)){
+ const required=monthRange(from,to),combined=combineSteelSeries(data.series);
+ return ['construction','hrc','coated','pipe','billet'].flatMap(product=>['production','sales','vsa_exports'].map(metric=>{
+  const rows=combined.filter(s=>s.product===product&&s.metric===metric&&['combined','vsa','reviewed-vsa'].includes(s.basis)&&(s.frequency||'month')==='month');
+  const points=rows.flatMap(s=>s.observations),present=new Set(points.map(o=>o.period)),missing=required.filter(p=>!present.has(p));
+  return {product,metric,count:required.length-missing.length,total:required.length,latest:points.map(o=>o.period).sort().at(-1)||null,missing};
+ }));
 }
 export function cleanText(html){return String(html).replace(/<\/(p|li|h[1-6])>|<br\s*\/?\s*>/gi,'\n').replace(/<[^>]*>/g,' ').replace(/&#(\d+);/g,(_,n)=>String.fromCodePoint(Number(n))).replace(/&nbsp;/g,' ').replace(/&amp;/g,'&').replace(/&quot;/g,'"').normalize('NFC').replace(/[ \t\u00a0]+/g,' ');}
 export function vnNumber(raw){let s=raw.trim();if(/^\d{1,3}(\.\d{3})+$/.test(s))return Number(s.replaceAll('.',''));if(s.includes(','))return Number(s.replaceAll('.','').replace(',','.'));return Number(s);}

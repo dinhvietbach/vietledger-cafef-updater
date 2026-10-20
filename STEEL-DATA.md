@@ -55,3 +55,14 @@ The combined display maps only reviewed monthly coated-steel industry totals fro
 
 The fixture `fixtures/req-australia-extract.xlsx` contains a small public-source extract of REQ tables 21 and 22, headers and source footnotes. It tests blank XML cells, missing observations, units and the Fe transition. It contains no user workbook data.
 
+
+
+## Bổ sung và đối soát 21/10/2026
+
+- Bảng đã đọc trực tiếp lưu trong steel-reviewed.json: tài liệu, SHA-256, số trang, kỳ, đơn vị, phạm vi và số gốc. VietnamBiz, KIS và VCBS cùng trích VSA không được coi là ba nguồn thống kê độc lập.
+- Phân biệt tháng, quý, năm và lũy kế (ytd). Không chia số quý/năm thành tháng; không đo chiều cao cột biểu đồ để tạo số chính xác.
+- Giữ tổng in trong nguồn, đồng thời ghi cảnh báo nếu khác tổng các dòng. Bảng giá lặp tiêu đề năm hoặc thiếu điều kiện giao hàng được cảnh báo/giữ riêng.
+- Giữ phiên bản công bố trước khi một số được điều chỉnh. Chế độ tổng hợp cho phép mở các số đối chiếu; không lấy trung bình nguồn.
+- Chỉ báo nội địa, xuất khẩu/bán hàng, tồn kho/bán hàng, bán hàng/sản xuất chỉ ghép cùng tài liệu, kỳ và phạm vi. Bán hàng/sản xuất không phải công suất sử dụng. Kim ngạch lấy từ payload hải quan, tách khỏi báo giá.
+- Bảng tiến độ đếm tháng thực có cho từng sản phẩm từ 2024. Độ phủ từng năm vẫn bắt đầu 2015; dữ liệu còn thiếu không được tự lấp.
+- Cập nhật tự động mở rộng bài VSA có tên “ngành thép / N tháng đầu năm”, giữ kỳ lũy kế; bổ sung bảng nội địa/tồn kho KIS và thư viện báo cáo VietnamBiz mới. Bảng ảnh cần rà soát trước khi đưa vào số liệu; không đánh đồng kiểm tra thành công với có dữ liệu mới.

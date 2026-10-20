@@ -29,10 +29,10 @@ def extract(filename):
                     if line.startswith(label): product=p;matched=True;break
                 if line.startswith(('Thép cuộn','Tổng')): product=None
                 if not product:continue
-                kind=metric if matched and metric=='sales' else 'production' if line.startswith('Sản xuất') else 'vsa_exports' if line.startswith('Xuất khẩu') and metric=='sales' else None
+                kind=metric if matched and metric=='sales' else 'production' if line.startswith('Sản xuất') else 'inventory' if line.startswith('Tồn kho') and metric=='production' else 'vsa_exports' if line.startswith('Xuất khẩu') and metric=='sales' else 'sales_domestic' if line.startswith('Nội địa') and metric=='sales' else None
                 if not kind:continue
                 # Values appear before the percentage columns. Ignore accumulated columns.
-                first=re.match(r'^(?:Thép (?:ống|tôn|xây(?: dựng)?)|Sản xuất|Xuất khẩu)\s+(\d[\d.,]*)\s+(\d[\d.,]*)(?:\s|$)',line)
+                first=re.match(r'^(?:Thép (?:ống|tôn|xây(?: dựng)?)|Sản xuất|Xuất khẩu|Nội địa|Tồn kho)\s+(\d[\d.,]*)\s+(\d[\d.,]*)(?:\s|$)',line)
                 if not first: continue
                 numbers=first.groups()
                 # KIS mixes dot and comma thousands separators in the same table.

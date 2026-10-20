@@ -1,0 +1,4980 @@
+{
+  "version": 1,
+  "reviewedAt": "2026-10-20T17:46:51.540Z",
+  "docs": {
+    "vb-2026-03": {
+      "url": "https://mediacdn.vietnambiz.vn/1881912202208555/files/2026/05/05/bao-cao-thi-truong-thep-quy-i-2026-20260505095914229.pdf",
+      "publishedAt": "2026-05-05",
+      "hash": "3b88db92df91910e011e013aeed7d10b94e2a66f29b35664fcb18416c5b1aa9d",
+      "source": "vietnambiz-vsa",
+      "upstream": "VSA",
+      "title": "VietnamBiz · Thị trường thép 2026-03",
+      "reviewedAt": "2026-10-20T17:46:51.394Z"
+    },
+    "vb-2026-02": {
+      "url": "https://mediacdn.vietnambiz.vn/1881912202208555/files/2026/04/11/bao-cao-thi-truong-thep-thang-2-2026-2026041108281055.pdf",
+      "publishedAt": "2026-04-11",
+      "hash": "54c9546a69a11aa2def7b9eb327833e80429de352b2bd0ac109611d0f6553337",
+      "source": "vietnambiz-vsa",
+      "upstream": "VSA",
+      "title": "VietnamBiz · Thị trường thép 2026-02",
+      "reviewedAt": "2026-10-20T17:46:51.402Z"
+    },
+    "vb-2026-01": {
+      "url": "https://mediacdn.vietnambiz.vn/1881912202208555/files/2026/04/08/bao-cao-thi-truong-thep-thang-1-2026-1-2026040810153716.pdf",
+      "publishedAt": "2026-04-08",
+      "hash": "137206c32ac042f3a7829d4745d6ea21bcaf1646bcec358ade26c9997360e762",
+      "source": "vietnambiz-vsa",
+      "upstream": "VSA",
+      "title": "VietnamBiz · Thị trường thép 2026-01",
+      "reviewedAt": "2026-10-20T17:46:51.406Z"
+    },
+    "vb-2025-08": {
+      "url": "https://mediacdn.vietnambiz.vn/1881912202208555/files/2025/10/03/bao-cao-thi-truong-thep-thang-8-2025-20251003115827835.pdf",
+      "publishedAt": "2025-10-03",
+      "hash": "0044f862c883b7a91551c6ce3aa7ced7014d23e7c52019244939b87568596a74",
+      "source": "vietnambiz-vsa",
+      "upstream": "VSA",
+      "title": "VietnamBiz · Thị trường thép 2025-08",
+      "reviewedAt": "2026-10-20T17:46:51.412Z"
+    },
+    "vb-2025-02": {
+      "url": "https://mediacdn.vietnambiz.vn/1881912202208555/files/2025/03/28/bao-cao-thi-truong-thep-thang-2-2025-20250328173842407.pdf",
+      "publishedAt": "2025-03-28",
+      "hash": "bac37f276d2c5e1e8bca44d64dab643e0f33bf3e2f2c08e05fe30a1bd0f294a9",
+      "source": "vietnambiz-vsa",
+      "upstream": "VSA",
+      "title": "VietnamBiz · Thị trường thép 2025-02",
+      "reviewedAt": "2026-10-20T17:46:51.426Z"
+    },
+    "vb-2025-01": {
+      "url": "https://mediacdn.vietnambiz.vn/1881912202208555/files/2025/03/01/bao-cao-thi-truong-thep-thang-1-2025-20250301094635830.pdf",
+      "publishedAt": "2025-03-01",
+      "hash": "d42151091bb5b52b57de6385c5849ee230f3e0b7d8ae6d40db1acfbae4736132",
+      "source": "vietnambiz-vsa",
+      "upstream": "VSA",
+      "title": "VietnamBiz · Thị trường thép 2025-01",
+      "reviewedAt": "2026-10-20T17:46:51.433Z"
+    },
+    "vb-2024-08": {
+      "url": "https://mediacdn.vietnambiz.vn/1881912202208555/files/2024/09/27/bao-cao-thi-truong-thep-thang-8-2024-20240927190003230.pdf",
+      "publishedAt": "2024-09-27",
+      "hash": "3c317e070787ad54a374050d3a0b8fc87fb29bc0ac61246cb105ae57614f3650",
+      "source": "vietnambiz-vsa",
+      "upstream": "VSA",
+      "title": "VietnamBiz · Thị trường thép 2024-08",
+      "reviewedAt": "2026-10-20T17:46:51.443Z"
+    },
+    "vb-2026-05": {
+      "url": "https://mediacdn.vietnambiz.vn/1881912202208555/files/2026/07/10/bao-cao-thi-truong-thep-thang-5-2026-20260710085659528.pdf",
+      "publishedAt": "2026-07-10",
+      "hash": "6726a2cda558ed067979a8e07250677e0e73e0cebbbd51d7dc784b4594925a5a",
+      "source": "vietnambiz-vsa",
+      "upstream": "VSA",
+      "title": "VietnamBiz · Thị trường thép 2026-05",
+      "reviewedAt": "2026-10-20T17:46:51.452Z"
+    },
+    "vb-2025-09": {
+      "url": "https://mediacdn.vietnambiz.vn/1881912202208555/files/2025/11/12/bao-cao-thi-truong-thep-quy-iii-2025-20251112133009837.pdf",
+      "publishedAt": "2025-11-12",
+      "hash": "8bf5ae0b52cc2097fabb7e6825ab0c390c16c860e6ddeed86d995bba9b5ed178",
+      "source": "vietnambiz-vsa",
+      "upstream": "VSA",
+      "title": "VietnamBiz · Thị trường thép 2025-09",
+      "reviewedAt": "2026-10-20T17:46:51.462Z"
+    },
+    "vb-2024-12": {
+      "url": "https://mediacdn.vietnambiz.vn/1881912202208555/files/2025/02/10/bao-cao-thi-truong-thep-nam-2024-20250210093643171.pdf",
+      "publishedAt": "2025-02-10",
+      "hash": "4e25786714e3327bc6f29b1931b52451aacdfb09f18abfc8c6d5847ccebff348",
+      "source": "vietnambiz-vsa",
+      "upstream": "VSA",
+      "title": "VietnamBiz · Thị trường thép 2024-12",
+      "reviewedAt": "2026-10-20T17:46:51.474Z"
+    },
+    "vcbs2026": {
+      "url": "https://cafefnew.mediacdn.vn/Images/Uploaded/DuLieuDownload/PhanTichBaoCao/HPG_20260810103452_936119e47f7f42aebfcf1a4e.pdf",
+      "publishedAt": "2026-07-27",
+      "hash": "2b2ef3a02012d2e45143efed63ec549d28a8d7227ea5cebc8217e583f3a54ba3",
+      "source": "vcbs-vsa",
+      "upstream": "VSA",
+      "title": "VCBS · Báo cáo ngành thép Q2/2026",
+      "reviewedAt": "2026-10-20T17:46:51.479Z"
+    },
+    "fpts-2017": {
+      "url": "https://static1.vietstock.vn/edocs/5678/Bao_cao_nganh_thep_FTS_T4.pdf",
+      "publishedAt": "",
+      "hash": "1184dde1ff3a828ca48fe2398e38e2a2689f04498c8d0cd3f756ce0546e8b2d3",
+      "source": "fpts-wsa",
+      "upstream": "WSA",
+      "title": "FPTS · Báo cáo ngành thép 2017",
+      "reviewedAt": "2026-10-20T17:46:51.501Z"
+    },
+    "hpg-2025-q4": {
+      "url": "https://file.hoaphat.com.vn/hoaphat-com-vn/2026/01/tong-quan-tinh-hinh-kinh-doanh-hpg-quy-4-2025.pdf",
+      "publishedAt": "",
+      "hash": "34c335a8ff04dcbfa101d7eec3e02b33590e0532e290910ce579a8546341b3af",
+      "source": "hpg-official",
+      "upstream": "Hòa Phát",
+      "title": "Hòa Phát · Tổng quan kinh doanh Q4/2025",
+      "reviewedAt": "2026-10-20T17:46:51.531Z"
+    },
+    "vb-2024-04": {
+      "url": "https://mediacdn.vietnambiz.vn/1881912202208555/files/2024/06/02/bao-cao-thi-truong-thep-thang-4-2024-20240602094737982.pdf",
+      "publishedAt": "2024-06-02",
+      "hash": "839c260eaef6b9b8f1140693b2088076e684aa6826aa1b771379224daad58a79",
+      "source": "vietnambiz-vsa",
+      "upstream": "VSA",
+      "title": "VietnamBiz · Thị trường thép 2024-04",
+      "reviewedAt": "2026-10-20T17:46:51.539Z"
+    }
+  },
+  "tables": [
+    {
+      "document": "vb-2026-03",
+      "page": 17,
+      "period": "2026-03",
+      "metric": "production",
+      "values": [
+        1345061,
+        814790,
+        252387,
+        427234,
+        233746,
+        3073218
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2026-03",
+      "page": 17,
+      "period": "2026-Q1",
+      "metric": "production",
+      "values": [
+        3725670,
+        2405044,
+        645948,
+        1141882,
+        618376,
+        8536920
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "quarter",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2026-03",
+      "page": 20,
+      "period": "2026-03",
+      "metric": "sales",
+      "values": [
+        1500065,
+        916417,
+        252925,
+        433882,
+        277635,
+        3380924
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2026-03",
+      "page": 20,
+      "period": "2026-Q1",
+      "metric": "sales",
+      "values": [
+        3970125,
+        2360616,
+        574617,
+        1064804,
+        691412,
+        8661574
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "quarter",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2026-03",
+      "page": 21,
+      "period": "2026-03",
+      "metric": "vsa_exports",
+      "values": [
+        108555,
+        211909,
+        73869,
+        103654,
+        38079,
+        536066
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2026-03",
+      "page": 21,
+      "period": "2026-Q1",
+      "metric": "vsa_exports",
+      "values": [
+        335502,
+        416013,
+        170487,
+        282800,
+        93500,
+        1298302
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "quarter",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2026-02",
+      "page": 14,
+      "period": "2026-02",
+      "metric": "production",
+      "values": [
+        1110860,
+        861810,
+        171046,
+        320538,
+        164541,
+        2628795
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2026-02",
+      "page": 16,
+      "period": "2026-02",
+      "metric": "sales",
+      "values": [
+        981489,
+        726085,
+        146093,
+        280546,
+        182089,
+        2316302
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2026-02",
+      "page": 18,
+      "period": "2026-02",
+      "metric": "vsa_exports",
+      "values": [
+        124907,
+        102754,
+        51944,
+        89448,
+        23480,
+        392533
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 13,
+      "period": "2025-08",
+      "metric": "production",
+      "values": [
+        1028447,
+        685703,
+        337619,
+        424629,
+        222899,
+        2699297
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 13,
+      "period": "2025-08",
+      "metric": "production",
+      "values": [
+        8548849,
+        5143269,
+        2261875,
+        3616660,
+        1686702,
+        21257355
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "ytd",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 16,
+      "period": "2025-08",
+      "metric": "sales",
+      "values": [
+        937823,
+        671092,
+        190869,
+        351865,
+        219955,
+        2371604
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 16,
+      "period": "2025-08",
+      "metric": "sales",
+      "values": [
+        8653120,
+        5211942,
+        1724671,
+        3305656,
+        1829946,
+        20725335
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "ytd",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 16,
+      "period": "2025-08",
+      "metric": "vsa_exports",
+      "values": [
+        88143,
+        86945,
+        47543,
+        86832,
+        34795,
+        344258
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 16,
+      "period": "2025-08",
+      "metric": "vsa_exports",
+      "values": [
+        1061510,
+        603307,
+        462772,
+        1207076,
+        260100,
+        3594765
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "ytd",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2025-02",
+      "page": 14,
+      "period": "2025-02",
+      "metric": "production",
+      "values": [
+        785800,
+        514971,
+        224045,
+        427432,
+        200522,
+        2152770
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2025-02",
+      "page": 14,
+      "period": "2025-02",
+      "metric": "production",
+      "values": [
+        1722378,
+        1064670,
+        435631,
+        856666,
+        371111,
+        4450456
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "ytd",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2025-02",
+      "page": 16,
+      "period": "2025-02",
+      "metric": "sales",
+      "values": [
+        1022302,
+        497995,
+        223368,
+        423080,
+        238090,
+        2404835
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2025-02",
+      "page": 16,
+      "period": "2025-02",
+      "metric": "sales",
+      "values": [
+        1776652,
+        1051690,
+        459593,
+        783288,
+        408568,
+        4479791
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "ytd",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2025-02",
+      "page": 17,
+      "period": "2025-02",
+      "metric": "vsa_exports",
+      "values": [
+        157973,
+        90679,
+        35599,
+        143493,
+        28221,
+        455965
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2025-02",
+      "page": 17,
+      "period": "2025-02",
+      "metric": "vsa_exports",
+      "values": [
+        303316,
+        130060,
+        126227,
+        326665,
+        55458,
+        941726
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "ytd",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2025-01",
+      "page": 11,
+      "period": "2025-01",
+      "metric": "production",
+      "values": [
+        936578,
+        549699,
+        208801,
+        433316,
+        172159,
+        2300553
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2025-01",
+      "page": 13,
+      "period": "2025-01",
+      "metric": "sales",
+      "values": [
+        754350,
+        553695,
+        222709,
+        360956,
+        170956,
+        2062666
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2025-01",
+      "page": 14,
+      "period": "2025-01",
+      "metric": "vsa_exports",
+      "values": [
+        145343,
+        39381,
+        80912,
+        183172,
+        27237,
+        476045
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2024-08",
+      "page": 16,
+      "period": "2024-08",
+      "metric": "production",
+      "values": [
+        1018607,
+        579163,
+        244488,
+        477720,
+        213173,
+        2533150
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 1
+    },
+    {
+      "document": "vb-2024-08",
+      "page": 16,
+      "period": "2024-08",
+      "metric": "sales",
+      "values": [
+        981624,
+        620099,
+        224336,
+        480804,
+        215636,
+        2522499
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2024-08",
+      "page": 16,
+      "period": "2024-08",
+      "metric": "vsa_exports",
+      "values": [
+        198161,
+        252456,
+        31596,
+        279545,
+        27450,
+        789208
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2024-08",
+      "page": 16,
+      "period": "2023-08",
+      "metric": "production",
+      "values": [
+        979124,
+        314708,
+        227211,
+        255902,
+        205731,
+        1982676
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2024-08",
+      "page": 16,
+      "period": "2023-08",
+      "metric": "sales",
+      "values": [
+        1166155,
+        390811,
+        111918,
+        269029,
+        215863,
+        2153776
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2024-08",
+      "page": 16,
+      "period": "2023-08",
+      "metric": "vsa_exports",
+      "values": [
+        177255,
+        83700,
+        26935,
+        103482,
+        24312,
+        415684
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2024-08",
+      "page": 17,
+      "period": "2024-08",
+      "metric": "production",
+      "values": [
+        7799438,
+        4557704,
+        1743773,
+        3813104,
+        1579012,
+        19493032
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "ytd",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": -1
+    },
+    {
+      "document": "vb-2024-08",
+      "page": 17,
+      "period": "2024-08",
+      "metric": "sales",
+      "values": [
+        7772237,
+        4512484,
+        1691027,
+        3655570,
+        1616644,
+        19247962
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "ytd",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2024-08",
+      "page": 17,
+      "period": "2024-08",
+      "metric": "vsa_exports",
+      "values": [
+        1346644,
+        1651465,
+        304148,
+        2156340,
+        201423,
+        5660020
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "ytd",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2024-08",
+      "page": 17,
+      "period": "2023-08",
+      "metric": "production",
+      "values": [
+        6846486,
+        4313659,
+        2070837,
+        2992588,
+        1572408,
+        17795978
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "ytd",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2024-08",
+      "page": 17,
+      "period": "2023-08",
+      "metric": "sales",
+      "values": [
+        6780258,
+        4416130,
+        1214373,
+        2740007,
+        1600295,
+        16751063
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "ytd",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2024-08",
+      "page": 17,
+      "period": "2023-08",
+      "metric": "vsa_exports",
+      "values": [
+        1117827,
+        2214994,
+        281415,
+        1459557,
+        210269,
+        5284062
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "ytd",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 18,
+      "period": "2024-06",
+      "metric": "price",
+      "values": [
+        106.5
+      ],
+      "products": [
+        "iron"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "62fe-cfr-north-china",
+      "scope": "Quặng sắt 62% Fe CFR Bắc Trung Quốc; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 18,
+      "period": "2024-07",
+      "metric": "price",
+      "values": [
+        105.9
+      ],
+      "products": [
+        "iron"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "62fe-cfr-north-china",
+      "scope": "Quặng sắt 62% Fe CFR Bắc Trung Quốc; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 18,
+      "period": "2024-08",
+      "metric": "price",
+      "values": [
+        98.7
+      ],
+      "products": [
+        "iron"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "62fe-cfr-north-china",
+      "scope": "Quặng sắt 62% Fe CFR Bắc Trung Quốc; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 18,
+      "period": "2025-06",
+      "metric": "price",
+      "values": [
+        94.5
+      ],
+      "products": [
+        "iron"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "62fe-cfr-north-china",
+      "scope": "Quặng sắt 62% Fe CFR Bắc Trung Quốc; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 18,
+      "period": "2025-07",
+      "metric": "price",
+      "values": [
+        99.1
+      ],
+      "products": [
+        "iron"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "62fe-cfr-north-china",
+      "scope": "Quặng sắt 62% Fe CFR Bắc Trung Quốc; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 18,
+      "period": "2025-08",
+      "metric": "price",
+      "values": [
+        101.8
+      ],
+      "products": [
+        "iron"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "62fe-cfr-north-china",
+      "scope": "Quặng sắt 62% Fe CFR Bắc Trung Quốc; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 18,
+      "period": "2024-06",
+      "metric": "price",
+      "values": [
+        249.4
+      ],
+      "products": [
+        "coking_coal"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "plv-hcc-fob-australia",
+      "scope": "Than mỡ PLV HCC FOB Úc; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 18,
+      "period": "2024-07",
+      "metric": "price",
+      "values": [
+        237.1
+      ],
+      "products": [
+        "coking_coal"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "plv-hcc-fob-australia",
+      "scope": "Than mỡ PLV HCC FOB Úc; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 18,
+      "period": "2024-08",
+      "metric": "price",
+      "values": [
+        205.5
+      ],
+      "products": [
+        "coking_coal"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "plv-hcc-fob-australia",
+      "scope": "Than mỡ PLV HCC FOB Úc; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 18,
+      "period": "2025-06",
+      "metric": "price",
+      "values": [
+        178.4
+      ],
+      "products": [
+        "coking_coal"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "plv-hcc-fob-australia",
+      "scope": "Than mỡ PLV HCC FOB Úc; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 18,
+      "period": "2025-07",
+      "metric": "price",
+      "values": [
+        176.8
+      ],
+      "products": [
+        "coking_coal"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "plv-hcc-fob-australia",
+      "scope": "Than mỡ PLV HCC FOB Úc; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 18,
+      "period": "2025-08",
+      "metric": "price",
+      "values": [
+        186.8
+      ],
+      "products": [
+        "coking_coal"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "plv-hcc-fob-australia",
+      "scope": "Than mỡ PLV HCC FOB Úc; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 18,
+      "period": "2024-06",
+      "metric": "price",
+      "values": [
+        292.1
+      ],
+      "products": [
+        "coke"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "fob-north-china",
+      "scope": "Than cốc FOB Bắc Trung Quốc; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 18,
+      "period": "2024-07",
+      "metric": "price",
+      "values": [
+        278.5
+      ],
+      "products": [
+        "coke"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "fob-north-china",
+      "scope": "Than cốc FOB Bắc Trung Quốc; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 18,
+      "period": "2024-08",
+      "metric": "price",
+      "values": [
+        256.7
+      ],
+      "products": [
+        "coke"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "fob-north-china",
+      "scope": "Than cốc FOB Bắc Trung Quốc; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 18,
+      "period": "2025-06",
+      "metric": "price",
+      "values": [
+        183.9
+      ],
+      "products": [
+        "coke"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "fob-north-china",
+      "scope": "Than cốc FOB Bắc Trung Quốc; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 18,
+      "period": "2025-07",
+      "metric": "price",
+      "values": [
+        186.7
+      ],
+      "products": [
+        "coke"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "fob-north-china",
+      "scope": "Than cốc FOB Bắc Trung Quốc; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 18,
+      "period": "2025-08",
+      "metric": "price",
+      "values": [
+        215.3
+      ],
+      "products": [
+        "coke"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "fob-north-china",
+      "scope": "Than cốc FOB Bắc Trung Quốc; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 18,
+      "period": "2024-06",
+      "metric": "price",
+      "values": [
+        374.8
+      ],
+      "products": [
+        "scrap"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "hms-cfr-east-asia",
+      "scope": "Thép phế HMS 1/2 80:20 CFR Đông Á; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 18,
+      "period": "2024-07",
+      "metric": "price",
+      "values": [
+        377.6
+      ],
+      "products": [
+        "scrap"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "hms-cfr-east-asia",
+      "scope": "Thép phế HMS 1/2 80:20 CFR Đông Á; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 18,
+      "period": "2024-08",
+      "metric": "price",
+      "values": [
+        364
+      ],
+      "products": [
+        "scrap"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "hms-cfr-east-asia",
+      "scope": "Thép phế HMS 1/2 80:20 CFR Đông Á; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 18,
+      "period": "2025-06",
+      "metric": "price",
+      "values": [
+        334.6
+      ],
+      "products": [
+        "scrap"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "hms-cfr-east-asia",
+      "scope": "Thép phế HMS 1/2 80:20 CFR Đông Á; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 18,
+      "period": "2025-07",
+      "metric": "price",
+      "values": [
+        335
+      ],
+      "products": [
+        "scrap"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "hms-cfr-east-asia",
+      "scope": "Thép phế HMS 1/2 80:20 CFR Đông Á; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 18,
+      "period": "2025-08",
+      "metric": "price",
+      "values": [
+        341
+      ],
+      "products": [
+        "scrap"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "hms-cfr-east-asia",
+      "scope": "Thép phế HMS 1/2 80:20 CFR Đông Á; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 18,
+      "period": "2024-06",
+      "metric": "price",
+      "values": [
+        515.7
+      ],
+      "products": [
+        "billet"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "cfr-se-asia",
+      "scope": "Phôi thép CFR Đông Nam Á; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 18,
+      "period": "2024-07",
+      "metric": "price",
+      "values": [
+        496
+      ],
+      "products": [
+        "billet"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "cfr-se-asia",
+      "scope": "Phôi thép CFR Đông Nam Á; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 18,
+      "period": "2024-08",
+      "metric": "price",
+      "values": [
+        467.7
+      ],
+      "products": [
+        "billet"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "cfr-se-asia",
+      "scope": "Phôi thép CFR Đông Nam Á; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 18,
+      "period": "2025-06",
+      "metric": "price",
+      "values": [
+        444
+      ],
+      "products": [
+        "billet"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "cfr-se-asia",
+      "scope": "Phôi thép CFR Đông Nam Á; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 18,
+      "period": "2025-07",
+      "metric": "price",
+      "values": [
+        456.1
+      ],
+      "products": [
+        "billet"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "cfr-se-asia",
+      "scope": "Phôi thép CFR Đông Nam Á; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 18,
+      "period": "2025-08",
+      "metric": "price",
+      "values": [
+        466
+      ],
+      "products": [
+        "billet"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "cfr-se-asia",
+      "scope": "Phôi thép CFR Đông Nam Á; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 18,
+      "period": "2024-06",
+      "metric": "price",
+      "values": [
+        539.2
+      ],
+      "products": [
+        "hrc"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "sae1006-cfr-se-asia",
+      "scope": "HRC SAE1006 CFR Đông Nam Á; bình quân tháng, không đồng nhất giá tại nhà máy Việt Nam.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 18,
+      "period": "2024-07",
+      "metric": "price",
+      "values": [
+        519.7
+      ],
+      "products": [
+        "hrc"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "sae1006-cfr-se-asia",
+      "scope": "HRC SAE1006 CFR Đông Nam Á; bình quân tháng, không đồng nhất giá tại nhà máy Việt Nam.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 18,
+      "period": "2024-08",
+      "metric": "price",
+      "values": [
+        485.6
+      ],
+      "products": [
+        "hrc"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "sae1006-cfr-se-asia",
+      "scope": "HRC SAE1006 CFR Đông Nam Á; bình quân tháng, không đồng nhất giá tại nhà máy Việt Nam.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 18,
+      "period": "2025-06",
+      "metric": "price",
+      "values": [
+        494.3
+      ],
+      "products": [
+        "hrc"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "sae1006-cfr-se-asia",
+      "scope": "HRC SAE1006 CFR Đông Nam Á; bình quân tháng, không đồng nhất giá tại nhà máy Việt Nam.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 18,
+      "period": "2025-07",
+      "metric": "price",
+      "values": [
+        491.1
+      ],
+      "products": [
+        "hrc"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "sae1006-cfr-se-asia",
+      "scope": "HRC SAE1006 CFR Đông Nam Á; bình quân tháng, không đồng nhất giá tại nhà máy Việt Nam.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-08",
+      "page": 18,
+      "period": "2025-08",
+      "metric": "price",
+      "values": [
+        502.4
+      ],
+      "products": [
+        "hrc"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "sae1006-cfr-se-asia",
+      "scope": "HRC SAE1006 CFR Đông Nam Á; bình quân tháng, không đồng nhất giá tại nhà máy Việt Nam.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-02",
+      "page": 18,
+      "period": "2024-01",
+      "metric": "price",
+      "values": [
+        135.1
+      ],
+      "products": [
+        "iron"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "62fe-cfr-north-china",
+      "scope": "Quặng sắt 62% Fe CFR Bắc Trung Quốc; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-02",
+      "page": 18,
+      "period": "2024-02",
+      "metric": "price",
+      "values": [
+        124.9
+      ],
+      "products": [
+        "iron"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "62fe-cfr-north-china",
+      "scope": "Quặng sắt 62% Fe CFR Bắc Trung Quốc; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-02",
+      "page": 18,
+      "period": "2025-01",
+      "metric": "price",
+      "values": [
+        101.9
+      ],
+      "products": [
+        "iron"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "62fe-cfr-north-china",
+      "scope": "Quặng sắt 62% Fe CFR Bắc Trung Quốc; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-02",
+      "page": 18,
+      "period": "2025-02",
+      "metric": "price",
+      "values": [
+        106.9
+      ],
+      "products": [
+        "iron"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "62fe-cfr-north-china",
+      "scope": "Quặng sắt 62% Fe CFR Bắc Trung Quốc; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-02",
+      "page": 18,
+      "period": "2024-01",
+      "metric": "price",
+      "values": [
+        332.1
+      ],
+      "products": [
+        "coking_coal"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "plv-hcc-fob-australia",
+      "scope": "Than mỡ PLV HCC FOB Úc; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-02",
+      "page": 18,
+      "period": "2024-02",
+      "metric": "price",
+      "values": [
+        315.4
+      ],
+      "products": [
+        "coking_coal"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "plv-hcc-fob-australia",
+      "scope": "Than mỡ PLV HCC FOB Úc; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-02",
+      "page": 18,
+      "period": "2025-01",
+      "metric": "price",
+      "values": [
+        192.3
+      ],
+      "products": [
+        "coking_coal"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "plv-hcc-fob-australia",
+      "scope": "Than mỡ PLV HCC FOB Úc; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-02",
+      "page": 18,
+      "period": "2025-02",
+      "metric": "price",
+      "values": [
+        188.2
+      ],
+      "products": [
+        "coking_coal"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "plv-hcc-fob-australia",
+      "scope": "Than mỡ PLV HCC FOB Úc; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-02",
+      "page": 18,
+      "period": "2024-01",
+      "metric": "price",
+      "values": [
+        325
+      ],
+      "products": [
+        "coke"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "fob-north-china",
+      "scope": "Than cốc FOB Bắc Trung Quốc; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-02",
+      "page": 18,
+      "period": "2024-02",
+      "metric": "price",
+      "values": [
+        316.9
+      ],
+      "products": [
+        "coke"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "fob-north-china",
+      "scope": "Than cốc FOB Bắc Trung Quốc; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-02",
+      "page": 18,
+      "period": "2025-01",
+      "metric": "price",
+      "values": [
+        233.4
+      ],
+      "products": [
+        "coke"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "fob-north-china",
+      "scope": "Than cốc FOB Bắc Trung Quốc; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-02",
+      "page": 18,
+      "period": "2025-02",
+      "metric": "price",
+      "values": [
+        216.8
+      ],
+      "products": [
+        "coke"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "fob-north-china",
+      "scope": "Than cốc FOB Bắc Trung Quốc; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-02",
+      "page": 18,
+      "period": "2024-01",
+      "metric": "price",
+      "values": [
+        401.6
+      ],
+      "products": [
+        "scrap"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "hms-cfr-east-asia",
+      "scope": "Thép phế HMS 1/2 80:20 CFR Đông Á; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-02",
+      "page": 18,
+      "period": "2024-02",
+      "metric": "price",
+      "values": [
+        398.2
+      ],
+      "products": [
+        "scrap"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "hms-cfr-east-asia",
+      "scope": "Thép phế HMS 1/2 80:20 CFR Đông Á; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-02",
+      "page": 18,
+      "period": "2025-01",
+      "metric": "price",
+      "values": [
+        341.5
+      ],
+      "products": [
+        "scrap"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "hms-cfr-east-asia",
+      "scope": "Thép phế HMS 1/2 80:20 CFR Đông Á; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-02",
+      "page": 18,
+      "period": "2025-02",
+      "metric": "price",
+      "values": [
+        343.8
+      ],
+      "products": [
+        "scrap"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "hms-cfr-east-asia",
+      "scope": "Thép phế HMS 1/2 80:20 CFR Đông Á; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-02",
+      "page": 18,
+      "period": "2024-01",
+      "metric": "price",
+      "values": [
+        541.9
+      ],
+      "products": [
+        "billet"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "cfr-se-asia",
+      "scope": "Phôi thép CFR Đông Nam Á; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-02",
+      "page": 18,
+      "period": "2024-02",
+      "metric": "price",
+      "values": [
+        538.8
+      ],
+      "products": [
+        "billet"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "cfr-se-asia",
+      "scope": "Phôi thép CFR Đông Nam Á; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-02",
+      "page": 18,
+      "period": "2025-01",
+      "metric": "price",
+      "values": [
+        460.3
+      ],
+      "products": [
+        "billet"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "cfr-se-asia",
+      "scope": "Phôi thép CFR Đông Nam Á; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-02",
+      "page": 18,
+      "period": "2025-02",
+      "metric": "price",
+      "values": [
+        463.5
+      ],
+      "products": [
+        "billet"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "cfr-se-asia",
+      "scope": "Phôi thép CFR Đông Nam Á; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-02",
+      "page": 18,
+      "period": "2024-01",
+      "metric": "price",
+      "values": [
+        600
+      ],
+      "products": [
+        "hrc"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "sae1006-cfr-se-asia",
+      "scope": "HRC SAE1006 CFR Đông Nam Á; bình quân tháng, không đồng nhất giá tại nhà máy Việt Nam.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-02",
+      "page": 18,
+      "period": "2024-02",
+      "metric": "price",
+      "values": [
+        596
+      ],
+      "products": [
+        "hrc"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "sae1006-cfr-se-asia",
+      "scope": "HRC SAE1006 CFR Đông Nam Á; bình quân tháng, không đồng nhất giá tại nhà máy Việt Nam.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-02",
+      "page": 18,
+      "period": "2025-01",
+      "metric": "price",
+      "values": [
+        479.3
+      ],
+      "products": [
+        "hrc"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "sae1006-cfr-se-asia",
+      "scope": "HRC SAE1006 CFR Đông Nam Á; bình quân tháng, không đồng nhất giá tại nhà máy Việt Nam.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-02",
+      "page": 18,
+      "period": "2025-02",
+      "metric": "price",
+      "values": [
+        484.3
+      ],
+      "products": [
+        "hrc"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "sae1006-cfr-se-asia",
+      "scope": "HRC SAE1006 CFR Đông Nam Á; bình quân tháng, không đồng nhất giá tại nhà máy Việt Nam.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-01",
+      "page": 14,
+      "period": "2025-01",
+      "metric": "price",
+      "values": [
+        102
+      ],
+      "products": [
+        "iron"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "62fe-cfr-north-china",
+      "scope": "Quặng sắt 62% Fe CFR Bắc Trung Quốc; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-01",
+      "page": 14,
+      "period": "2025-02",
+      "metric": "price",
+      "values": [
+        106.2
+      ],
+      "products": [
+        "iron"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "62fe-cfr-north-china",
+      "scope": "Quặng sắt 62% Fe CFR Bắc Trung Quốc; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-01",
+      "page": 14,
+      "period": "2026-01",
+      "metric": "price",
+      "values": [
+        107.4
+      ],
+      "products": [
+        "iron"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "62fe-cfr-north-china",
+      "scope": "Quặng sắt 62% Fe CFR Bắc Trung Quốc; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-01",
+      "page": 14,
+      "period": "2026-02",
+      "metric": "price",
+      "values": [
+        102.1
+      ],
+      "products": [
+        "iron"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "62fe-cfr-north-china",
+      "scope": "Quặng sắt 62% Fe CFR Bắc Trung Quốc; bình quân tháng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-01",
+      "page": 14,
+      "period": "2025-01",
+      "metric": "price",
+      "values": [
+        192.6
+      ],
+      "products": [
+        "scrap"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "hms-east-asia-unspecified",
+      "scope": "Thép phế HMS 1/2 80:20, Đông Á. Bảng 2026 không ghi điều kiện CFR/FOB; giữ riêng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-01",
+      "page": 14,
+      "period": "2025-02",
+      "metric": "price",
+      "values": [
+        188.3
+      ],
+      "products": [
+        "scrap"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "hms-east-asia-unspecified",
+      "scope": "Thép phế HMS 1/2 80:20, Đông Á. Bảng 2026 không ghi điều kiện CFR/FOB; giữ riêng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-01",
+      "page": 14,
+      "period": "2026-01",
+      "metric": "price",
+      "values": [
+        230.8
+      ],
+      "products": [
+        "scrap"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "hms-east-asia-unspecified",
+      "scope": "Thép phế HMS 1/2 80:20, Đông Á. Bảng 2026 không ghi điều kiện CFR/FOB; giữ riêng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-01",
+      "page": 14,
+      "period": "2026-02",
+      "metric": "price",
+      "values": [
+        250.1
+      ],
+      "products": [
+        "scrap"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "hms-east-asia-unspecified",
+      "scope": "Thép phế HMS 1/2 80:20, Đông Á. Bảng 2026 không ghi điều kiện CFR/FOB; giữ riêng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-01",
+      "page": 14,
+      "period": "2025-01",
+      "metric": "price",
+      "values": [
+        355
+      ],
+      "products": [
+        "billet"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "se-asia-unspecified",
+      "scope": "Phôi thép Đông Nam Á. Bảng 2026 không ghi CFR/FOB; giữ riêng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-01",
+      "page": 14,
+      "period": "2025-02",
+      "metric": "price",
+      "values": [
+        362.5
+      ],
+      "products": [
+        "billet"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "se-asia-unspecified",
+      "scope": "Phôi thép Đông Nam Á. Bảng 2026 không ghi CFR/FOB; giữ riêng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-01",
+      "page": 14,
+      "period": "2026-01",
+      "metric": "price",
+      "values": [
+        351.7
+      ],
+      "products": [
+        "billet"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "se-asia-unspecified",
+      "scope": "Phôi thép Đông Nam Á. Bảng 2026 không ghi CFR/FOB; giữ riêng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-01",
+      "page": 14,
+      "period": "2026-02",
+      "metric": "price",
+      "values": [
+        355.8
+      ],
+      "products": [
+        "billet"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "se-asia-unspecified",
+      "scope": "Phôi thép Đông Nam Á. Bảng 2026 không ghi CFR/FOB; giữ riêng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-01",
+      "page": 14,
+      "period": "2025-01",
+      "metric": "price",
+      "values": [
+        460.6
+      ],
+      "products": [
+        "construction"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "se-asia-unspecified",
+      "scope": "Thép xây dựng Đông Nam Á; chưa xác định quy cách/CFR/FOB trong bảng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-01",
+      "page": 14,
+      "period": "2025-02",
+      "metric": "price",
+      "values": [
+        464.4
+      ],
+      "products": [
+        "construction"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "se-asia-unspecified",
+      "scope": "Thép xây dựng Đông Nam Á; chưa xác định quy cách/CFR/FOB trong bảng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-01",
+      "page": 14,
+      "period": "2026-01",
+      "metric": "price",
+      "values": [
+        465
+      ],
+      "products": [
+        "construction"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "se-asia-unspecified",
+      "scope": "Thép xây dựng Đông Nam Á; chưa xác định quy cách/CFR/FOB trong bảng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-01",
+      "page": 14,
+      "period": "2026-02",
+      "metric": "price",
+      "values": [
+        463.1
+      ],
+      "products": [
+        "construction"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "se-asia-unspecified",
+      "scope": "Thép xây dựng Đông Nam Á; chưa xác định quy cách/CFR/FOB trong bảng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-01",
+      "page": 14,
+      "period": "2025-01",
+      "metric": "price",
+      "values": [
+        486.3
+      ],
+      "products": [
+        "hrc"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "sae1006-se-asia-unspecified",
+      "scope": "HRC SAE1006 Đông Nam Á. Bảng 2026 không ghi CFR/FOB; giữ riêng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-01",
+      "page": 14,
+      "period": "2025-02",
+      "metric": "price",
+      "values": [
+        491.3
+      ],
+      "products": [
+        "hrc"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "sae1006-se-asia-unspecified",
+      "scope": "HRC SAE1006 Đông Nam Á. Bảng 2026 không ghi CFR/FOB; giữ riêng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-01",
+      "page": 14,
+      "period": "2026-01",
+      "metric": "price",
+      "values": [
+        494.4
+      ],
+      "products": [
+        "hrc"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "sae1006-se-asia-unspecified",
+      "scope": "HRC SAE1006 Đông Nam Á. Bảng 2026 không ghi CFR/FOB; giữ riêng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-01",
+      "page": 14,
+      "period": "2026-02",
+      "metric": "price",
+      "values": [
+        508.2
+      ],
+      "products": [
+        "hrc"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "sae1006-se-asia-unspecified",
+      "scope": "HRC SAE1006 Đông Nam Á. Bảng 2026 không ghi CFR/FOB; giữ riêng.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-03",
+      "page": 22,
+      "period": "2025-03",
+      "metric": "price",
+      "values": [
+        101.4
+      ],
+      "products": [
+        "iron"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "62fe-cfr-north-china",
+      "scope": "Quặng sắt 62% Fe CFR Bắc Trung Quốc; bình quân kỳ công bố.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-03",
+      "page": 22,
+      "period": "2025-Q1",
+      "metric": "price",
+      "values": [
+        103.2
+      ],
+      "products": [
+        "iron"
+      ],
+      "frequency": "quarter",
+      "unit": "USD/tấn",
+      "basis": "62fe-cfr-north-china",
+      "scope": "Quặng sắt 62% Fe CFR Bắc Trung Quốc; bình quân kỳ công bố.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-03",
+      "page": 22,
+      "period": "2026-03",
+      "metric": "price",
+      "values": [
+        105.9
+      ],
+      "products": [
+        "iron"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "62fe-cfr-north-china",
+      "scope": "Quặng sắt 62% Fe CFR Bắc Trung Quốc; bình quân kỳ công bố.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-03",
+      "page": 22,
+      "period": "2026-Q1",
+      "metric": "price",
+      "values": [
+        105.1
+      ],
+      "products": [
+        "iron"
+      ],
+      "frequency": "quarter",
+      "unit": "USD/tấn",
+      "basis": "62fe-cfr-north-china",
+      "scope": "Quặng sắt 62% Fe CFR Bắc Trung Quốc; bình quân kỳ công bố.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-03",
+      "page": 22,
+      "period": "2025-03",
+      "metric": "price",
+      "values": [
+        175.2
+      ],
+      "products": [
+        "scrap"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "hms-east-asia-unspecified",
+      "scope": "Thép phế HMS 1/2 80:20 Đông Á; bảng không ghi CFR/FOB.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-03",
+      "page": 22,
+      "period": "2025-Q1",
+      "metric": "price",
+      "values": [
+        185.4
+      ],
+      "products": [
+        "scrap"
+      ],
+      "frequency": "quarter",
+      "unit": "USD/tấn",
+      "basis": "hms-east-asia-unspecified",
+      "scope": "Thép phế HMS 1/2 80:20 Đông Á; bảng không ghi CFR/FOB.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-03",
+      "page": 22,
+      "period": "2026-03",
+      "metric": "price",
+      "values": [
+        225.2
+      ],
+      "products": [
+        "scrap"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "hms-east-asia-unspecified",
+      "scope": "Thép phế HMS 1/2 80:20 Đông Á; bảng không ghi CFR/FOB.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-03",
+      "page": 22,
+      "period": "2026-Q1",
+      "metric": "price",
+      "values": [
+        235.1
+      ],
+      "products": [
+        "scrap"
+      ],
+      "frequency": "quarter",
+      "unit": "USD/tấn",
+      "basis": "hms-east-asia-unspecified",
+      "scope": "Thép phế HMS 1/2 80:20 Đông Á; bảng không ghi CFR/FOB.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-03",
+      "page": 22,
+      "period": "2025-03",
+      "metric": "price",
+      "values": [
+        367.5
+      ],
+      "products": [
+        "billet"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "se-asia-unspecified",
+      "scope": "Phôi thép Đông Nam Á; bảng không ghi CFR/FOB.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-03",
+      "page": 22,
+      "period": "2025-Q1",
+      "metric": "price",
+      "values": [
+        361.7
+      ],
+      "products": [
+        "billet"
+      ],
+      "frequency": "quarter",
+      "unit": "USD/tấn",
+      "basis": "se-asia-unspecified",
+      "scope": "Phôi thép Đông Nam Á; bảng không ghi CFR/FOB.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-03",
+      "page": 22,
+      "period": "2026-03",
+      "metric": "price",
+      "values": [
+        370
+      ],
+      "products": [
+        "billet"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "se-asia-unspecified",
+      "scope": "Phôi thép Đông Nam Á; bảng không ghi CFR/FOB.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-03",
+      "page": 22,
+      "period": "2026-Q1",
+      "metric": "price",
+      "values": [
+        359.2
+      ],
+      "products": [
+        "billet"
+      ],
+      "frequency": "quarter",
+      "unit": "USD/tấn",
+      "basis": "se-asia-unspecified",
+      "scope": "Phôi thép Đông Nam Á; bảng không ghi CFR/FOB.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-03",
+      "page": 22,
+      "period": "2025-03",
+      "metric": "price",
+      "values": [
+        462.5
+      ],
+      "products": [
+        "construction"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "se-asia-unspecified",
+      "scope": "Thép xây dựng Đông Nam Á; bảng không ghi quy cách/CFR/FOB.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-03",
+      "page": 22,
+      "period": "2025-Q1",
+      "metric": "price",
+      "values": [
+        459.3
+      ],
+      "products": [
+        "construction"
+      ],
+      "frequency": "quarter",
+      "unit": "USD/tấn",
+      "basis": "se-asia-unspecified",
+      "scope": "Thép xây dựng Đông Nam Á; bảng không ghi quy cách/CFR/FOB.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-03",
+      "page": 22,
+      "period": "2026-03",
+      "metric": "price",
+      "values": [
+        482.7
+      ],
+      "products": [
+        "construction"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "se-asia-unspecified",
+      "scope": "Thép xây dựng Đông Nam Á; bảng không ghi quy cách/CFR/FOB.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-03",
+      "page": 22,
+      "period": "2026-Q1",
+      "metric": "price",
+      "values": [
+        466.4
+      ],
+      "products": [
+        "construction"
+      ],
+      "frequency": "quarter",
+      "unit": "USD/tấn",
+      "basis": "se-asia-unspecified",
+      "scope": "Thép xây dựng Đông Nam Á; bảng không ghi quy cách/CFR/FOB.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-03",
+      "page": 22,
+      "period": "2025-03",
+      "metric": "price",
+      "values": [
+        495.6
+      ],
+      "products": [
+        "hrc"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "sae1006-se-asia-unspecified",
+      "scope": "HRC SAE1006 Đông Nam Á; bảng không ghi CFR/FOB.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-03",
+      "page": 22,
+      "period": "2025-Q1",
+      "metric": "price",
+      "values": [
+        490
+      ],
+      "products": [
+        "hrc"
+      ],
+      "frequency": "quarter",
+      "unit": "USD/tấn",
+      "basis": "sae1006-se-asia-unspecified",
+      "scope": "HRC SAE1006 Đông Nam Á; bảng không ghi CFR/FOB.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-03",
+      "page": 22,
+      "period": "2026-03",
+      "metric": "price",
+      "values": [
+        529.6
+      ],
+      "products": [
+        "hrc"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "sae1006-se-asia-unspecified",
+      "scope": "HRC SAE1006 Đông Nam Á; bảng không ghi CFR/FOB.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-03",
+      "page": 22,
+      "period": "2026-Q1",
+      "metric": "price",
+      "values": [
+        510.6
+      ],
+      "products": [
+        "hrc"
+      ],
+      "frequency": "quarter",
+      "unit": "USD/tấn",
+      "basis": "sae1006-se-asia-unspecified",
+      "scope": "HRC SAE1006 Đông Nam Á; bảng không ghi CFR/FOB.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2026-05",
+      "page": 14,
+      "period": "2026-05",
+      "metric": "production",
+      "values": [
+        1298662,
+        1011338,
+        278303,
+        427025,
+        220820,
+        3236147
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 1
+    },
+    {
+      "document": "vb-2026-05",
+      "page": 14,
+      "period": "2026-05",
+      "metric": "production",
+      "values": [
+        6289619,
+        4377474,
+        1203544,
+        1971692,
+        1067980,
+        14910309
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "ytd",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2026-05",
+      "page": 15,
+      "period": "2026-05",
+      "metric": "sales",
+      "values": [
+        1212972,
+        963363,
+        228465,
+        399589,
+        234275,
+        3038664
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2026-05",
+      "page": 15,
+      "period": "2026-05",
+      "metric": "sales",
+      "values": [
+        6487006,
+        4301588,
+        1044605,
+        1913727,
+        1178940,
+        14925866
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "ytd",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2026-05",
+      "page": 16,
+      "period": "2026-05",
+      "metric": "vsa_exports",
+      "values": [
+        144791,
+        47993,
+        53636,
+        134872,
+        34873,
+        416165
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2026-05",
+      "page": 16,
+      "period": "2026-05",
+      "metric": "vsa_exports",
+      "values": [
+        613206,
+        649969,
+        276417,
+        562947,
+        156216,
+        2258755
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "ytd",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2025-09",
+      "page": 17,
+      "period": "2025-09",
+      "metric": "production",
+      "values": [
+        1080032,
+        703313,
+        223188,
+        416054,
+        209780,
+        2632367
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2025-09",
+      "page": 17,
+      "period": "2025-09",
+      "metric": "production",
+      "values": [
+        9628881,
+        5846462,
+        2485063,
+        4032714,
+        1896482,
+        23889602
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "ytd",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2025-09",
+      "page": 19,
+      "period": "2025-09",
+      "metric": "sales",
+      "values": [
+        1076725,
+        704117,
+        172262,
+        361053,
+        219949,
+        2534106
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2025-09",
+      "page": 19,
+      "period": "2025-09",
+      "metric": "sales",
+      "values": [
+        9729845,
+        5916059,
+        1896933,
+        3665862,
+        2044875,
+        23253574
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "ytd",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2025-09",
+      "page": 22,
+      "period": "2025-09",
+      "metric": "vsa_exports",
+      "values": [
+        116121,
+        82207,
+        37299,
+        88928,
+        27908,
+        352463
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2025-09",
+      "page": 22,
+      "period": "2025-09",
+      "metric": "vsa_exports",
+      "values": [
+        1177631,
+        685514,
+        500071,
+        1297207,
+        288008,
+        3948431
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "ytd",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2025-09",
+      "page": 17,
+      "period": "2025-Q3",
+      "metric": "production",
+      "values": [
+        3180140,
+        2041964,
+        909354,
+        1277572,
+        658468,
+        8067498
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "quarter",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2025-09",
+      "page": 20,
+      "period": "2025-Q3",
+      "metric": "sales",
+      "values": [
+        3092802,
+        2015126,
+        544404,
+        1156542,
+        699263,
+        7508137
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "quarter",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2025-09",
+      "page": 20,
+      "period": "2025-Q3",
+      "metric": "vsa_exports",
+      "values": [
+        328167,
+        217589,
+        141246,
+        314834,
+        101096,
+        1102932
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "quarter",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2024-12",
+      "page": 17,
+      "period": "2024-12",
+      "metric": "production",
+      "values": [
+        1009368,
+        593723,
+        235394,
+        445904,
+        215157,
+        2499545
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 1
+    },
+    {
+      "document": "vb-2024-12",
+      "page": 17,
+      "period": "2024-12",
+      "metric": "sales",
+      "values": [
+        1027608,
+        506756,
+        189727,
+        374639,
+        225361,
+        2324091
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2024-12",
+      "page": 17,
+      "period": "2024-12",
+      "metric": "vsa_exports",
+      "values": [
+        111827,
+        61429,
+        48187,
+        142683,
+        32703,
+        396829
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2024-12",
+      "page": 17,
+      "period": "2023-12",
+      "metric": "production",
+      "values": [
+        1054393,
+        659707,
+        371495,
+        496291,
+        220452,
+        2802338
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2024-12",
+      "page": 17,
+      "period": "2023-12",
+      "metric": "sales",
+      "values": [
+        1173418,
+        596507,
+        220117,
+        464793,
+        232008,
+        2686843
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2024-12",
+      "page": 17,
+      "period": "2023-12",
+      "metric": "vsa_exports",
+      "values": [
+        174529,
+        214955,
+        38806,
+        229541,
+        24249,
+        682080
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2024-12",
+      "page": 18,
+      "period": "2024",
+      "metric": "production",
+      "values": [
+        11735188,
+        6829533,
+        2718446,
+        5695852,
+        2464859,
+        29443878
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "year",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2024-12",
+      "page": 18,
+      "period": "2024",
+      "metric": "sales",
+      "values": [
+        11916781,
+        6581018,
+        2619700,
+        5418924,
+        2554083,
+        29090506
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "year",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2024-12",
+      "page": 18,
+      "period": "2024",
+      "metric": "vsa_exports",
+      "values": [
+        1942682,
+        2254744,
+        533228,
+        2993788,
+        318312,
+        8042754
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "year",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2024-12",
+      "page": 18,
+      "period": "2023",
+      "metric": "production",
+      "values": [
+        10655711,
+        6727351,
+        3373753,
+        4625971,
+        2381230,
+        27764016
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "year",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2024-12",
+      "page": 18,
+      "period": "2023",
+      "metric": "sales",
+      "values": [
+        10905820,
+        6808337,
+        1945927,
+        4271340,
+        2421740,
+        26353164
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "year",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2024-12",
+      "page": 18,
+      "period": "2023",
+      "metric": "vsa_exports",
+      "values": [
+        1737655,
+        3405633,
+        448721,
+        2221767,
+        274416,
+        8088192
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "year",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2024-12",
+      "page": 18,
+      "period": "2024-Q4",
+      "metric": "production",
+      "values": [
+        3080248,
+        1680679,
+        721281,
+        1413527,
+        678914,
+        7574649
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "quarter",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2024-12",
+      "page": 18,
+      "period": "2024-Q4",
+      "metric": "sales",
+      "values": [
+        3207016,
+        1482811,
+        665981,
+        1299879,
+        712334,
+        7368021
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "quarter",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2024-12",
+      "page": 18,
+      "period": "2024-Q4",
+      "metric": "vsa_exports",
+      "values": [
+        425537,
+        309785,
+        159511,
+        600761,
+        85250,
+        1580844
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "quarter",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2024-12",
+      "page": 18,
+      "period": "2023-Q4",
+      "metric": "production",
+      "values": [
+        2889587,
+        1800162,
+        1014748,
+        1305693,
+        629384,
+        7639574
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "quarter",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2024-12",
+      "page": 18,
+      "period": "2023-Q4",
+      "metric": "sales",
+      "values": [
+        3164571,
+        1858733,
+        554060,
+        1204021,
+        669356,
+        7450741
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "quarter",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2024-12",
+      "page": 18,
+      "period": "2023-Q4",
+      "metric": "vsa_exports",
+      "values": [
+        488084,
+        916997,
+        120313,
+        584542,
+        69694,
+        2179630
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "quarter",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2025-09",
+      "page": 22,
+      "period": "2024-09",
+      "metric": "price",
+      "values": [
+        93.8
+      ],
+      "products": [
+        "iron"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "62fe-cfr-north-china",
+      "scope": "Quặng sắt 62% Fe CFR Bắc Trung Quốc; bình quân kỳ.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-09",
+      "page": 22,
+      "period": "2024-Q3",
+      "metric": "price",
+      "values": [
+        99.7
+      ],
+      "products": [
+        "iron"
+      ],
+      "frequency": "quarter",
+      "unit": "USD/tấn",
+      "basis": "62fe-cfr-north-china",
+      "scope": "Quặng sắt 62% Fe CFR Bắc Trung Quốc; bình quân kỳ.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-09",
+      "page": 22,
+      "period": "2025-09",
+      "metric": "price",
+      "values": [
+        105.3
+      ],
+      "products": [
+        "iron"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "62fe-cfr-north-china",
+      "scope": "Quặng sắt 62% Fe CFR Bắc Trung Quốc; bình quân kỳ.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-09",
+      "page": 22,
+      "period": "2025-Q3",
+      "metric": "price",
+      "values": [
+        102
+      ],
+      "products": [
+        "iron"
+      ],
+      "frequency": "quarter",
+      "unit": "USD/tấn",
+      "basis": "62fe-cfr-north-china",
+      "scope": "Quặng sắt 62% Fe CFR Bắc Trung Quốc; bình quân kỳ.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-09",
+      "page": 22,
+      "period": "2024-09",
+      "metric": "price",
+      "values": [
+        186.9
+      ],
+      "products": [
+        "coking_coal"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "plv-hcc-fob-australia",
+      "scope": "Than mỡ PLV HCC FOB Úc; bình quân kỳ.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-09",
+      "page": 22,
+      "period": "2024-Q3",
+      "metric": "price",
+      "values": [
+        210.7
+      ],
+      "products": [
+        "coking_coal"
+      ],
+      "frequency": "quarter",
+      "unit": "USD/tấn",
+      "basis": "plv-hcc-fob-australia",
+      "scope": "Than mỡ PLV HCC FOB Úc; bình quân kỳ.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-09",
+      "page": 22,
+      "period": "2025-09",
+      "metric": "price",
+      "values": [
+        188.1
+      ],
+      "products": [
+        "coking_coal"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "plv-hcc-fob-australia",
+      "scope": "Than mỡ PLV HCC FOB Úc; bình quân kỳ.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-09",
+      "page": 22,
+      "period": "2025-Q3",
+      "metric": "price",
+      "values": [
+        183.3
+      ],
+      "products": [
+        "coking_coal"
+      ],
+      "frequency": "quarter",
+      "unit": "USD/tấn",
+      "basis": "plv-hcc-fob-australia",
+      "scope": "Than mỡ PLV HCC FOB Úc; bình quân kỳ.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-09",
+      "page": 22,
+      "period": "2024-09",
+      "metric": "price",
+      "values": [
+        248.2
+      ],
+      "products": [
+        "coke"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "fob-north-china",
+      "scope": "Than cốc FOB Bắc Trung Quốc; bình quân kỳ.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-09",
+      "page": 22,
+      "period": "2024-Q3",
+      "metric": "price",
+      "values": [
+        261.6
+      ],
+      "products": [
+        "coke"
+      ],
+      "frequency": "quarter",
+      "unit": "USD/tấn",
+      "basis": "fob-north-china",
+      "scope": "Than cốc FOB Bắc Trung Quốc; bình quân kỳ.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-09",
+      "page": 22,
+      "period": "2025-09",
+      "metric": "price",
+      "values": [
+        214.9
+      ],
+      "products": [
+        "coke"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "fob-north-china",
+      "scope": "Than cốc FOB Bắc Trung Quốc; bình quân kỳ.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-09",
+      "page": 22,
+      "period": "2025-Q3",
+      "metric": "price",
+      "values": [
+        205.3
+      ],
+      "products": [
+        "coke"
+      ],
+      "frequency": "quarter",
+      "unit": "USD/tấn",
+      "basis": "fob-north-china",
+      "scope": "Than cốc FOB Bắc Trung Quốc; bình quân kỳ.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-09",
+      "page": 22,
+      "period": "2024-09",
+      "metric": "price",
+      "values": [
+        347.8
+      ],
+      "products": [
+        "scrap"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "hms-cfr-east-asia",
+      "scope": "Thép phế HMS 1/2 80:20 CFR Đông Á; bình quân kỳ.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-09",
+      "page": 22,
+      "period": "2024-Q3",
+      "metric": "price",
+      "values": [
+        364.2
+      ],
+      "products": [
+        "scrap"
+      ],
+      "frequency": "quarter",
+      "unit": "USD/tấn",
+      "basis": "hms-cfr-east-asia",
+      "scope": "Thép phế HMS 1/2 80:20 CFR Đông Á; bình quân kỳ.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-09",
+      "page": 22,
+      "period": "2025-09",
+      "metric": "price",
+      "values": [
+        344.8
+      ],
+      "products": [
+        "scrap"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "hms-cfr-east-asia",
+      "scope": "Thép phế HMS 1/2 80:20 CFR Đông Á; bình quân kỳ.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-09",
+      "page": 22,
+      "period": "2025-Q3",
+      "metric": "price",
+      "values": [
+        339.8
+      ],
+      "products": [
+        "scrap"
+      ],
+      "frequency": "quarter",
+      "unit": "USD/tấn",
+      "basis": "hms-cfr-east-asia",
+      "scope": "Thép phế HMS 1/2 80:20 CFR Đông Á; bình quân kỳ.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-09",
+      "page": 22,
+      "period": "2024-09",
+      "metric": "price",
+      "values": [
+        460.4
+      ],
+      "products": [
+        "billet"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "cfr-se-asia",
+      "scope": "Phôi thép CFR Đông Nam Á; bình quân kỳ.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-09",
+      "page": 22,
+      "period": "2024-Q3",
+      "metric": "price",
+      "values": [
+        475.3
+      ],
+      "products": [
+        "billet"
+      ],
+      "frequency": "quarter",
+      "unit": "USD/tấn",
+      "basis": "cfr-se-asia",
+      "scope": "Phôi thép CFR Đông Nam Á; bình quân kỳ.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-09",
+      "page": 22,
+      "period": "2025-09",
+      "metric": "price",
+      "values": [
+        456.9
+      ],
+      "products": [
+        "billet"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "cfr-se-asia",
+      "scope": "Phôi thép CFR Đông Nam Á; bình quân kỳ.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-09",
+      "page": 22,
+      "period": "2025-Q3",
+      "metric": "price",
+      "values": [
+        459.7
+      ],
+      "products": [
+        "billet"
+      ],
+      "frequency": "quarter",
+      "unit": "USD/tấn",
+      "basis": "cfr-se-asia",
+      "scope": "Phôi thép CFR Đông Nam Á; bình quân kỳ.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-09",
+      "page": 22,
+      "period": "2024-09",
+      "metric": "price",
+      "values": [
+        471.2
+      ],
+      "products": [
+        "hrc"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "sae1006-cfr-se-asia",
+      "scope": "HRC SAE1006 CFR Đông Nam Á; bình quân kỳ.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-09",
+      "page": 22,
+      "period": "2024-Q3",
+      "metric": "price",
+      "values": [
+        493
+      ],
+      "products": [
+        "hrc"
+      ],
+      "frequency": "quarter",
+      "unit": "USD/tấn",
+      "basis": "sae1006-cfr-se-asia",
+      "scope": "HRC SAE1006 CFR Đông Nam Á; bình quân kỳ.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-09",
+      "page": 22,
+      "period": "2025-09",
+      "metric": "price",
+      "values": [
+        506.1
+      ],
+      "products": [
+        "hrc"
+      ],
+      "frequency": "month",
+      "unit": "USD/tấn",
+      "basis": "sae1006-cfr-se-asia",
+      "scope": "HRC SAE1006 CFR Đông Nam Á; bình quân kỳ.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vb-2025-09",
+      "page": 22,
+      "period": "2025-Q3",
+      "metric": "price",
+      "values": [
+        499.7
+      ],
+      "products": [
+        "hrc"
+      ],
+      "frequency": "quarter",
+      "unit": "USD/tấn",
+      "basis": "sae1006-cfr-se-asia",
+      "scope": "HRC SAE1006 CFR Đông Nam Á; bình quân kỳ.",
+      "kind": "monthly-average"
+    },
+    {
+      "document": "vcbs2026",
+      "page": 10,
+      "period": "2023",
+      "metric": "sales",
+      "values": [
+        10910000,
+        6810000,
+        1950000,
+        4270000,
+        2420000
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe"
+      ],
+      "frequency": "year",
+      "basis": "vcbs-vsa",
+      "unit": "tấn",
+      "scope": "Bán hàng thành viên VSA; nhãn biểu đồ VCBS làm tròn đến 0,01 triệu tấn.",
+      "note": "Độ chính xác nguồn: 0,01 triệu tấn. Không diễn giải số quy đổi là chính xác đến từng tấn."
+    },
+    {
+      "document": "vcbs2026",
+      "page": 10,
+      "period": "2024",
+      "metric": "sales",
+      "values": [
+        11910000,
+        6580000,
+        2620000,
+        5420000,
+        2550000
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe"
+      ],
+      "frequency": "year",
+      "basis": "vcbs-vsa",
+      "unit": "tấn",
+      "scope": "Bán hàng thành viên VSA; nhãn biểu đồ VCBS làm tròn đến 0,01 triệu tấn.",
+      "note": "Độ chính xác nguồn: 0,01 triệu tấn. Không diễn giải số quy đổi là chính xác đến từng tấn."
+    },
+    {
+      "document": "vcbs2026",
+      "page": 10,
+      "period": "2025",
+      "metric": "sales",
+      "values": [
+        13290000,
+        8460000,
+        2410000,
+        4880000,
+        2720000
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe"
+      ],
+      "frequency": "year",
+      "basis": "vcbs-vsa",
+      "unit": "tấn",
+      "scope": "Bán hàng thành viên VSA; nhãn biểu đồ VCBS làm tròn đến 0,01 triệu tấn.",
+      "note": "Độ chính xác nguồn: 0,01 triệu tấn. Không diễn giải số quy đổi là chính xác đến từng tấn."
+    },
+    {
+      "document": "vcbs2026",
+      "page": 13,
+      "period": "2025",
+      "frequency": "year",
+      "entity": "HSG",
+      "metric": "market_share",
+      "values": [
+        27.8
+      ],
+      "products": [
+        "coated"
+      ],
+      "basis": "vcbs-vsa",
+      "unit": "%",
+      "scope": "Thị phần tiêu thụ theo VSA, VCBS trình bày; nhãn làm tròn, tổng có thể khác 100%."
+    },
+    {
+      "document": "vcbs2026",
+      "page": 13,
+      "period": "2026-05",
+      "frequency": "ytd",
+      "entity": "HSG",
+      "metric": "market_share",
+      "values": [
+        27.8
+      ],
+      "products": [
+        "coated"
+      ],
+      "basis": "vcbs-vsa",
+      "unit": "%",
+      "scope": "Thị phần tiêu thụ theo VSA, VCBS trình bày; nhãn làm tròn, tổng có thể khác 100%."
+    },
+    {
+      "document": "vcbs2026",
+      "page": 13,
+      "period": "2025",
+      "frequency": "year",
+      "entity": "NKG",
+      "metric": "market_share",
+      "values": [
+        16.5
+      ],
+      "products": [
+        "coated"
+      ],
+      "basis": "vcbs-vsa",
+      "unit": "%",
+      "scope": "Thị phần tiêu thụ theo VSA, VCBS trình bày; nhãn làm tròn, tổng có thể khác 100%."
+    },
+    {
+      "document": "vcbs2026",
+      "page": 13,
+      "period": "2026-05",
+      "frequency": "ytd",
+      "entity": "NKG",
+      "metric": "market_share",
+      "values": [
+        13.9
+      ],
+      "products": [
+        "coated"
+      ],
+      "basis": "vcbs-vsa",
+      "unit": "%",
+      "scope": "Thị phần tiêu thụ theo VSA, VCBS trình bày; nhãn làm tròn, tổng có thể khác 100%."
+    },
+    {
+      "document": "vcbs2026",
+      "page": 13,
+      "period": "2025",
+      "frequency": "year",
+      "entity": "GDA",
+      "metric": "market_share",
+      "values": [
+        16.1
+      ],
+      "products": [
+        "coated"
+      ],
+      "basis": "vcbs-vsa",
+      "unit": "%",
+      "scope": "Thị phần tiêu thụ theo VSA, VCBS trình bày; nhãn làm tròn, tổng có thể khác 100%."
+    },
+    {
+      "document": "vcbs2026",
+      "page": 13,
+      "period": "2026-05",
+      "frequency": "ytd",
+      "entity": "GDA",
+      "metric": "market_share",
+      "values": [
+        16.1
+      ],
+      "products": [
+        "coated"
+      ],
+      "basis": "vcbs-vsa",
+      "unit": "%",
+      "scope": "Thị phần tiêu thụ theo VSA, VCBS trình bày; nhãn làm tròn, tổng có thể khác 100%."
+    },
+    {
+      "document": "vcbs2026",
+      "page": 13,
+      "period": "2025",
+      "frequency": "year",
+      "entity": "TVP",
+      "metric": "market_share",
+      "values": [
+        10.6
+      ],
+      "products": [
+        "coated"
+      ],
+      "basis": "vcbs-vsa",
+      "unit": "%",
+      "scope": "Thị phần tiêu thụ theo VSA, VCBS trình bày; nhãn làm tròn, tổng có thể khác 100%."
+    },
+    {
+      "document": "vcbs2026",
+      "page": 13,
+      "period": "2026-05",
+      "frequency": "ytd",
+      "entity": "TVP",
+      "metric": "market_share",
+      "values": [
+        11.1
+      ],
+      "products": [
+        "coated"
+      ],
+      "basis": "vcbs-vsa",
+      "unit": "%",
+      "scope": "Thị phần tiêu thụ theo VSA, VCBS trình bày; nhãn làm tròn, tổng có thể khác 100%."
+    },
+    {
+      "document": "vcbs2026",
+      "page": 13,
+      "period": "2025",
+      "frequency": "year",
+      "entity": "HPG",
+      "metric": "market_share",
+      "values": [
+        8.9
+      ],
+      "products": [
+        "coated"
+      ],
+      "basis": "vcbs-vsa",
+      "unit": "%",
+      "scope": "Thị phần tiêu thụ theo VSA, VCBS trình bày; nhãn làm tròn, tổng có thể khác 100%."
+    },
+    {
+      "document": "vcbs2026",
+      "page": 13,
+      "period": "2026-05",
+      "frequency": "ytd",
+      "entity": "HPG",
+      "metric": "market_share",
+      "values": [
+        9.3
+      ],
+      "products": [
+        "coated"
+      ],
+      "basis": "vcbs-vsa",
+      "unit": "%",
+      "scope": "Thị phần tiêu thụ theo VSA, VCBS trình bày; nhãn làm tròn, tổng có thể khác 100%."
+    },
+    {
+      "document": "vcbs2026",
+      "page": 13,
+      "period": "2025",
+      "frequency": "year",
+      "entity": "TPN",
+      "metric": "market_share",
+      "values": [
+        8
+      ],
+      "products": [
+        "coated"
+      ],
+      "basis": "vcbs-vsa",
+      "unit": "%",
+      "scope": "Thị phần tiêu thụ theo VSA, VCBS trình bày; nhãn làm tròn, tổng có thể khác 100%."
+    },
+    {
+      "document": "vcbs2026",
+      "page": 13,
+      "period": "2026-05",
+      "frequency": "ytd",
+      "entity": "TPN",
+      "metric": "market_share",
+      "values": [
+        7.1
+      ],
+      "products": [
+        "coated"
+      ],
+      "basis": "vcbs-vsa",
+      "unit": "%",
+      "scope": "Thị phần tiêu thụ theo VSA, VCBS trình bày; nhãn làm tròn, tổng có thể khác 100%."
+    },
+    {
+      "document": "vcbs2026",
+      "page": 13,
+      "period": "2025",
+      "frequency": "year",
+      "entity": "Khác",
+      "metric": "market_share",
+      "values": [
+        12.9
+      ],
+      "products": [
+        "coated"
+      ],
+      "basis": "vcbs-vsa",
+      "unit": "%",
+      "scope": "Thị phần tiêu thụ theo VSA, VCBS trình bày; nhãn làm tròn, tổng có thể khác 100%."
+    },
+    {
+      "document": "vcbs2026",
+      "page": 13,
+      "period": "2026-05",
+      "frequency": "ytd",
+      "entity": "Khác",
+      "metric": "market_share",
+      "values": [
+        14.8
+      ],
+      "products": [
+        "coated"
+      ],
+      "basis": "vcbs-vsa",
+      "unit": "%",
+      "scope": "Thị phần tiêu thụ theo VSA, VCBS trình bày; nhãn làm tròn, tổng có thể khác 100%."
+    },
+    {
+      "document": "vcbs2026",
+      "page": 13,
+      "period": "2025",
+      "frequency": "year",
+      "entity": "HPG",
+      "metric": "market_share",
+      "values": [
+        30.7
+      ],
+      "products": [
+        "pipe"
+      ],
+      "basis": "vcbs-vsa",
+      "unit": "%",
+      "scope": "Thị phần tiêu thụ theo VSA, VCBS trình bày; nhãn làm tròn, tổng có thể khác 100%."
+    },
+    {
+      "document": "vcbs2026",
+      "page": 13,
+      "period": "2026-05",
+      "frequency": "ytd",
+      "entity": "HPG",
+      "metric": "market_share",
+      "values": [
+        33.9
+      ],
+      "products": [
+        "pipe"
+      ],
+      "basis": "vcbs-vsa",
+      "unit": "%",
+      "scope": "Thị phần tiêu thụ theo VSA, VCBS trình bày; nhãn làm tròn, tổng có thể khác 100%."
+    },
+    {
+      "document": "vcbs2026",
+      "page": 13,
+      "period": "2025",
+      "frequency": "year",
+      "entity": "HSG",
+      "metric": "market_share",
+      "values": [
+        15.3
+      ],
+      "products": [
+        "pipe"
+      ],
+      "basis": "vcbs-vsa",
+      "unit": "%",
+      "scope": "Thị phần tiêu thụ theo VSA, VCBS trình bày; nhãn làm tròn, tổng có thể khác 100%."
+    },
+    {
+      "document": "vcbs2026",
+      "page": 13,
+      "period": "2026-05",
+      "frequency": "ytd",
+      "entity": "HSG",
+      "metric": "market_share",
+      "values": [
+        15.3
+      ],
+      "products": [
+        "pipe"
+      ],
+      "basis": "vcbs-vsa",
+      "unit": "%",
+      "scope": "Thị phần tiêu thụ theo VSA, VCBS trình bày; nhãn làm tròn, tổng có thể khác 100%."
+    },
+    {
+      "document": "vcbs2026",
+      "page": 13,
+      "period": "2025",
+      "frequency": "year",
+      "entity": "Minh Ngọc",
+      "metric": "market_share",
+      "values": [
+        6.8
+      ],
+      "products": [
+        "pipe"
+      ],
+      "basis": "vcbs-vsa",
+      "unit": "%",
+      "scope": "Thị phần tiêu thụ theo VSA, VCBS trình bày; nhãn làm tròn, tổng có thể khác 100%."
+    },
+    {
+      "document": "vcbs2026",
+      "page": 13,
+      "period": "2026-05",
+      "frequency": "ytd",
+      "entity": "Minh Ngọc",
+      "metric": "market_share",
+      "values": [
+        7.5
+      ],
+      "products": [
+        "pipe"
+      ],
+      "basis": "vcbs-vsa",
+      "unit": "%",
+      "scope": "Thị phần tiêu thụ theo VSA, VCBS trình bày; nhãn làm tròn, tổng có thể khác 100%."
+    },
+    {
+      "document": "vcbs2026",
+      "page": 13,
+      "period": "2025",
+      "frequency": "year",
+      "entity": "TVP",
+      "metric": "market_share",
+      "values": [
+        7.1
+      ],
+      "products": [
+        "pipe"
+      ],
+      "basis": "vcbs-vsa",
+      "unit": "%",
+      "scope": "Thị phần tiêu thụ theo VSA, VCBS trình bày; nhãn làm tròn, tổng có thể khác 100%."
+    },
+    {
+      "document": "vcbs2026",
+      "page": 13,
+      "period": "2026-05",
+      "frequency": "ytd",
+      "entity": "TVP",
+      "metric": "market_share",
+      "values": [
+        6.1
+      ],
+      "products": [
+        "pipe"
+      ],
+      "basis": "vcbs-vsa",
+      "unit": "%",
+      "scope": "Thị phần tiêu thụ theo VSA, VCBS trình bày; nhãn làm tròn, tổng có thể khác 100%."
+    },
+    {
+      "document": "vcbs2026",
+      "page": 13,
+      "period": "2025",
+      "frequency": "year",
+      "entity": "SeAH",
+      "metric": "market_share",
+      "values": [
+        7.3
+      ],
+      "products": [
+        "pipe"
+      ],
+      "basis": "vcbs-vsa",
+      "unit": "%",
+      "scope": "Thị phần tiêu thụ theo VSA, VCBS trình bày; nhãn làm tròn, tổng có thể khác 100%."
+    },
+    {
+      "document": "vcbs2026",
+      "page": 13,
+      "period": "2026-05",
+      "frequency": "ytd",
+      "entity": "SeAH",
+      "metric": "market_share",
+      "values": [
+        7.5
+      ],
+      "products": [
+        "pipe"
+      ],
+      "basis": "vcbs-vsa",
+      "unit": "%",
+      "scope": "Thị phần tiêu thụ theo VSA, VCBS trình bày; nhãn làm tròn, tổng có thể khác 100%."
+    },
+    {
+      "document": "vcbs2026",
+      "page": 13,
+      "period": "2025",
+      "frequency": "year",
+      "entity": "Khác",
+      "metric": "market_share",
+      "values": [
+        33
+      ],
+      "products": [
+        "pipe"
+      ],
+      "basis": "vcbs-vsa",
+      "unit": "%",
+      "scope": "Thị phần tiêu thụ theo VSA, VCBS trình bày; nhãn làm tròn, tổng có thể khác 100%."
+    },
+    {
+      "document": "vcbs2026",
+      "page": 13,
+      "period": "2026-05",
+      "frequency": "ytd",
+      "entity": "Khác",
+      "metric": "market_share",
+      "values": [
+        30
+      ],
+      "products": [
+        "pipe"
+      ],
+      "basis": "vcbs-vsa",
+      "unit": "%",
+      "scope": "Thị phần tiêu thụ theo VSA, VCBS trình bày; nhãn làm tròn, tổng có thể khác 100%."
+    },
+    {
+      "document": "fpts-2017",
+      "page": 29,
+      "period": "2015",
+      "frequency": "year",
+      "products": [
+        "all_steel"
+      ],
+      "values": [
+        15000000
+      ],
+      "metric": "production",
+      "unit": "tấn",
+      "basis": "fpts-wsa",
+      "scope": "Việt Nam theo WSA, FPTS trích dẫn. Số năm 2015 làm tròn đến triệu/0,1 triệu tấn; phạm vi khác thành viên VSA.",
+      "note": "Mốc đối chiếu năm; không phân bổ thành số tháng."
+    },
+    {
+      "document": "fpts-2017",
+      "page": 29,
+      "period": "2015",
+      "frequency": "year",
+      "products": [
+        "crude_steel"
+      ],
+      "values": [
+        6100000
+      ],
+      "metric": "production",
+      "unit": "tấn",
+      "basis": "fpts-wsa",
+      "scope": "Việt Nam theo WSA, FPTS trích dẫn. Số năm 2015 làm tròn đến triệu/0,1 triệu tấn; phạm vi khác thành viên VSA.",
+      "note": "Mốc đối chiếu năm; không phân bổ thành số tháng."
+    },
+    {
+      "document": "fpts-2017",
+      "page": 29,
+      "period": "2015",
+      "frequency": "year",
+      "products": [
+        "all_steel"
+      ],
+      "values": [
+        16300000
+      ],
+      "metric": "imports",
+      "unit": "tấn",
+      "basis": "fpts-wsa",
+      "scope": "Việt Nam theo WSA, FPTS trích dẫn. Số năm 2015 làm tròn đến triệu/0,1 triệu tấn; phạm vi khác thành viên VSA.",
+      "note": "Mốc đối chiếu năm; không phân bổ thành số tháng."
+    },
+    {
+      "document": "fpts-2017",
+      "page": 29,
+      "period": "2015",
+      "frequency": "year",
+      "products": [
+        "all_steel"
+      ],
+      "values": [
+        1400000
+      ],
+      "metric": "exports",
+      "unit": "tấn",
+      "basis": "fpts-wsa",
+      "scope": "Việt Nam theo WSA, FPTS trích dẫn. Số năm 2015 làm tròn đến triệu/0,1 triệu tấn; phạm vi khác thành viên VSA.",
+      "note": "Mốc đối chiếu năm; không phân bổ thành số tháng."
+    },
+    {
+      "document": "hpg-2025-q4",
+      "page": 2,
+      "period": "2025",
+      "frequency": "year",
+      "entity": "HPG",
+      "products": [
+        "crude_steel"
+      ],
+      "values": [
+        11000000
+      ],
+      "metric": "production",
+      "unit": "tấn",
+      "basis": "hpg-official",
+      "scope": "Riêng Tập đoàn Hòa Phát, cả năm 2025; số làm tròn theo bản công bố doanh nghiệp.",
+      "note": "Số doanh nghiệp, không phải toàn ngành."
+    },
+    {
+      "document": "hpg-2025-q4",
+      "page": 2,
+      "period": "2025",
+      "frequency": "year",
+      "entity": "HPG",
+      "products": [
+        "pipe"
+      ],
+      "values": [
+        850000
+      ],
+      "metric": "sales",
+      "unit": "tấn",
+      "basis": "hpg-official",
+      "scope": "Riêng Tập đoàn Hòa Phát, cả năm 2025; số làm tròn theo bản công bố doanh nghiệp.",
+      "note": "Số doanh nghiệp, không phải toàn ngành."
+    },
+    {
+      "document": "hpg-2025-q4",
+      "page": 2,
+      "period": "2025",
+      "frequency": "year",
+      "entity": "HPG",
+      "products": [
+        "coated"
+      ],
+      "values": [
+        423000
+      ],
+      "metric": "sales",
+      "unit": "tấn",
+      "basis": "hpg-official",
+      "scope": "Riêng Tập đoàn Hòa Phát, cả năm 2025; số làm tròn theo bản công bố doanh nghiệp.",
+      "note": "Số doanh nghiệp, không phải toàn ngành."
+    },
+    {
+      "document": "hpg-2025-q4",
+      "page": 4,
+      "period": "2025",
+      "frequency": "year",
+      "entity": "HPG",
+      "products": [
+        "hrc"
+      ],
+      "values": [
+        5000000
+      ],
+      "metric": "sales",
+      "unit": "tấn",
+      "basis": "hpg-official",
+      "scope": "Riêng Tập đoàn Hòa Phát, cả năm 2025; số làm tròn theo bản công bố doanh nghiệp.",
+      "note": "Số doanh nghiệp, không phải toàn ngành."
+    },
+    {
+      "document": "vb-2024-04",
+      "page": 14,
+      "period": "2024-04",
+      "metric": "production",
+      "values": [
+        1016385,
+        395928,
+        195614,
+        496579,
+        177527,
+        2282032
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 1
+    },
+    {
+      "document": "vb-2024-04",
+      "page": 14,
+      "period": "2024-04",
+      "metric": "sales",
+      "values": [
+        1192914,
+        491796,
+        220247,
+        537115,
+        231315,
+        2673387
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2024-04",
+      "page": 14,
+      "period": "2024-04",
+      "metric": "vsa_exports",
+      "values": [
+        167562,
+        145105,
+        52150,
+        315280,
+        23813,
+        703910
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2024-04",
+      "page": 14,
+      "period": "2023-04",
+      "metric": "production",
+      "values": [
+        711205,
+        639978,
+        266361,
+        373656,
+        183353,
+        2174553
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2024-04",
+      "page": 14,
+      "period": "2023-04",
+      "metric": "sales",
+      "values": [
+        735759,
+        587609,
+        164980,
+        353807,
+        190194,
+        2032349
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2024-04",
+      "page": 14,
+      "period": "2023-04",
+      "metric": "vsa_exports",
+      "values": [
+        95100,
+        277875,
+        35830,
+        209488,
+        23669,
+        641926
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 36
+    },
+    {
+      "document": "vb-2026-01",
+      "page": 10,
+      "period": "2026-01",
+      "metric": "production",
+      "values": [
+        1269749,
+        728444,
+        202960,
+        380849,
+        215169,
+        2797171
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    },
+    {
+      "document": "vb-2026-01",
+      "page": 13,
+      "period": "2026-01",
+      "metric": "vsa_exports",
+      "values": [
+        102040,
+        101350,
+        34868,
+        91015,
+        35811,
+        365084
+      ],
+      "products": [
+        "construction",
+        "hrc",
+        "crc",
+        "coated",
+        "pipe",
+        "all_steel"
+      ],
+      "frequency": "month",
+      "unit": "tấn",
+      "scope": "Thành viên VSA; thép thành phẩm. Bán hàng gồm nội địa và xuất khẩu.",
+      "sumDifference": 0
+    }
+  ],
+  "issues": [
+    {
+      "period": "2024-08",
+      "product": "all_steel",
+      "metric": "production",
+      "url": "https://mediacdn.vietnambiz.vn/1881912202208555/files/2024/09/27/bao-cao-thi-truong-thep-thang-8-2024-20240927190003230.pdf#page=16",
+      "note": "vb-2024-08, trang 16: tổng 5 nhóm chênh 1 tấn với tổng in tại nguồn. Giữ nguyên từng con số, không sửa tổng."
+    },
+    {
+      "period": "2024-08",
+      "product": "all_steel",
+      "metric": "production",
+      "url": "https://mediacdn.vietnambiz.vn/1881912202208555/files/2024/09/27/bao-cao-thi-truong-thep-thang-8-2024-20240927190003230.pdf#page=17",
+      "note": "vb-2024-08, trang 17: tổng 5 nhóm chênh -1 tấn với tổng in tại nguồn. Giữ nguyên từng con số, không sửa tổng."
+    },
+    {
+      "period": "2026-03",
+      "product": "hrc",
+      "metric": "production",
+      "url": "https://mediacdn.vietnambiz.vn/1881912202208555/files/2026/05/05/bao-cao-thi-truong-thep-quy-i-2026-20260505095914229.pdf#page=17",
+      "note": "HRC tháng 3/2026: dùng 814.790 tấn tại bảng 3; tỷ lệ tăng 5,46% trong diễn giải không khớp 861.810 tấn tháng 2 ở báo cáo trước. Không suy ngược sản lượng từ phần trăm."
+    },
+    {
+      "period": "2026-01",
+      "product": "scrap",
+      "metric": "price",
+      "url": "https://mediacdn.vietnambiz.vn/1881912202208555/files/2026/04/08/bao-cao-thi-truong-thep-thang-1-2026-1-2026040810153716.pdf#page=14",
+      "note": "Bảng giá 2026 bỏ điều kiện giao hàng ở nhiều sản phẩm và giá cùng kỳ khác mạnh bảng 2025. Giữ chuỗi riêng theo nguyên văn phạm vi; không nối thành một lịch sử đồng nhất."
+    },
+    {
+      "period": "2026-05",
+      "product": "all_steel",
+      "metric": "production",
+      "url": "https://mediacdn.vietnambiz.vn/1881912202208555/files/2026/07/10/bao-cao-thi-truong-thep-thang-5-2026-20260710085659528.pdf#page=14",
+      "note": "vb-2026-05, trang 14: tổng 5 nhóm chênh 1 tấn với tổng in tại nguồn. Giữ nguyên từng con số, không sửa tổng."
+    },
+    {
+      "period": "2024-12",
+      "product": "all_steel",
+      "metric": "production",
+      "url": "https://mediacdn.vietnambiz.vn/1881912202208555/files/2025/02/10/bao-cao-thi-truong-thep-nam-2024-20250210093643171.pdf#page=17",
+      "note": "vb-2024-12, trang 17: tổng 5 nhóm chênh 1 tấn với tổng in tại nguồn. Giữ nguyên từng con số, không sửa tổng."
+    },
+    {
+      "period": "2026-05",
+      "product": "hrc",
+      "metric": "price",
+      "url": "https://mediacdn.vietnambiz.vn/1881912202208555/files/2026/07/10/bao-cao-thi-truong-thep-thang-5-2026-20260710085659528.pdf#page=17",
+      "note": "Bảng giá tháng 5/2026 in lặp tiêu đề năm 2025 cho hai nhóm cột. Chưa nhập các cột năm không rõ vào lịch sử giá; liên kết nguồn được giữ để kiểm tra."
+    },
+    {
+      "period": "2024",
+      "product": "hrc",
+      "metric": "price",
+      "url": "https://mediacdn.vietnambiz.vn/1881912202208555/files/2025/02/10/bao-cao-thi-truong-thep-nam-2024-20250210093643171.pdf#page=19",
+      "note": "Bảng giá bình quân năm 2024 có hai cột cùng ghi BQ năm 2023. Chưa nhập các số có tiêu đề năm mâu thuẫn."
+    },
+    {
+      "period": "2024-04",
+      "product": "all_steel",
+      "metric": "production",
+      "url": "https://mediacdn.vietnambiz.vn/1881912202208555/files/2024/06/02/bao-cao-thi-truong-thep-thang-4-2024-20240602094737982.pdf#page=14",
+      "note": "vb-2024-04, trang 14: tổng 5 nhóm chênh 1 tấn với tổng in tại nguồn. Giữ nguyên từng con số, không sửa tổng."
+    },
+    {
+      "period": "2023-04",
+      "product": "all_steel",
+      "metric": "vsa_exports",
+      "url": "https://mediacdn.vietnambiz.vn/1881912202208555/files/2024/06/02/bao-cao-thi-truong-thep-thang-4-2024-20240602094737982.pdf#page=14",
+      "note": "vb-2024-04, trang 14: tổng 5 nhóm chênh 36 tấn với tổng in tại nguồn. Giữ nguyên từng con số, không sửa tổng."
+    },
+    {
+      "period": "2026-01",
+      "product": "all_steel",
+      "metric": "sales",
+      "url": "https://mediacdn.vietnambiz.vn/1881912202208555/files/2026/04/08/bao-cao-thi-truong-thep-thang-1-2026-1-2026040810153716.pdf#page=12",
+      "note": "Biểu đồ trang 12 lặp tên “Sản xuất” trong phần Tiêu thụ và thiếu nhãn sản phẩm trên ảnh. Chưa nhập dãy chi tiết bán hàng từ hình này để tránh nhầm phạm vi."
+    }
+  ]
+}

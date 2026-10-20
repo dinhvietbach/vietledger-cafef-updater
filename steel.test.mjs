@@ -41,7 +41,7 @@ test('Growth uses exact calendar periods and never bridges a missing month',()=>
 });
 test('Published seed has source-backed unique observations and explicit coverage gaps',()=>{
  const data=JSON.parse(fs.readFileSync(new URL('./steel-seed.json',import.meta.url)));assert.equal(data.schema,1);
- for(const s of data.series){assert.equal(new Set(s.observations.map(o=>o.period)).size,s.observations.length);for(const o of s.observations){assert.ok(o.url.startsWith('https://'));assert.ok(Number.isFinite(o.value)&&o.value>=0);assert.ok(o.period>='2015-01');}}
+ for(const s of data.series){assert.equal(new Set(s.observations.map(o=>o.period)).size,s.observations.length);for(const o of s.observations){assert.ok(o.url.startsWith('https://'));assert.ok(Number.isFinite(o.value)&&o.value>=0);assert.ok(o.period.slice(0,4)>='2015');}}
  const ore=data.series.find(s=>s.id==='iron.price.wb');assert.equal(ore.observations[0].period,'2015-01');assert.ok(ore.observations.length>=141);assert.equal(ore.observations[0].value,68.2);
  const actual=id=>data.series.find(s=>s.id===id).observations.find(o=>o.period==='2023-08').value;
  // Visually checked against page 2 of the KIS report dated 05/10/2023.
