@@ -76,3 +76,33 @@ test('Coverage counts unique observed months, not cumulative or company records'
  const mixed=combineSteelSeries(seed.series).find(s=>s.id==='coated.production.combined');
  assert.ok(mixed.observations.find(o=>o.period==='2025-01').alternatives?.some(o=>o.source==='workbook'));
 });
+// Completion checks use archived source facts and assert that reconciliation
+// affects the combined view only, never the original workbook values.
+import {reconciledSteelSeries,latestClosedMonth,growthAt} from './steel-data.mjs';
+import {parseVsaHistoricalTotals} from './steel-reviewed.mjs';
+test('company reconciliation preserves raw workbook and uses documented annual totals',()=>{
+ const d=JSON.parse(fs.readFileSync(new URL('./steel-seed.json',import.meta.url))),snapshot=JSON.stringify(d.series);
+ const view=reconciledSteelSeries(d.series,d.reconciliations);
+ const at=(product,entity,period)=>view.find(s=>s.id===`${product}.sales.reconciled.year.${entity}`).observations.find(o=>o.period===period);
+ assert.equal(at('coated','HPG','2024').value,446411);
+ assert.equal(at('pipe','HPG','2024').value,708191);
+ assert.equal(at('coated_pipe','HPG','2024').value,1154602);
+ assert.equal(at('coated_pipe','NKG','2024').value,1022794);
+ assert.equal(at('coated_pipe','NKG','2025').value,781506);
+ assert.equal(at('coated','HSG','2024').inputs.length,12);
+ assert.equal(JSON.stringify(d.series),snapshot);
+ assert.ok(at('coated','HPG','2024').alternatives.some(o=>o.value===424647));
+});
+test('rounded thresholds do not fill exact monthly coverage or produce a growth percentage',()=>{
+ const d=JSON.parse(fs.readFileSync(new URL('./steel-seed.json',import.meta.url)));
+ const r=steelQuality(d,'2025-01','2025-12').find(r=>r.product==='hrc'&&r.metric==='sales');
+ assert.ok(r.missing.includes('2025-04'));assert.ok(r.rounded.includes('2025-04'));assert.equal(r.count,11);
+ assert.equal(latestClosedMonth(new Date('2026-10-21T00:00:00Z')),'2026-09');
+ assert.equal(growthAt([{period:'2025-03',value:800000},{period:'2025-04',value:765000,approximate:true}],'2025-04',1),null);
+});
+test('VSA historical parser refuses cumulative-only titles and malformed leading digits',()=>{
+ const p={slug:'thi-truong-thep-viet-nam',link:'https://vsa.com.vn/example/',date:'2020-12-01',title:{rendered:'Thị trường thép tháng 11/2020'},content:{rendered:'<p>Bán hàng thép các loại đạt 2.455.845 tấn.</p><p>Tính chung 11 tháng: Bán hàng thép các loại đạt 21.016.002 tấn.</p>'}};
+ assert.equal(parseVsaHistoricalTotals(p)[0].observations[0].value,2455845);
+ assert.deepEqual(parseVsaHistoricalTotals({...p,title:{rendered:'Thị trường thép 11 tháng đầu năm 2020'}}),[]);
+ assert.deepEqual(parseVsaHistoricalTotals({...p,content:{rendered:'Bán hàng thép các loại đạt 043.799 tấn'}}),[]);
+});

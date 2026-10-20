@@ -64,7 +64,7 @@ export function mergeSteel(previous,incoming,{now=new Date().toISOString()}={}){
  }
  result.series=[...map.values()];result.updatedAt=now;return result;
 }
-export function growthAt(observations,period,months){const now=observations.find(o=>o.period===period);const d=new Date(periodMonth(period)+'-01T00:00:00Z');d.setUTCMonth(d.getUTCMonth()-months);const m=d.toISOString().slice(0,7),key=period.includes('Q')?m.slice(0,4)+'-Q'+Math.ceil(Number(m.slice(5))/3):period.length===4?m.slice(0,4):m;const prev=observations.find(o=>o.period===key);return now&&prev&&prev.value>0?(now.value/prev.value-1)*100:null;}
+export function growthAt(observations,period,months){const now=observations.find(o=>o.period===period);const d=new Date(periodMonth(period)+'-01T00:00:00Z');d.setUTCMonth(d.getUTCMonth()-months);const m=d.toISOString().slice(0,7),key=period.includes('Q')?m.slice(0,4)+'-Q'+Math.ceil(Number(m.slice(5))/3):period.length===4?m.slice(0,4):m;const prev=observations.find(o=>o.period===key);return now&&prev&&!now.approximate&&!prev.approximate&&prev.value>0?(now.value/prev.value-1)*100:null;}
 export function seriesCoverage(series,to=new Date().toISOString().slice(0,7)){const months=periodRange('2015-01',to,series.frequency);const points=series.observations.filter(o=>months.includes(o.period));return {count:points.length,total:months.length,first:points[0]?.period||null,last:points.at(-1)?.period||null,missing:months.filter(m=>!points.some(o=>o.period===m))};}
 // Only the reviewed monthly coated-steel totals share a usable comparison mapping.
 // Customs, prices, product subsegments and differing frequencies remain separate.
@@ -77,10 +77,28 @@ export function combineSteelSeries(series){
  }
  for(const [key,parts] of groups){if(parts.length<2){other.push(...parts);continue;}const [product,metric]=key.split('|');const s=seriesDefinition(product,metric,'combined');s.label+=' · tổng hợp nguồn';s.sourceLabel='VSA / KIS / VietnamBiz'+(product==='coated'?' + Excel':'');s.scope='Thống kê thép thành phẩm VSA theo sản phẩm. '+(product==='coated'?'Bổ sung dòng tổng tôn mạ trong Excel; file chưa ghi liên kết nguồn gốc. ':'')+'Các báo cáo cùng trích VSA không phải các nguồn xác nhận độc lập.';s.method='Ưu tiên VSA trực tiếp, KIS trích VSA, bảng VietnamBiz trích VSA, rồi Excel. Giữ số đối chiếu và chênh lệch; không lấy trung bình, không nội suy.';s.frequency='month';const byPeriod=new Map();
   for(const part of parts)for(const o of part.observations){if(!byPeriod.has(o.period))byPeriod.set(o.period,[]);byPeriod.get(o.period).push({...o,sourceSeriesId:part.id,sourceLabel:part.sourceLabel||'VSA / KIS'});}
-  const priority=o=>o.source==='vsa'?4:o.source==='kis-vsa'?3:o.source==='vietnambiz-vsa'?2:1;
+  const priority=o=>(o.approximate?0:10)+(o.source==='vsa'?4:o.source==='kis-vsa'?3:o.source==='vietnambiz-vsa'?2:1);
   s.observations=[...byPeriod.entries()].sort(([a],[b])=>a.localeCompare(b)).map(([period,options])=>{options.sort((a,b)=>priority(b)-priority(a));return {...options[0],alternatives:options.slice(1),conflict:options.some(o=>o.value!==options[0].value)};});other.push(s);
  }return other;
 }
+// A display-only reconciliation. Raw workbook observations never change.
+export function reconciledSteelSeries(series,records=[]){
+ const out=[...series],groups=new Map();
+ for(const r of records.filter(r=>r.preferred&&Number.isFinite(r.preferred.value))){const key=[r.product,r.metric,r.entity].join('|');if(!groups.has(key))groups.set(key,[]);groups.get(key).push(r);}
+ for(const [key,rs] of groups){const [product,metric,entity]=key.split('|');
+  const parts=out.filter(s=>s.product===product&&s.metric===metric&&s.entity===entity&&s.frequency==='year'&&(s.segment||'total')==='total'&&(s.basis==='workbook'||/reviewed-.*official/.test(s.basis)));
+  if(!parts.length)continue;
+  const periods=new Map();for(const s of parts)for(const o of s.observations){if(!periods.has(o.period))periods.set(o.period,[]);periods.get(o.period).push({...o,sourceLabel:s.sourceLabel,sourceSeriesId:s.id});}
+  const observations=[...periods].sort(([a],[b])=>a.localeCompare(b)).map(([period,options])=>{
+   const r=rs.find(r=>r.period===period);options.sort((a,b)=>Number(b.source?.endsWith('official'))-Number(a.source?.endsWith('official'))||(b.publishedAt||'').localeCompare(a.publishedAt||''));
+   const chosen=r?{...r.preferred,period,note:r.reason+' '+(r.preferred.note||''),reconciliation:r.status}:options[0];
+   return {...chosen,alternatives:options.filter(o=>o.value!==chosen.value||o.url!==chosen.url),conflict:options.some(o=>o.value!==chosen.value)};
+  });
+  for(const s of parts)out.splice(out.indexOf(s),1);
+  out.push({...parts[0],id:`${product}.${metric}.reconciled.year.${entity}`,basis:'reconciled-company',sourceLabel:'Nguồn đã rà soát · '+entity,label:PRODUCT_BY_ID[product].name+' · Bán hàng '+entity+' · đã rà soát',method:'Số được chọn sau đối chiếu. Mở từng điểm để xem số gốc, phép tính và lý do. Nguồn Excel vẫn xem riêng được.',observations});
+ }return out;
+}
+export function latestClosedMonth(now=new Date()) {const d=new Date(now);d.setUTCDate(1);d.setUTCMonth(d.getUTCMonth()-1);return d.toISOString().slice(0,7);}
 export function coverageYears(series,to=new Date().toISOString().slice(0,7)){
  const range=periodRange('2015-01',to,series.frequency),present=new Set(series.observations.map(o=>o.period));
  return [...new Set(range.map(p=>p.slice(0,4)))].map(year=>{const periods=range.filter(p=>p.startsWith(year));return {year,count:periods.filter(p=>present.has(p)).length,total:periods.length,missing:periods.filter(p=>!present.has(p))};});
@@ -116,12 +134,12 @@ export function steelIndicators(series){
  }
  return result;
 }
-export function steelQuality(data,from='2024-01',to=new Date().toISOString().slice(0,7)){
+export function steelQuality(data,from='2025-01',to=latestClosedMonth()){
  const required=monthRange(from,to),combined=combineSteelSeries(data.series);
  return ['construction','hrc','coated','pipe','billet'].flatMap(product=>['production','sales','vsa_exports'].map(metric=>{
   const rows=combined.filter(s=>s.product===product&&s.metric===metric&&['combined','vsa','reviewed-vsa'].includes(s.basis)&&(s.frequency||'month')==='month');
-  const points=rows.flatMap(s=>s.observations),present=new Set(points.map(o=>o.period)),missing=required.filter(p=>!present.has(p));
-  return {product,metric,count:required.length-missing.length,total:required.length,latest:points.map(o=>o.period).sort().at(-1)||null,missing};
+  const points=rows.flatMap(s=>s.observations),present=new Set(points.filter(o=>!o.approximate).map(o=>o.period)),rounded=[...new Set(points.filter(o=>o.approximate&&!present.has(o.period)&&required.includes(o.period)).map(o=>o.period))],missing=required.filter(p=>!present.has(p));
+  return {product,metric,count:required.length-missing.length,total:required.length,rounded,latest:points.map(o=>o.period).sort().at(-1)||null,missing};
  }));
 }
 export function cleanText(html){return String(html).replace(/<\/(p|li|h[1-6])>|<br\s*\/?\s*>/gi,'\n').replace(/<[^>]*>/g,' ').replace(/&#(\d+);/g,(_,n)=>String.fromCodePoint(Number(n))).replace(/&nbsp;/g,' ').replace(/&amp;/g,'&').replace(/&quot;/g,'"').normalize('NFC').replace(/[ \t\u00a0]+/g,' ');}

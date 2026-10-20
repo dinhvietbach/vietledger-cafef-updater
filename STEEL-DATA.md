@@ -75,3 +75,13 @@ The fixture `fixtures/req-australia-extract.xlsx` contains a small public-source
 - Bổ sung bảng VietnamBiz/VSA tháng 2024–2026 và cột cùng kỳ 2022–2023. Sản xuất, bán hàng, xuất khẩu VSA của thép xây dựng/HRC/tôn mạ/ống thép đủ 12 tháng 2024. Năm 2025 còn tháng 4 ở một số chuỗi; 2026 còn tháng 7–9 và bán hàng tháng 1. Các khoảng trống được hiển thị, không nội suy.
 - Giá HRC 2 mm CFR Việt Nam giữ khác chuỗi SAE1006 CFR Đông Nam Á; thép phế CFR Việt Nam khác CFR Đông Á. Chỉ nhập cột bình quân có nhãn kỳ rõ; bỏ bảng lặp nhãn năm mâu thuẫn và cột “giá hiện tại” không xác định ngày.
 - `steel-reviewed.json` giữ toàn bộ bảng đã đọc, số trang và dấu vết nguồn. Lịch đám mây khôi phục dữ liệu cũ rồi hợp nhất với seed này; các bảng chưa đọc vẫn ở thư viện nguồn và không được coi là tháng đã có số.
+
+## Rà soát tiếp ngày 21/10/2026
+
+- Kho đã tăng từ 30.123 lên 30.291 điểm. Thêm số bán hàng tháng 1/2026 sau khi đối chiếu biểu đồ 6 VietnamBiz với mục Tiêu thụ trang 11 và nhãn số VSA quý I/2026; tiêu đề “Sản xuất” ở trang 12 là không nhất quán với nội dung. Tổng 5 nhóm khớp 2.936.813 tấn.
+- HRC tháng 4/2025 chỉ có nguồn ghi “hơn 765.000 tấn”. Lưu dưới dạng ngưỡng `approximate`, không tính là đã lấp tháng có số cụ thể và không tính tỷ lệ tăng trưởng từ ngưỡng này. Tháng đang diễn ra không tính vào tiến độ các tháng đã khép lại.
+- Bổ sung công bố HPG quý III/9 tháng 2026 và NKG năm 2025 đúng kỳ công bố. Thêm nhãn bán hàng thép xây dựng 2016, bảng tháng 4/2015–2016, bảng lũy kế 2015–2017 và các tổng tháng lịch sử VSA có số rõ trong văn bản. HRC PO trong bảng cũ không gộp vào HRC.
+- Tôn mạ HSG/GDA/HPG 2024 trong DATA NGÀNH THÉP bằng đúng tổng tháng 1–11, thiếu lần lượt 123.557 / 61.837 / 21.764 tấn của tháng 12 so với DATA UPDATE THEP. Đây là đối chiếu phạm vi kỳ, chưa xác nhận thao tác nhập file. BCTN GDA phù hợp ở độ làm tròn 865 nghìn tấn; BCTN HPG trang 29 xác nhận đúng 446.411 tấn. HSG chưa có xác nhận độc lập theo năm dương lịch, không dùng số niên độ tháng 9 thay thế.
+- BCTN HPG trang 29 ghi 708.191 tấn ống thép; Excel ghi 706.938, nguyên nhân còn mở. Tổng tôn + ống tính lại từ hai số BCTN là 1.154.602 tấn.
+- BCTN NKG 2025 trang 46 xác nhận lại tổng 2024 là 1.022.794 tấn và thực hiện 2025 là 781.506 tấn. Chênh lệch 10.000 tấn so với Excel 2024 chưa có giải trình; tổng tháng Excel cũng bằng số năm Excel nên không kết luận lỗi nhập riêng ô năm.
+- Chế độ Tổng hợp nguồn dùng `reconciledSteelSeries` để chọn các số năm doanh nghiệp đã rà soát, lưu số thay thế và chứng cứ. Chế độ Excel giữ số gốc. Các tổng và thị phần phụ thuộc được cảnh báo, chưa tự đổi mẫu số/phạm vi. Hồ sơ `reconciliations` và `completionAudit` được bảo toàn khi phục hồi kho công khai để chạy lịch.
