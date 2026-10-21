@@ -105,12 +105,37 @@ export function reconciledSteelSeries(series,records=[]){
  }return out;
 }
 export function latestClosedMonth(now=new Date()) {const d=new Date(now);d.setUTCDate(1);d.setUTCMonth(d.getUTCMonth()-1);return d.toISOString().slice(0,7);}
+// A cumulative residual can contain retrospective revisions. It is a reference,
+// never a reported monthly observation, even when every input is an exact table.
+export function cumulativeSteelReferences(series){
+ const monthly=combineSteelSeries(series),out=[];
+ const safe=o=>Number.isFinite(o.value)&&!o.approximate&&!o.modelEstimated&&!o.cumulativeDerived&&!o.scopeUnverified&&!o.provisional&&!o.qualifier&&!o.source?.startsWith('workbook');
+ for(const s of monthly.filter(s=>['vsa','reviewed-vsa','combined'].includes(s.basis)&&s.unit==='tấn'&&(s.frequency||'month')==='month'&&(s.entity||'industry')==='industry'&&['production','sales','vsa_exports'].includes(s.metric))){
+  const ytd=series.filter(a=>a.basis==='reviewed-vsa'&&a.frequency==='ytd'&&(a.entity||'industry')==='industry'&&a.unit===s.unit&&a.product===s.product&&a.metric===s.metric).flatMap(a=>a.observations).filter(safe).sort((a,b)=>a.period.localeCompare(b.period));
+  const actual=new Map(s.observations.filter(safe).map(o=>[o.period,o])),candidates=new Map();
+  for(const end of ytd){
+   const year=end.period.slice(0,4),em=Number(end.period.slice(5));
+   const starts=[{period:year+'-00',value:0,zeroOrigin:true},...ytd.filter(o=>o.period<end.period&&o.period.startsWith(year))];
+   for(const start of starts){const sm=Number(start.period.slice(5));if(em-sm>3)continue;
+    const range=monthRange(year+'-'+String(sm+1).padStart(2,'0'),end.period),missing=range.filter(p=>!actual.has(p));if(missing.length!==1)continue;
+    const inputs=[{...end,series:'Lũy kế cuối',coefficient:1},...(!start.zeroOrigin?[{...start,series:'Lũy kế đầu',coefficient:-1}]:[]),...range.filter(p=>actual.has(p)).map(p=>({...actual.get(p),series:'Tháng đã công bố',coefficient:-1}))];
+    const value=inputs.reduce((n,o)=>n+o.coefficient*o.value,0);if(value<=0)continue;
+    const period=missing[0],formula=inputs.map((o,i)=>(i?' − ':'')+o.value+' ('+o.series+' '+o.period+')').join('');
+    const o={period,value,source:'vietledger-cumulative',sourceLabel:'Số dư lũy kế tham khảo',kind:'calculated',cumulativeDerived:true,scopeUnverified:true,url:end.url,checkedAt:end.checkedAt,inputs:inputs.map(o=>({series:o.series,period:o.period,value:o.value,url:o.url,source:o.source,hash:o.hash,coefficient:o.coefficient})),note:formula+' = '+value+' tấn. Chỉ còn một tháng chưa có số cụ thể trong đoạn tối đa 3 tháng. Hiệu giữa các kỳ công bố có thể chứa điều chỉnh các tháng trước; chưa xác nhận đây là sản lượng riêng tháng. Không dùng tính tăng trưởng hoặc đối soát độc lập.',span:em-sm};
+    if(!candidates.has(period))candidates.set(period,[]);candidates.get(period).push(o);
+   }
+  }
+  const observations=[...candidates].map(([period,choices])=>{choices.sort((a,b)=>a.span-b.span);const first=choices[0],other=[...new Map(choices.slice(1).filter(o=>o.value!==first.value).map(o=>[o.value,o])).values()];return other.length?{...first,conflict:true,alternatives:other,note:first.note+' Các cửa sổ lũy kế khác cho kết quả '+other.map(o=>o.value).join(', ')+' tấn; giữ phép tính ngắn nhất để tham khảo.'}:first;});
+  if(observations.length)out.push({...s,id:s.id+'.cumulative-reference',observations});
+ }
+ return out;
+}
 // A separate display view requested by the user. Never persist model estimates
 // as source observations; each refresh rebuilds them, so new actuals replace them.
 export function referenceSteelSeries(series,{from='2015-01',to=latestClosedMonth(),estimates=true}={}){
  const result=structuredClone(combineSteelSeries(series)),eligible=new Set(['construction','hrc','coated','pipe','crc','all_steel']);
  const targets=result.filter(s=>eligible.has(s.product)&&['production','sales','vsa_exports'].includes(s.metric)&&['vsa','reviewed-vsa','combined'].includes(s.basis)&&(s.frequency||'month')==='month'&&(s.entity||'industry')==='industry');
- const months=monthRange(from,to),idx=p=>Number(p.slice(0,4))*12+Number(p.slice(5))-1;
+ const months=monthRange(from,to),idx=p=>Number(p.slice(0,4))*12+Number(p.slice(5))-1,cumulative=estimates?cumulativeSteelReferences(series):[];
  for(const s of targets){
   const points=new Map(s.observations.map(o=>[o.period,{...o,provisional:Boolean(o.provisional||o.source?.startsWith('workbook'))}]));
   const workbook=series.filter(w=>w.id.startsWith('four.')&&w.product===s.product&&w.metric===s.metric&&w.frequency==='month'&&w.entity==='industry'&&w.region==='Việt Nam'&&w.unit==='tấn'&&w.basis==='workbook');
@@ -121,8 +146,12 @@ export function referenceSteelSeries(series,{from='2015-01',to=latestClosedMonth
    if(!points.has(o.period))points.set(o.period,fallback);
    else {const chosen=points.get(o.period);if(![chosen,...(chosen.alternatives||[])].some(p=>p.source===o.source&&p.value===o.value)){chosen.alternatives=[...(chosen.alternatives||[]),fallback];if(o.value!==chosen.value)chosen.conflict=true;}}
   }
-  // Models use original anchors only, never recursively use other estimates.
-  const anchors=[...points.values()].filter(o=>!o.modelEstimated&&!o.approximate&&!o.qualifier&&Number.isFinite(o.value)).sort((a,b)=>a.period.localeCompare(b.period));
+  for(const o of cumulative.filter(r=>r.product===s.product&&r.metric===s.metric).flatMap(r=>r.observations)){
+   if(!points.has(o.period))points.set(o.period,o);
+   else {const chosen=points.get(o.period);chosen.alternatives=[...(chosen.alternatives||[]),o];if(o.value!==chosen.value)chosen.conflict=true;}
+  }
+  // Models use original anchors only, never recursively use cumulative residuals.
+  const anchors=[...points.values()].filter(o=>!o.modelEstimated&&!o.cumulativeDerived&&!o.approximate&&!o.qualifier&&Number.isFinite(o.value)).sort((a,b)=>a.period.localeCompare(b.period));
   if(estimates)for(const period of months){
    if(points.has(period))continue;
    const left=anchors.filter(o=>o.period<period).at(-1),right=anchors.find(o=>o.period>period);let value,inputs,method;
@@ -136,7 +165,7 @@ export function referenceSteelSeries(series,{from='2015-01',to=latestClosedMonth
    if(!Number.isFinite(value))continue;
    points.set(period,{period,value:Math.round(value),source:'vietledger-model',sourceLabel:'Ước tính VietLedger · chưa phải số công bố',kind:'model-estimate',modelEstimated:true,approximate:true,qualifier:'ƯT',url:inputs[0].url,inputs:inputs.map(o=>({series:s.label,period:o.period,value:o.value,url:o.url,provisional:Boolean(o.provisional),source:o.source})),note:method+' Làm tròn đến tấn. Dùng để tham khảo khoảng trống, không phải báo cáo VSA. '+(inputs.some(o=>o.provisional)?'Có đầu vào Excel chưa xác minh. ':'')+'Không dùng để tính tăng trưởng hoặc xác nhận tổng toàn ngành.'});
   }
-  s.id+='.reference';s.basis='reference';s.sourceLabel='Nguồn công bố + Excel + ước tính có nhãn';s.method='Ưu tiên số nguồn đang có; bổ sung Excel khi thiếu. ƯT = nội suy tối đa 12 tháng trống giữa hai mốc hoặc bình quân 3 tháng để tạm điền tối đa 3 tháng cuối. Không mô hình hóa giá, hải quan, phôi hoặc trước mốc đầu tiên. Mở từng số để xem phép tính.';
+  s.id+='.reference';s.basis='reference';s.sourceLabel='Nguồn công bố + Excel + số tham khảo có nhãn';s.method='Ưu tiên số nguồn, rồi Excel. LK = số dư lũy kế trong đoạn tối đa 3 tháng chỉ thiếu một tháng, có thể chứa điều chỉnh kỳ trước. ƯT = nội suy tối đa 12 tháng trống hoặc bình quân 3 tháng để tạm điền tối đa 3 tháng cuối. LK và ƯT không phải số tháng được công bố trực tiếp. Mở từng số để xem phép tính.';
   s.observations=[...points.values()].sort((a,b)=>a.period.localeCompare(b.period));
  }
  const mapped=new Set(targets.map(s=>s.product+'|'+s.metric));

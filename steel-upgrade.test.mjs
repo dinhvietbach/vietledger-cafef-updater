@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {mergeSteel,emptySteel,steelIndicators,steelQuality,combineSteelSeries,selectSteelSeries,referenceSteelSeries} from './steel-data.mjs';
+import {mergeSteel,emptySteel,steelIndicators,steelQuality,combineSteelSeries,selectSteelSeries,referenceSteelSeries,cumulativeSteelReferences} from './steel-data.mjs';
 import {reviewedSeries,parseVsaExpanded,isVsaIndustryPost} from './steel-reviewed.mjs';
 const review=JSON.parse(fs.readFileSync(new URL('./steel-reviewed.json',import.meta.url)));
 const seed=JSON.parse(fs.readFileSync(new URL('./steel-seed.json',import.meta.url)));
@@ -167,8 +167,9 @@ test('VSA historical parser refuses cumulative-only titles and malformed leading
 test('reference view fills with attributed inputs, preserves raw data and source precedence',()=>{
  const before=JSON.stringify(seed),r=referenceSteelSeries(seed.series,{to:'2026-09'});
  const s=r.find(s=>s.product==='construction'&&s.metric==='production'&&s.basis==='reference');
- const april=s.observations.find(o=>o.period==='2025-04');assert.equal(april.modelEstimated,true);assert.equal(april.inputs.length,2);
- assert.deepEqual(april.inputs.map(o=>o.period),['2025-03','2025-05']);assert.equal(april.value,Math.round(april.inputs.reduce((n,o)=>n+o.value,0)/2));
+ const april=s.observations.find(o=>o.period==='2025-04');assert.equal(april.cumulativeDerived,true);assert.equal(april.scopeUnverified,true);
+ assert.equal(april.value,1265516);assert.equal(april.value,april.inputs.reduce((n,o)=>n+o.value*o.coefficient,0));
+ assert.equal(growthAt(s.observations,'2025-04',1),null);
  assert.equal(s.observations.find(o=>o.period==='2026-09').modelEstimated,true);
  assert.equal(s.observations.find(o=>o.period==='2026-09').inputs.length,3);
  assert.ok(s.observations.some(o=>o.provisional&&o.raw.cell&&o.source==='workbook-four'));
@@ -195,4 +196,25 @@ test('new VSA images retain historical versions, monthly vs cumulative and arith
  assert.deepEqual(seed.completionAudit.fillResearch.annualChecks.map(r=>r.difference),[-10201,19841,14309]);
  assert.ok(seed.sources.workbook_four.comparisons.find(c=>c.period==='2016-02').review.earlierReference);
  assert.equal(seed.series.flatMap(s=>s.observations).filter(o=>o.modelEstimated).length,0);
+});
+
+test('cumulative references never claim a monthly actual or use rounded/workbook inputs',()=>{
+ const obs=(period,value)=>({period,value,source:'vsa',url:'https://vsa.com.vn/'+period});
+ const monthly={id:'pipe.production.vsa',product:'pipe',metric:'production',unit:'tấn',basis:'vsa',frequency:'month',observations:[obs('2025-01',10),obs('2025-03',30)]};
+ const ytd={...monthly,id:'pipe.production.reviewed-vsa.ytd',basis:'reviewed-vsa',frequency:'ytd',observations:[obs('2025-03',60)]};
+ const result=cumulativeSteelReferences([monthly,ytd]);assert.equal(result[0].observations[0].value,20);assert.equal(result[0].observations[0].period,'2025-02');assert.ok(result[0].observations[0].scopeUnverified);
+ for(const overrides of [{approximate:true},{source:'workbook'},{scopeUnverified:true}])assert.equal(cumulativeSteelReferences([monthly,{...ytd,observations:[{...ytd.observations[0],...overrides}]}]).length,0);
+ assert.equal(cumulativeSteelReferences([{...monthly,observations:[monthly.observations[0]]},ytd]).length,0);
+ assert.equal(cumulativeSteelReferences([monthly,{...ytd,observations:[obs('2025-03',30)]}]).length,0);
+ const actual={...monthly,observations:[...monthly.observations,obs('2025-02',25)]};
+ assert.equal(referenceSteelSeries([actual,ytd],{to:'2025-03'}).find(s=>s.basis==='reference').observations.find(o=>o.period==='2025-02').value,25);
+ assert.ok(!referenceSteelSeries([monthly,ytd],{to:'2025-09'}).find(s=>s.basis==='reference').observations.some(o=>o.period>'2025-03'));
+});
+
+test('new primary and attributed observations preserve frequency, scope and source precision',()=>{
+ const w=seed.series.filter(s=>s.basis==='reviewed-worldsteel');assert.equal(w.length,2);
+ assert.deepEqual(w.find(s=>s.frequency==='month').observations.map(o=>[o.period,o.value,o.approximate]),[['2026-07',2700000,true],['2026-08',2700000,true]]);
+ const nkg=seed.series.filter(s=>s.basis==='reviewed-cafef-nkg');assert.equal(nkg.length,2);assert.ok(nkg.every(s=>s.entity==='NKG'&&s.product==='steel_unspecified'&&s.observations[0].qualifier==='>'));
+ for(const p of ['2016-06','2016-09']){const c=seed.sources.workbook_four.comparisons.find(c=>c.period===p&&c.product==='construction');assert.equal(c.review.cumulativeReference.value,c.file);assert.equal(c.review.causeResolved,false);}
+ assert.equal(seed.series.flatMap(s=>s.observations).filter(o=>o.cumulativeDerived).length,0);
 });

@@ -1,5 +1,15 @@
 # DATA NGÀNH – Thép
 
+## Bổ sung nguồn và số dư lũy kế · lượt tiếp theo 22/10/2026
+
+- Thêm 116 quan sát nguồn: 108 số lũy kế VSA 2015–2016; 4 số tháng/lũy kế Worldsteel 7–8/2026; 2 ngưỡng bán hàng/xuất khẩu Nam Kim tháng 9 và 2 số ngành lũy kế 8 tháng do CafeF trích. Nam Kim chưa tách sản phẩm nên không ghép tôn mạ thuần. Worldsteel giữ độ làm tròn 0,1 triệu tấn.
+- Chế độ tham khảo bổ sung nhãn LK: số dư từ hai mốc lũy kế và các tháng đã công bố trong đoạn tối đa 3 tháng, chỉ khi thiếu đúng một tháng. Không dùng Excel, số làm tròn, số tạm hoặc hiệu không dương làm đầu vào. LK có thể bao gồm điều chỉnh kỳ trước; không coi là quan sát tháng thực, không tính tăng trưởng và không dùng làm đầu vào ước tính. Bấm số để xem công thức, từng tài liệu và kết quả khác giữa các cửa sổ.
+- 133 điểm LK hiện được hiển thị; 13 điểm thuộc tháng 4/2025. 92 điểm mô hình còn lại được gắn ƯT (đợt trước 178). Những con số này không làm tăng số quan sát nguồn hay độ phủ đã xác minh. Các nguồn tháng mới ưu tiên thay số tạm.
+- Làm rõ thêm 2 chênh lệch Excel: bán hàng thép xây dựng tháng 6/2016 (483.989 tấn) và tháng 9/2016 (635.545 tấn) bằng đúng chênh lệch hai báo cáo lũy kế VSA. Các số tháng công bố khác vẫn giữ nguyên. Chưa xác nhận cách tạo file hay nguyên nhân điều chỉnh nên chưa đánh dấu giải quyết nguyên nhân.
+- Bảng VSA tôn mạ 9 tháng 2016 thấp hơn 8 tháng 187.317 tấn; không dùng hiệu âm để điền tháng. Bộ VSA tháng 9/2015 có hai số sản xuất thép xây dựng 556.301 và 516.398 trong bảng và phần diễn giải; giữ mâu thuẫn và không chọn tùy ý.
+- Chi tiết sản phẩm tháng 7–9/2026 vẫn chưa đủ nguồn gốc công khai. VITIC có báo cáo chứa tháng 7/8 nhưng bảng chi tiết trả phí. Số Nam Kim và thép thô không thay cho bảng thép thành phẩm toàn ngành.
+
+
 ## Chế độ số tham khảo · 22/10/2026
 
 Theo yêu cầu ưu tiên độ đầy đủ, giao diện mặc định bổ sung một chế độ riêng: “Đầy đủ số tham khảo (có ước tính)”. Đây là thay đổi so với chính sách không nội suy của các đợt trước mô tả bên dưới. Kho số nguồn và chế độ “Tổng hợp & đối chiếu” không chứa ước tính VietLedger.
