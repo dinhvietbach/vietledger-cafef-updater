@@ -70,7 +70,7 @@ export function mergeSteel(previous,incoming,{now=new Date().toISOString()}={}){
  for(const s of result.series)for(const o of s.observations)if(o.source==='vsa'&&/Số làm tròn theo đơn vị/.test(o.note||''))o.approximate=true;
  result.updatedAt=now;return result;
 }
-export function growthAt(observations,period,months){const now=observations.find(o=>o.period===period);const d=new Date(periodMonth(period)+'-01T00:00:00Z');d.setUTCMonth(d.getUTCMonth()-months);const m=d.toISOString().slice(0,7),key=period.includes('Q')?m.slice(0,4)+'-Q'+Math.ceil(Number(m.slice(5))/3):period.length===4?m.slice(0,4):m;const prev=observations.find(o=>o.period===key);return now&&prev&&!now.approximate&&!prev.approximate&&!now.scopeUnverified&&!prev.scopeUnverified&&prev.value>0?(now.value/prev.value-1)*100:null;}
+export function growthAt(observations,period,months){const now=observations.find(o=>o.period===period);const d=new Date(periodMonth(period)+'-01T00:00:00Z');d.setUTCMonth(d.getUTCMonth()-months);const m=d.toISOString().slice(0,7),key=period.includes('Q')?m.slice(0,4)+'-Q'+Math.ceil(Number(m.slice(5))/3):period.length===4?m.slice(0,4):m;const prev=observations.find(o=>o.period===key);return now&&prev&&!now.approximate&&!prev.approximate&&!now.scopeUnverified&&!prev.scopeUnverified&&!now.provisional&&!prev.provisional&&!now.modelEstimated&&!prev.modelEstimated&&prev.value>0?(now.value/prev.value-1)*100:null;}
 export function seriesCoverage(series,to=new Date().toISOString().slice(0,7)){const months=periodRange('2015-01',to,series.frequency);const points=series.observations.filter(o=>months.includes(o.period));return {count:points.length,total:months.length,first:points[0]?.period||null,last:points.at(-1)?.period||null,missing:months.filter(m=>!points.some(o=>o.period===m))};}
 // Only the reviewed monthly coated-steel totals share a usable comparison mapping.
 // Customs, prices, product subsegments and differing frequencies remain separate.
@@ -105,6 +105,43 @@ export function reconciledSteelSeries(series,records=[]){
  }return out;
 }
 export function latestClosedMonth(now=new Date()) {const d=new Date(now);d.setUTCDate(1);d.setUTCMonth(d.getUTCMonth()-1);return d.toISOString().slice(0,7);}
+// A separate display view requested by the user. Never persist model estimates
+// as source observations; each refresh rebuilds them, so new actuals replace them.
+export function referenceSteelSeries(series,{from='2015-01',to=latestClosedMonth(),estimates=true}={}){
+ const result=structuredClone(combineSteelSeries(series)),eligible=new Set(['construction','hrc','coated','pipe','crc','all_steel']);
+ const targets=result.filter(s=>eligible.has(s.product)&&['production','sales','vsa_exports'].includes(s.metric)&&['vsa','reviewed-vsa','combined'].includes(s.basis)&&(s.frequency||'month')==='month'&&(s.entity||'industry')==='industry');
+ const months=monthRange(from,to),idx=p=>Number(p.slice(0,4))*12+Number(p.slice(5))-1;
+ for(const s of targets){
+  const points=new Map(s.observations.map(o=>[o.period,{...o,provisional:Boolean(o.provisional||o.source?.startsWith('workbook'))}]));
+  const workbook=series.filter(w=>w.id.startsWith('four.')&&w.product===s.product&&w.metric===s.metric&&w.frequency==='month'&&w.entity==='industry'&&w.region==='Việt Nam'&&w.unit==='tấn'&&w.basis==='workbook');
+  for(const w of workbook)for(const o of w.observations){
+   // Early HRC rows may describe HRC PO, rather than modern hot-rolled output.
+   if(s.product==='hrc'&&o.period<'2018-01')continue;
+   const fallback={...o,sourceSeriesId:w.id,sourceLabel:w.sourceLabel,provisional:true,scopeUnverified:true,note:'Excel chưa xác minh theo ô với báo cáo gốc. '+(o.note||'')};
+   if(!points.has(o.period))points.set(o.period,fallback);
+   else {const chosen=points.get(o.period);if(![chosen,...(chosen.alternatives||[])].some(p=>p.source===o.source&&p.value===o.value)){chosen.alternatives=[...(chosen.alternatives||[]),fallback];if(o.value!==chosen.value)chosen.conflict=true;}}
+  }
+  // Models use original anchors only, never recursively use other estimates.
+  const anchors=[...points.values()].filter(o=>!o.modelEstimated&&!o.approximate&&!o.qualifier&&Number.isFinite(o.value)).sort((a,b)=>a.period.localeCompare(b.period));
+  if(estimates)for(const period of months){
+   if(points.has(period))continue;
+   const left=anchors.filter(o=>o.period<period).at(-1),right=anchors.find(o=>o.period>period);let value,inputs,method;
+   if(left&&right&&idx(right.period)-idx(left.period)<=13){
+    const distance=idx(right.period)-idx(left.period),fraction=(idx(period)-idx(left.period))/distance;
+    value=left.value+(right.value-left.value)*fraction;inputs=[left,right];method=`Nội suy tuyến tính giữa ${left.period} (${left.value}) và ${right.period} (${right.value}): ${left.value} + (${right.value} − ${left.value}) × ${idx(period)-idx(left.period)}/${distance}.`;
+   }else if(left&&!right&&idx(period)-idx(left.period)<=3){
+    const last=anchors.filter(o=>o.period<=left.period).slice(-3);
+    if(last.length===3&&idx(last[2].period)-idx(last[0].period)===2){value=last.reduce((n,o)=>n+o.value,0)/3;inputs=last;method='Tạm giữ bình quân 3 tháng gần nhất có số liên tiếp ('+last.map(o=>o.period+': '+o.value).join('; ')+'). Giới hạn tối đa 3 tháng sau số cuối; chưa phản ánh mùa vụ hay công suất mới.';}
+   }
+   if(!Number.isFinite(value))continue;
+   points.set(period,{period,value:Math.round(value),source:'vietledger-model',sourceLabel:'Ước tính VietLedger · chưa phải số công bố',kind:'model-estimate',modelEstimated:true,approximate:true,qualifier:'ƯT',url:inputs[0].url,inputs:inputs.map(o=>({series:s.label,period:o.period,value:o.value,url:o.url,provisional:Boolean(o.provisional),source:o.source})),note:method+' Làm tròn đến tấn. Dùng để tham khảo khoảng trống, không phải báo cáo VSA. '+(inputs.some(o=>o.provisional)?'Có đầu vào Excel chưa xác minh. ':'')+'Không dùng để tính tăng trưởng hoặc xác nhận tổng toàn ngành.'});
+  }
+  s.id+='.reference';s.basis='reference';s.sourceLabel='Nguồn công bố + Excel + ước tính có nhãn';s.method='Ưu tiên số nguồn đang có; bổ sung Excel khi thiếu. ƯT = nội suy tối đa 12 tháng trống giữa hai mốc hoặc bình quân 3 tháng để tạm điền tối đa 3 tháng cuối. Không mô hình hóa giá, hải quan, phôi hoặc trước mốc đầu tiên. Mở từng số để xem phép tính.';
+  s.observations=[...points.values()].sort((a,b)=>a.period.localeCompare(b.period));
+ }
+ const mapped=new Set(targets.map(s=>s.product+'|'+s.metric));
+ return result.filter(s=>!(s.id.startsWith('four.')&&s.entity==='industry'&&s.frequency==='month'&&s.region==='Việt Nam'&&s.unit==='tấn'&&mapped.has(s.product+'|'+s.metric)));
+}
 export function coverageYears(series,to=new Date().toISOString().slice(0,7)){
  const range=periodRange('2015-01',to,series.frequency),present=new Set(series.observations.map(o=>o.period));
  return [...new Set(range.map(p=>p.slice(0,4)))].map(year=>{const periods=range.filter(p=>p.startsWith(year));return {year,count:periods.filter(p=>present.has(p)).length,total:periods.length,missing:periods.filter(p=>!present.has(p))};});
@@ -125,7 +162,7 @@ export function steelIndicators(series){
    const method=metric==='sales_domestic'?'Bán hàng − xuất khẩu':metric==='export_share'?'Xuất khẩu / bán hàng × 100':metric==='inventory_sales'?'Tồn kho cuối kỳ / bán hàng':'Bán hàng / sản xuất × 100';
    const observations=sales.observations.flatMap(a=>{
     const b=peer.observations.find(o=>o.period===a.period);
-    if(!b||a.source!==b.source||baseURL(a)!==baseURL(b)||a.conflict||b.conflict||a.approximate||b.approximate||a.scopeUnverified||b.scopeUnverified||a.evidenceUrl!==b.evidenceUrl)return[];
+    if(!b||a.modelEstimated||b.modelEstimated||a.provisional||b.provisional||a.source!==b.source||baseURL(a)!==baseURL(b)||a.conflict||b.conflict||a.approximate||b.approximate||a.scopeUnverified||b.scopeUnverified||a.evidenceUrl!==b.evidenceUrl)return[];
     if(series.some(s=>s.metric===metric&&identity(s)===identity(sales)&&s.observations.some(o=>o.period===a.period)))return[];
     if(inputMetric==='vsa_exports'&&b.value>a.value)return[];
     const value=calculate(a.value,b.value);if(value===null||value<0)return[];

@@ -1,5 +1,17 @@
 # DATA NGÀNH – Thép
 
+## Chế độ số tham khảo · 22/10/2026
+
+Theo yêu cầu ưu tiên độ đầy đủ, giao diện mặc định bổ sung một chế độ riêng: “Đầy đủ số tham khảo (có ước tính)”. Đây là thay đổi so với chính sách không nội suy của các đợt trước mô tả bên dưới. Kho số nguồn và chế độ “Tổng hợp & đối chiếu” không chứa ước tính VietLedger.
+
+- Bổ sung 82 điểm lưu mới từ các ảnh bảng VSA tháng 2, tháng 3 và lũy kế 3/5 tháng năm 2015–2016. HRC PO không gộp HRC. Giữ một bản công bố sớm có giá trị khác bản sau.
+- Các chuỗi ngành theo tháng dùng số công bố trước, Excel khi thiếu (nhãn XL), rồi ước tính hiển thị (nhãn ƯT). Nội suy tuyến tính tối đa 12 tháng trống giữa hai mốc; cuối chuỗi tạm giữ bình quân 3 tháng có số liên tiếp, tối đa 3 tháng sau mốc cuối. Không đệ quy dùng ước tính làm đầu vào; không điền trước mốc nguồn đầu tiên. Mỗi ước tính có công thức và các đầu vào kèm nguồn. Không dùng cho tăng trưởng hay chỉ báo dẫn xuất. Số mới công bố tự thay phần tạm khi tải dữ liệu mới.
+- Chỉ áp dụng mô hình cho sản xuất/bán hàng/xuất khẩu VSA của các nhóm đã xác định; không áp dụng giá, hải quan, doanh nghiệp hay phôi. Excel HRC trước 2018 giữ riêng vì chưa phân biệt chắc chắn HRC PO. Không trộn tổng cán nóng + cán nguội vào HRC.
+- 281 chênh lệch sản lượng vẫn giữ trạng thái nguyên nhân chưa xác nhận. Tháng 2/2016 thép xây dựng: bản sớm 505.518 tấn gần Excel 505.519 (lệch 1), bản VSA tháng 11 ghi lại 459.064. Tháng 1 Excel lặp 505.519 nhưng bản sau 550.559; chỉ ghi dấu hiệu lặp kỳ, chưa kết luận thao tác nhập.
+- Tôn mạ 2025: số năm trừ cộng 12 tháng lần lượt −10.201 tấn sản xuất, +19.841 bán hàng, +14.309 xuất khẩu. Chưa có giải trình phạm vi/phiên bản, nên không dùng số dư năm trừ 11 tháng như quan sát chính xác tháng 4.
+- Bảng VSA nội địa 3/2015 cộng dòng 906.915 tấn so với tổng in 828.441; không dùng tổng bị lệch. Số bán hàng từng sản phẩm được tính nội địa + xuất khẩu với hai đầu vào lưu lại.
+- Độ phủ nguồn thực vẫn đếm riêng, không tăng bởi phần mô hình. Đây chưa phải bộ số thực tế đầy đủ mọi tháng 2015–2026.
+
 Monthly workspace with charts, tables, point-level sources, coverage and CSV.
 Sources are checked with the existing six daily Vietnam schedule windows.
 The browser reads the published snapshot; it does not scrape third parties.

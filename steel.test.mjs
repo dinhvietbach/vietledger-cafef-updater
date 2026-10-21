@@ -117,6 +117,6 @@ test('Combined view retains evidence conflicts and does not blend prices, custom
  assert.equal(march.value,391798);assert.equal(march.conflict,true);assert.equal(march.alternatives.find(o=>o.source==='workbook').value,393340);
  assert.equal(s.observations.find(o=>o.period==='2016-01').source,'workbook');assert.equal(s.observations.find(o=>o.period==='2015-09').source,'vsa');assert.equal(s.observations.find(o=>o.period==='2015-10'),undefined);
  for(const raw of data.series.filter(s=>s.basis==='trade'||/price/.test(s.metric)||s.frequency==='quarter'||s.entity==='HPG'))assert.ok(combined.includes(raw));
- assert.equal(coverageYears(s,'2015-12')[0].count,1);assert.equal(coverageYears(s,'2015-12')[0].missing.length,11);
+ assert.equal(coverageYears(s,'2015-12')[0].count,2);assert.equal(coverageYears(s,'2015-12')[0].missing.length,10);assert.equal(s.observations.find(o=>o.period==='2015-02').value,182436);
  const big=data.series.filter(s=>s.basis.startsWith('bigmint'));assert.equal(big.length,3);assert.ok(big.every(s=>s.observations[0].period==='2025-12'));
 });

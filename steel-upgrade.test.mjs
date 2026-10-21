@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {mergeSteel,emptySteel,steelIndicators,steelQuality,combineSteelSeries,selectSteelSeries} from './steel-data.mjs';
+import {mergeSteel,emptySteel,steelIndicators,steelQuality,combineSteelSeries,selectSteelSeries,referenceSteelSeries} from './steel-data.mjs';
 import {reviewedSeries,parseVsaExpanded,isVsaIndustryPost} from './steel-reviewed.mjs';
 const review=JSON.parse(fs.readFileSync(new URL('./steel-reviewed.json',import.meta.url)));
 const seed=JSON.parse(fs.readFileSync(new URL('./steel-seed.json',import.meta.url)));
@@ -162,4 +162,37 @@ test('VSA historical parser refuses cumulative-only titles and malformed leading
  assert.equal(parseVsaHistoricalTotals(p)[0].observations[0].value,2455845);
  assert.deepEqual(parseVsaHistoricalTotals({...p,title:{rendered:'Thị trường thép 11 tháng đầu năm 2020'}}),[]);
  assert.deepEqual(parseVsaHistoricalTotals({...p,content:{rendered:'Bán hàng thép các loại đạt 043.799 tấn'}}),[]);
+});
+
+test('reference view fills with attributed inputs, preserves raw data and source precedence',()=>{
+ const before=JSON.stringify(seed),r=referenceSteelSeries(seed.series,{to:'2026-09'});
+ const s=r.find(s=>s.product==='construction'&&s.metric==='production'&&s.basis==='reference');
+ const april=s.observations.find(o=>o.period==='2025-04');assert.equal(april.modelEstimated,true);assert.equal(april.inputs.length,2);
+ assert.deepEqual(april.inputs.map(o=>o.period),['2025-03','2025-05']);assert.equal(april.value,Math.round(april.inputs.reduce((n,o)=>n+o.value,0)/2));
+ assert.equal(s.observations.find(o=>o.period==='2026-09').modelEstimated,true);
+ assert.equal(s.observations.find(o=>o.period==='2026-09').inputs.length,3);
+ assert.ok(s.observations.some(o=>o.provisional&&o.raw.cell&&o.source==='workbook-four'));
+ assert.equal(s.observations.find(o=>o.period==='2024-03').modelEstimated,undefined);
+ assert.equal(JSON.stringify(seed),before);
+ assert.equal(r.filter(s=>s.product==='hrc'&&s.basis==='reference').flatMap(s=>s.observations).filter(o=>o.provisional&&o.period<'2018-01').length,0);
+ assert.equal(r.filter(s=>s.basis==='trade'||s.metric==='price').flatMap(s=>s.observations).filter(o=>o.modelEstimated).length,0);
+});
+test('estimates never recursively extend a sparse series or imply growth',()=>{
+ const base={id:'pipe.sales.vsa',product:'pipe',metric:'sales',basis:'vsa',unit:'tấn',observations:[{period:'2025-01',value:100,url:'https://vsa.com.vn/a',source:'vsa'},{period:'2025-02',value:200,url:'https://vsa.com.vn/a',source:'vsa'},{period:'2025-03',value:300,url:'https://vsa.com.vn/a',source:'vsa'}]};
+ const r=referenceSteelSeries([base],{from:'2024-01',to:'2026-09'})[0];
+ assert.deepEqual(r.observations.filter(o=>o.modelEstimated).map(o=>[o.period,o.value]),[['2025-04',200],['2025-05',200],['2025-06',200]]);
+ assert.equal(growthAt(r.observations,'2025-04',1),null);
+ assert.ok(!r.observations.some(o=>o.period<'2025-01'||o.period>'2025-06'));
+ const sparse={...base,observations:[base.observations[0],{...base.observations[2],period:'2026-09'}]};
+ assert.equal(referenceSteelSeries([sparse],{to:'2026-09'})[0].observations.length,2);
+ assert.equal(referenceSteelSeries([base],{to:'2026-09',estimates:false})[0].observations.length,3);
+});
+test('new VSA images retain historical versions, monthly vs cumulative and arithmetic',()=>{
+ const src=seed.series.find(s=>s.product==='construction'&&s.metric==='sales'&&s.basis==='reviewed-vsa'&&s.frequency==='month');
+ const feb=src.observations.find(o=>o.period==='2016-02');assert.equal(feb.value,459064);assert.ok(feb.revisions.some(o=>o.value===505518&&o.evidenceUrl.endsWith('/8.png')));
+ const p=seed.series.find(s=>s.product==='pipe'&&s.metric==='production'&&s.basis==='reviewed-vsa'&&s.frequency==='month').observations.find(o=>o.period==='2015-02');assert.equal(p.value,61107);
+ const c=seed.series.find(s=>s.product==='coated'&&s.metric==='sales'&&s.basis==='reviewed-vsa'&&s.frequency==='month').observations.find(o=>o.period==='2015-03');assert.equal(c.value,158038);assert.equal(c.kind,'calculated');assert.equal(c.inputs.reduce((n,o)=>n+o.value,0),c.value);
+ assert.deepEqual(seed.completionAudit.fillResearch.annualChecks.map(r=>r.difference),[-10201,19841,14309]);
+ assert.ok(seed.sources.workbook_four.comparisons.find(c=>c.period==='2016-02').review.earlierReference);
+ assert.equal(seed.series.flatMap(s=>s.observations).filter(o=>o.modelEstimated).length,0);
 });
