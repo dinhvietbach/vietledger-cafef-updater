@@ -9,3 +9,15 @@
 
 .steel-reconciliation{margin:12px 0;padding:16px;border:1px solid #c9dbd5;border-radius:12px;background:#f7fbf9}.steel-reconciliation summary{cursor:pointer;font-weight:650;color:#17664f}.steel-reconciliation table{min-width:860px}.steel-reconciliation th,.steel-reconciliation td{padding:12px 10px;vertical-align:top}.steel-reconciliation th:first-child,.steel-reconciliation td:first-child{min-width:95px;max-width:110px}.steel-reconciliation td:nth-child(2){white-space:normal;min-width:75px;max-width:100px}.steel-reconciliation td:nth-child(5){min-width:280px;max-width:360px;text-align:left;white-space:normal;line-height:1.6}.steel-reconciliation td small{display:block;white-space:normal;line-height:1.55;margin-top:5px}.steel-reconciliation td:last-child{min-width:120px;max-width:150px;white-space:normal;text-align:left;line-height:1.6}
 .steel-four-summary{border:1px solid #bdd7ce;background:#f4faf7;border-radius:14px;padding:20px;margin:18px 0;color:#213c35}.steel-four-heading{display:flex;gap:18px;align-items:start;justify-content:space-between}.steel-four-heading small{font-size:10px;letter-spacing:1.4px;color:#15715b}.steel-four-heading h3{font-size:18px;margin:6px 0}.steel-four-heading p{font-size:13px;color:#53675f}.steel-four-actions{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}.steel-four-summary table{width:100%;border-collapse:collapse;font-size:12px}.steel-four-summary td,.steel-four-summary th{padding:10px;text-align:left;border-bottom:1px solid #d8e6df;vertical-align:top}.steel-four-summary th{min-width:120px}.steel-four-summary td{min-width:140px}.steel-four-summary td small,.steel-four-summary th small{display:block;font-weight:normal;color:#62776c;margin-top:4px}.steel-four-summary summary{cursor:pointer;padding:10px 0;font-size:13px}.steel-four-summary a{color:#087159}.steel-four-summary .steel-hint{margin-bottom:6px}@media(max-width:700px){.steel-four-heading{display:block}.steel-four-summary{padding:14px}.steel-four-actions button{flex:1 1 46%}}
+/* Keep source reconciliation usable on a phone without widening the page. */
+.steel-audit-panel{border-bottom:1px solid var(--line,#d8e1dd);padding:0 0 22px;margin-bottom:22px}
+.steel-audit-filters{display:flex;gap:16px;flex-wrap:wrap;align-items:end;margin:18px 0 12px}
+.steel-audit-filters label{display:flex;flex-direction:column;gap:6px;font-size:13px}
+.steel-audit-filters select{padding:9px 12px;border:1px solid #cddbd4;border-radius:7px;background:white;color:#26443b}
+.steel-audit-filters span{font-size:12px;color:#61756d;padding-bottom:8px}
+.steel-audit-scroll{max-height:540px;overflow:auto}
+.steel-audit-scroll table{min-width:850px}
+.steel-audit-scroll th:first-child{min-width:200px}
+.steel-audit-scroll td:last-child{min-width:340px;max-width:570px;white-space:normal;text-align:left}
+.steel-audit-scroll td:last-child p{line-height:1.6;margin:6px 0}
+.steel-audit-scroll td:last-child small{display:block;margin-top:7px;color:#61756d}
