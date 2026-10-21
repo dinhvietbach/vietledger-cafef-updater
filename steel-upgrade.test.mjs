@@ -5,6 +5,29 @@ import {mergeSteel,emptySteel,steelIndicators,steelQuality,combineSteelSeries,se
 import {reviewedSeries,parseVsaExpanded,isVsaIndustryPost} from './steel-reviewed.mjs';
 const review=JSON.parse(fs.readFileSync(new URL('./steel-reviewed.json',import.meta.url)));
 const seed=JSON.parse(fs.readFileSync(new URL('./steel-seed.json',import.meta.url)));
+
+test('Four workbooks preserve 2026 quarters, verified NKG scope and quarantine invalid historical claims',()=>{
+ const rows=seed.series.filter(s=>s.id.startsWith('four.')),points=rows.flatMap(s=>s.observations);
+ assert.equal(points.length,seed.sources.workbook_four.observations);
+ assert.equal(seed.sources.workbook_four.files.length,4);
+ const find=(entity,product,metric,freq)=>rows.find(s=>s.entity===entity&&s.product===product&&s.metric===metric&&s.frequency===freq&&s.label.includes(entity==='NKG'?'Rồng Việt':'Vận hành HPG'));
+ assert.equal(find('NKG','coated','sales','quarter').observations.find(o=>o.period==='2026-Q2').value,203050);
+ assert.equal(find('NKG','coated','asp_export','quarter').observations.find(o=>o.period==='2026-Q2').value,21140);
+ assert.ok(find('NKG','coated','asp_export','quarter').observations.every(o=>o.estimated&&o.evidenceUrl.includes('NKG_20261005')));
+ assert.equal(find('HPG','hrc','sales','quarter').observations.find(o=>o.period==='2026-Q2').value,1924872);
+ assert.equal(find('HPG','coated','production','quarter').observations.find(o=>o.period==='2025-Q4').raw.corroboratingFiles.length,1);
+ assert.ok(!rows.filter(s=>s.entity==='NKG').flatMap(s=>s.observations).some(o=>o.period==='2021-Q4'));
+ assert.ok(!rows.filter(s=>s.entity==='NKG'&&s.metric.startsWith('asp_')).flatMap(s=>s.observations).some(o=>o.period==='2020-Q1'));
+ assert.ok(!points.some(o=>o.period==='2026-Q3'||o.period==='2026-Q4'));
+ assert.ok(!points.some(o=>o.raw.sheet==='XNK toàn ngành'));
+ for(const s of rows){assert.equal(new Set(s.observations.map(o=>o.period)).size,s.observations.length);for(const o of s.observations){assert.ok(Number.isFinite(o.value));assert.match(o.raw.sha256,/^[a-f0-9]{64}$/);}}
+ const coal=rows.filter(s=>s.product==='coking_coal').flatMap(s=>s.observations);assert.ok(coal.every(o=>!/^=I\d+$/.test(o.raw.formula||'')));
+ const trade=rows.filter(s=>s.metric==='import_value');assert.ok(trade.every(s=>s.product==='steel_articles'&&s.unit==='USD'&&s.observations.every(o=>o.value===o.raw.originalValue*1000)));
+ const derived=steelIndicators(rows);assert.ok(!derived.some(s=>s.product==='steel_unspecified'));assert.ok(!derived.some(s=>s.entity==='NKG'&&s.metric==='sales_domestic'));
+ assert.equal(selectSteelSeries(rows,{source:'four',entity:'NKG',frequency:'quarter',tab:'company'}).length,rows.filter(s=>s.entity==='NKG'&&s.frequency==='quarter').length);
+ assert.ok(selectSteelSeries(rows,{source:'online',entity:'all',tab:'coverage'}).length===0);
+ assert.ok(selectSteelSeries(rows,{entity:'industry',tab:'prices'}).every(s=>s.metric==='price'));
+});
 test('Second workbook imports actual annual data, preserves gaps and exposes independent discrepancies',()=>{
  const rows=seed.series.filter(s=>s.observations.some(o=>o.source==='workbook-industry'));
  assert.equal(rows.flatMap(s=>s.observations).length,373);

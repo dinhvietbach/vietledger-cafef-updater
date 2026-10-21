@@ -85,3 +85,13 @@ The fixture `fixtures/req-australia-extract.xlsx` contains a small public-source
 - BCTN HPG trang 29 ghi 708.191 tấn ống thép; Excel ghi 706.938, nguyên nhân còn mở. Tổng tôn + ống tính lại từ hai số BCTN là 1.154.602 tấn.
 - BCTN NKG 2025 trang 46 xác nhận lại tổng 2024 là 1.022.794 tấn và thực hiện 2025 là 781.506 tấn. Chênh lệch 10.000 tấn so với Excel 2024 chưa có giải trình; tổng tháng Excel cũng bằng số năm Excel nên không kết luận lỗi nhập riêng ô năm.
 - Chế độ Tổng hợp nguồn dùng `reconciledSteelSeries` để chọn các số năm doanh nghiệp đã rà soát, lưu số thay thế và chứng cứ. Chế độ Excel giữ số gốc. Các tổng và thị phần phụ thuộc được cảnh báo, chưa tự đổi mẫu số/phạm vi. Hồ sơ `reconciliations` và `completionAudit` được bảo toàn khi phục hồi kho công khai để chạy lịch.
+# Four-workbook review — 21 October 2026
+
+The new workbook extract contains 7,433 observations in 161 source-specific series. It does not represent 7,433 newly verified months. `steel-four.mjs` maps only reviewed tables; the public CSV retains file hashes, sheet/cell addresses, formulas, original-unit values, estimate flags and report links. Original files remain local. Shared historical construction/HRC/coated tables are not imported twice. Every cloud restoration retains `sources.workbook_four` and the seeded series.
+
+New views include company operating volumes and domestic/export ASP, a market/partner filter, and a visible workbook review dossier. Customs “iron and steel” and “articles of iron and steel” are separate product categories from VSA finished steel. Customs amounts recorded in thousand USD are converted to USD, retaining the original cell value.
+
+NKG Q2/2025, Q1/2026 and Q2/2026 were checked against Table 1, pages 2–3, of the October 2026 Rong Viet report linked in the workbook. The table explicitly describes coated steel; ASP is the broker’s estimate and Q1/2026 exports use customs data. Earlier mixed-scope rows remain in an unverified product category; their growth rates and derived indicators are suppressed. Q4/2021 was excluded because the cited December 2021 report only has actual monthly data through October and forecasts Q4. Q1/2020 ASP was excluded because it contradicts the workbook note against dividing by rounded volumes.
+
+Other withheld fields include duplicate March 2024 customs dates, HSG production copied into historical HPG coated rows, model projections, empty-reference zeros, coking-coal cells referencing coke, and month values inferred from rounded aggregates. HPG HRC quotes are separate from the generic historical HRC price series. The 2015–present coverage display continues to show real gaps; workbook uploads are snapshots, while online sources retain their existing refresh schedule.
+

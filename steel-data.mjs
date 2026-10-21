@@ -13,7 +13,10 @@ export const STEEL_PRODUCTS=[
  {id:'flat_steel',name:'Tổng cán nóng & cán nguội',codes:[],scope:'Tổng trong bảng Excel, bao gồm cả cán nóng và cán nguội; không đồng nhất với HRC.'},
  {id:'coated_pipe',name:'Tổng tôn mạ & ống thép',codes:[],scope:'Tổng hai nhóm tôn mạ và ống thép trong DATA NGÀNH THÉP.xlsx; không phải tổng toàn ngành thép.'},
  {id:'crude_steel',name:'Thép thô',codes:[],scope:'Thép thô, tách riêng thép thành phẩm và phôi thép.'},
- {id:'all_steel',name:'Tổng thép thành phẩm',codes:[],scope:'Tổng sản xuất/bán hàng của các đơn vị trong báo cáo VSA; không tương đương tiêu dùng cuối cùng toàn quốc.'}
+ {id:'all_steel',name:'Tổng thép thành phẩm',codes:[],scope:'Tổng sản xuất/bán hàng của các đơn vị trong báo cáo VSA; không tương đương tiêu dùng cuối cùng toàn quốc.'},
+ {id:'customs_steel',name:'Sắt thép các loại (hải quan)',codes:[],scope:'Nhóm hàng hải quan trong Excel, không phải tổng thép thành phẩm VSA.'},
+ {id:'steel_articles',name:'Sản phẩm từ sắt thép (hải quan)',codes:[],scope:'Sản phẩm chế tạo từ sắt thép theo nhóm hải quan trong file; tách khỏi sắt thép các loại.'},
+ {id:'steel_unspecified',name:'Thép · phạm vi cần xác minh',codes:[],scope:'Bảng tổng hợp chưa xác nhận nhất quán tôn mạ hay tôn mạ cộng ống thép. Không ghép vào tổng theo sản phẩm.'}
 ];
 export const PRODUCT_BY_ID=Object.fromEntries(STEEL_PRODUCTS.map(p=>[p.id,p]));
 export const TRADE_CODES=[...new Set(STEEL_PRODUCTS.flatMap(p=>p.codes))];
@@ -22,7 +25,7 @@ export function emptySteel(){return {schema:1,sector:'steel',requestedFrom:'2015
 export function periodMonth(period){if(/^\d{4}-Q[1-4]$/.test(period))return period.slice(0,4)+'-'+String(Number(period.at(-1))*3).padStart(2,'0');if(/^\d{4}$/.test(period))return period+'-12';return period;}
 export function periodLabel(period){return !period?'—':/^\d{4}-Q[1-4]$/.test(period)?period.slice(5)+'/'+period.slice(0,4):/^\d{4}$/.test(period)?period:period.slice(5)+'/'+period.slice(0,4);}
 export function periodRange(from,to,frequency='month'){const months=monthRange(from,to);return frequency==='quarter'?[...new Set(months.map(m=>m.slice(0,4)+'-Q'+Math.ceil(Number(m.slice(5))/3)))]:frequency==='year'?[...new Set(months.map(m=>m.slice(0,4)))]:months;}
-export function selectSteelSeries(series,{product='all',frequency='month',entity='industry',segment='total',source='all',metric='all',tab='prices',basis='market'}={}){return series.filter(s=>(product==='all'||s.product===product)&&(s.frequency||'month')===frequency&&(entity==='all'||(s.entity||'industry')===entity)&&(segment==='all'||(s.segment||'total')===segment)&&(source==='all'||(source==='workbook'?s.basis==='workbook':s.basis!=='workbook'))&&(metric==='all'||s.metric===metric)&&(tab==='prices'?/price/.test(s.metric)&&(basis==='market'?s.metric==='price':s.metric===basis):tab==='volume'?['production','sales','sales_north','sales_central','sales_south','sales_domestic','vsa_exports','exports','inventory','inventory_sum'].includes(s.metric)&&!(s.basis==='trade'):tab==='trade'?['imports','exports','import_value','export_value','import_price','export_price'].includes(s.metric):tab==='market'?['market_share','capacity'].includes(s.metric):tab==='indicators'?['export_share','inventory_sales','sales_production'].includes(s.metric):true));}
+export function selectSteelSeries(series,{product='all',frequency='month',entity='industry',segment='total',source='all',metric='all',tab='prices',basis='market'}={}){return series.filter(s=>(product==='all'||s.product===product)&&(s.frequency||'month')===frequency&&(entity==='all'||(s.entity||'industry')===entity)&&(segment==='all'||(s.segment||'total')===segment)&&(source==='all'||(source==='four'?s.id.startsWith('four.'):source==='workbook'?s.basis==='workbook':s.basis!=='workbook'))&&(metric==='all'||s.metric===metric)&&(tab==='prices'?/price/.test(s.metric)&&(basis==='market'?s.metric==='price':s.metric===basis):tab==='company'?(s.entity&&s.entity!=='industry')&&['production','sales','sales_domestic','exports','asp_domestic','asp_export','revenue_domestic','revenue_export'].includes(s.metric):tab==='volume'?['production','sales','sales_north','sales_central','sales_south','sales_domestic','vsa_exports','exports','inventory','inventory_sum'].includes(s.metric)&&!(s.basis==='trade'):tab==='trade'?['imports','exports','import_value','export_value','import_price','export_price'].includes(s.metric):tab==='market'?['market_share','capacity'].includes(s.metric):tab==='indicators'?['export_share','inventory_sales','sales_production'].includes(s.metric):true));}
 export function seriesDefinition(product,metric,basis='trade'){
  const p=PRODUCT_BY_ID[product];if(!p)throw Error('Unknown steel product');
  const names={imports:'Nhập khẩu',exports:'Xuất khẩu',import_price:'Đơn giá nhập khẩu',export_price:'Đơn giá xuất khẩu',production:'Sản xuất',sales:'Bán hàng',vsa_exports:'Xuất khẩu thành viên VSA',price:'Giá thị trường'};
@@ -64,7 +67,7 @@ export function mergeSteel(previous,incoming,{now=new Date().toISOString()}={}){
  }
  result.series=[...map.values()];result.updatedAt=now;return result;
 }
-export function growthAt(observations,period,months){const now=observations.find(o=>o.period===period);const d=new Date(periodMonth(period)+'-01T00:00:00Z');d.setUTCMonth(d.getUTCMonth()-months);const m=d.toISOString().slice(0,7),key=period.includes('Q')?m.slice(0,4)+'-Q'+Math.ceil(Number(m.slice(5))/3):period.length===4?m.slice(0,4):m;const prev=observations.find(o=>o.period===key);return now&&prev&&!now.approximate&&!prev.approximate&&prev.value>0?(now.value/prev.value-1)*100:null;}
+export function growthAt(observations,period,months){const now=observations.find(o=>o.period===period);const d=new Date(periodMonth(period)+'-01T00:00:00Z');d.setUTCMonth(d.getUTCMonth()-months);const m=d.toISOString().slice(0,7),key=period.includes('Q')?m.slice(0,4)+'-Q'+Math.ceil(Number(m.slice(5))/3):period.length===4?m.slice(0,4):m;const prev=observations.find(o=>o.period===key);return now&&prev&&!now.approximate&&!prev.approximate&&!now.scopeUnverified&&!prev.scopeUnverified&&prev.value>0?(now.value/prev.value-1)*100:null;}
 export function seriesCoverage(series,to=new Date().toISOString().slice(0,7)){const months=periodRange('2015-01',to,series.frequency);const points=series.observations.filter(o=>months.includes(o.period));return {count:points.length,total:months.length,first:points[0]?.period||null,last:points.at(-1)?.period||null,missing:months.filter(m=>!points.some(o=>o.period===m))};}
 // Only the reviewed monthly coated-steel totals share a usable comparison mapping.
 // Customs, prices, product subsegments and differing frequencies remain separate.
@@ -119,7 +122,8 @@ export function steelIndicators(series){
    const method=metric==='sales_domestic'?'Bán hàng − xuất khẩu':metric==='export_share'?'Xuất khẩu / bán hàng × 100':metric==='inventory_sales'?'Tồn kho cuối kỳ / bán hàng':'Bán hàng / sản xuất × 100';
    const observations=sales.observations.flatMap(a=>{
     const b=peer.observations.find(o=>o.period===a.period);
-    if(!b||a.source!==b.source||baseURL(a)!==baseURL(b)||a.conflict||b.conflict)return[];
+    if(!b||a.source!==b.source||baseURL(a)!==baseURL(b)||a.conflict||b.conflict||a.approximate||b.approximate||a.scopeUnverified||b.scopeUnverified||a.evidenceUrl!==b.evidenceUrl)return[];
+    if(series.some(s=>s.metric===metric&&identity(s)===identity(sales)&&s.observations.some(o=>o.period===a.period)))return[];
     if(inputMetric==='vsa_exports'&&b.value>a.value)return[];
     const value=calculate(a.value,b.value);if(value===null||value<0)return[];
     return [{period:a.period,value,url:a.url,source:a.source,checkedAt:a.checkedAt,publishedAt:a.publishedAt,kind:'calculated',note:method+'. Tính từ số gốc cùng kỳ và tài liệu; không phải số công bố riêng.',inputs:[{series:sales.id,value:a.value,url:a.url},{series:peer.id,value:b.value,url:b.url}]}];
