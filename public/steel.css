@@ -21,3 +21,5 @@
 .steel-audit-scroll td:last-child{min-width:340px;max-width:570px;white-space:normal;text-align:left}
 .steel-audit-scroll td:last-child p{line-height:1.6;margin:6px 0}
 .steel-audit-scroll td:last-child small{display:block;margin-top:7px;color:#61756d}
+
+.steel-reference-note{padding:18px 22px;border:1px solid #d3a65b;border-radius:12px;background:#fffbf2;margin:16px 0;color:#5c461d}.steel-reference-note p{margin:8px 0;line-height:1.55}.steel-chart-scroll .steel-line-model{stroke:#b75a30;stroke-dasharray:6 5}.steel-chart-scroll .steel-line-excel{stroke:#ad861e}.steel-chart-scroll .steel-point-model{fill:#b75a30}.steel-chart-scroll .steel-point-excel{fill:#ad861e}.steel-model-cell{color:#a04721!important}.steel-excel-cell{color:#8a6812!important}.steel-series-method{font-size:12px;line-height:1.5;color:#756c5d;margin:6px 18px}.steel-fill-notes{padding:22px;margin-top:20px;background:#faf9f5;border:1px solid #e0dfd7;border-radius:12px;line-height:1.65}.steel-fill-notes details{margin:14px 0}.steel-fill-notes details[open]{max-height:420px;overflow:auto}.steel-quality-tag{font-weight:700;color:#975019}
