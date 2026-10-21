@@ -7,7 +7,7 @@ export function reviewedSeries(review){
   return t.values.map((value,i)=>{
    const product=t.products[i],basis=t.basis?'reviewed-'+t.basis:'reviewed-vsa',frequency=t.frequency||'month';
    const s=seriesDefinition(product,t.metric,basis);
-   s.id+='.'+frequency+(t.entity?'.'+t.entity:'');s.frequency=frequency;s.unit=t.unit;s.scope=t.scope;s.entity=t.entity||'industry';s.sourceLabel={'vcbs-vsa':'VCBS trích VSA','vietnambiz-vsa':'VietnamBiz trích VSA','fpts-wsa':'FPTS trích WSA','hpg-official':'Hòa Phát · công bố doanh nghiệp'}[d.source]||d.source;
+   s.id+='.'+frequency+(t.entity?'.'+t.entity:'');s.frequency=frequency;s.unit=t.unit;s.scope=t.scope;s.entity=t.entity||'industry';s.sourceLabel={'vsa':'VSA · công bố trực tiếp','vnsteel':'VNSTEEL · bản tin thị trường','vcbs-vsa':'VCBS trích VSA','vietnambiz-vsa':'VietnamBiz trích VSA','fpts-wsa':'FPTS trích WSA','hpg-official':'Hòa Phát · công bố doanh nghiệp'}[d.source]||d.source;
    if(t.metric==='market_share')s.label=PRODUCT_BY_ID[product].name+' · Thị phần '+t.entity;
    if(t.metric==='capacity')s.label=PRODUCT_BY_ID[product].name+' · Công suất '+t.entity;
    if(d.source==='nkg-official')s.sourceLabel='Nam Kim · công bố doanh nghiệp';

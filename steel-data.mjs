@@ -65,7 +65,10 @@ export function mergeSteel(previous,incoming,{now=new Date().toISOString()}={}){
   }
   map.set(next.id,{...old,...next,observations:[...points.values()].sort((a,b)=>a.period.localeCompare(b.period))});
  }
- result.series=[...map.values()];result.updatedAt=now;return result;
+ result.series=[...map.values()];
+ // Migrate restored snapshots written before the VSA parser tagged rounding.
+ for(const s of result.series)for(const o of s.observations)if(o.source==='vsa'&&/Số làm tròn theo đơn vị/.test(o.note||''))o.approximate=true;
+ result.updatedAt=now;return result;
 }
 export function growthAt(observations,period,months){const now=observations.find(o=>o.period===period);const d=new Date(periodMonth(period)+'-01T00:00:00Z');d.setUTCMonth(d.getUTCMonth()-months);const m=d.toISOString().slice(0,7),key=period.includes('Q')?m.slice(0,4)+'-Q'+Math.ceil(Number(m.slice(5))/3):period.length===4?m.slice(0,4):m;const prev=observations.find(o=>o.period===key);return now&&prev&&!now.approximate&&!prev.approximate&&!now.scopeUnverified&&!prev.scopeUnverified&&prev.value>0?(now.value/prev.value-1)*100:null;}
 export function seriesCoverage(series,to=new Date().toISOString().slice(0,7)){const months=periodRange('2015-01',to,series.frequency);const points=series.observations.filter(o=>months.includes(o.period));return {count:points.length,total:months.length,first:points[0]?.period||null,last:points.at(-1)?.period||null,missing:months.filter(m=>!points.some(o=>o.period===m))};}
@@ -170,6 +173,6 @@ export function parseVsa(post,checkedAt=new Date().toISOString()){
  }
  // Total finished-steel monthly data are separately identified, never distributed to individual products.
  const tm=title.match(/tháng\s+(\d{1,2})\/(20\d{2})/i);
- if(tm){const period=`${tm[2]}-${tm[1].padStart(2,'0')}`;const start=text.search(new RegExp(`Tháng\\s+${Number(tm[1])}\\/${tm[2]}\\s*:`,'i'));if(start>=0){const block=text.slice(start).split(/Tính chung|Tính lũy kế|Cả năm|Quý [IV]/i)[0];for(const [metric,re] of [['production',/Sản xuất (?:sản phẩm )?thép (?:thành phẩm(?: các loại)?|các loại)\s+đạt\s+([\d.,]+)\s*(triệu|ngàn|nghìn)?\s*tấn/i],['sales',/Bán hàng thép (?:thành phẩm(?: các loại)?|các loại)(?: trong nước)?\s+đạt\s+([\d.,]+)\s*(triệu|ngàn|nghìn)?\s*tấn/i]]){const m=block.match(re);if(m){const s=seriesDefinition('all_steel',metric,'vsa');s.observations=[{period,value:vnNumber(m[1])*(m[2]==='triệu'?1e6:m[2]?1e3:1),url,source:'vsa',checkedAt,publishedAt:post.date,evidence:m[0],note:m[2]?'Số làm tròn theo đơn vị trong bản tin VSA.':'Theo bản tin VSA.'}];out.push(s);}}}}
+ if(tm){const period=`${tm[2]}-${tm[1].padStart(2,'0')}`;const start=text.search(new RegExp(`Tháng\\s+${Number(tm[1])}\\/${tm[2]}\\s*:`,'i'));if(start>=0){const block=text.slice(start).split(/Tính chung|Tính lũy kế|Cả năm|Quý [IV]/i)[0];for(const [metric,re] of [['production',/Sản xuất (?:sản phẩm )?thép (?:thành phẩm(?: các loại)?|các loại)\s+đạt\s+([\d.,]+)\s*(triệu|ngàn|nghìn)?\s*tấn/i],['sales',/Bán hàng thép (?:thành phẩm(?: các loại)?|các loại)(?: trong nước)?\s+đạt\s+([\d.,]+)\s*(triệu|ngàn|nghìn)?\s*tấn/i]]){const m=block.match(re);if(m){const s=seriesDefinition('all_steel',metric,'vsa');s.observations=[{period,value:vnNumber(m[1])*(m[2]==='triệu'?1e6:m[2]?1e3:1),url,source:'vsa',checkedAt,publishedAt:post.date,evidence:m[0],approximate:Boolean(m[2]),note:m[2]?'Số làm tròn theo đơn vị trong bản tin VSA.':'Theo bản tin VSA.'}];out.push(s);}}}}
  return out.filter(s=>s.observations[0].period>='2015-01');
 }

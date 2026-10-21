@@ -103,6 +103,40 @@ test('Coverage counts unique observed months, not cumulative or company records'
 // affects the combined view only, never the original workbook values.
 import {reconciledSteelSeries,latestClosedMonth,growthAt} from './steel-data.mjs';
 import {parseVsaHistoricalTotals} from './steel-reviewed.mjs';
+import {parseVsa} from './steel-data.mjs';
+
+test('reconciliation audit keeps all original conflicts and separates checked values from unexplained causes',()=>{
+ const w=seed.sources.workbook_four,a=w.audit;
+ assert.equal(a.volumeCases,281);assert.equal(w.comparisons.length,283);
+ assert.equal(a.sourceChecked+a.rounded+a.needsSource,a.volumeCases);
+ const q1=w.comparisons.filter(c=>c.period>='2025-01'&&c.period<='2025-03');
+ assert.equal(q1.length,12);assert.ok(q1.every(c=>c.review.status==='source-checked'&&c.review.selected.hash.length===64&&c.review.selected.page));
+ const march=q1.find(c=>c.period==='2025-03'&&c.metric==='sales'&&c.product==='all_steel');
+ assert.equal(march.other,3021000);assert.equal(march.review.selected.value,3021475);assert.equal(march.review.difference,1406);
+ assert.ok(w.comparisons.filter(c=>c.metric==='price').every(c=>!c.review.selected&&!c.review.causeResolved));
+ assert.ok(w.comparisons.every(c=>c.review.causeResolved===false));
+});
+
+test('rounded VSA totals cannot outrank exact tables, including restored legacy snapshots',()=>{
+ const p={slug:'tinh-hinh-thi-truong-thep-viet-nam-thang-3-2025',link:'https://vsa.com.vn/test/',date:'2025-04-20',title:{rendered:'Thị trường thép tháng 3/2025'},content:{rendered:'Tháng 3/2025: Bán hàng thép thành phẩm đạt 3,021 triệu tấn.'}};
+ const parsed=parseVsa(p,'2026-10-22T00:00:00Z');
+ assert.equal(parsed[0].observations[0].approximate,true);
+ const legacy=structuredClone(parsed);delete legacy[0].observations[0].approximate;
+ const restored=mergeSteel(emptySteel(),legacy,{now:'2026-10-22T00:00:00Z'});
+ assert.equal(restored.series[0].observations[0].approximate,true);
+ const combined=combineSteelSeries(seed.series).find(s=>s.id==='all_steel.sales.combined');
+ assert.equal(combined.observations.find(o=>o.period==='2025-03').value,3021475);
+ assert.equal(combined.observations.find(o=>o.period==='2026-07').approximate,true);
+});
+
+test('new July and August observations retain declared rounding and benchmark limits',()=>{
+ const iron=seed.series.find(s=>s.basis==='reviewed-iron-cfr-china-unspecified-grade');
+ assert.equal(iron.unit,'USD/dmt');assert.deepEqual(iron.observations.map(o=>[o.period,o.value]),[['2026-07',98.7],['2026-08',97.1]]);
+ assert.ok(iron.scope.includes('không ghi rõ hàm lượng Fe'));
+ assert.ok(iron.observations.every(o=>o.approximate));
+ const hrc=steelQuality(seed,'2025-01','2025-12').find(s=>s.product==='hrc'&&s.metric==='production');
+ assert.ok(hrc.rounded.includes('2025-04'));assert.ok(hrc.missing.includes('2025-04'));
+});
 test('company reconciliation preserves raw workbook and uses documented annual totals',()=>{
  const d=JSON.parse(fs.readFileSync(new URL('./steel-seed.json',import.meta.url))),snapshot=JSON.stringify(d.series);
  const view=reconciledSteelSeries(d.series,d.reconciliations);

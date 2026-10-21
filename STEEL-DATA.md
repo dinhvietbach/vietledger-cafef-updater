@@ -95,3 +95,13 @@ NKG Q2/2025, Q1/2026 and Q2/2026 were checked against Table 1, pages 2–3, of t
 
 Other withheld fields include duplicate March 2024 customs dates, HSG production copied into historical HPG coated rows, model projections, empty-reference zeros, coking-coal cells referencing coke, and month values inferred from rounded aggregates. HPG HRC quotes are separate from the generic historical HRC price series. The 2015–present coverage display continues to show real gaps; workbook uploads are snapshots, while online sources retain their existing refresh schedule.
 
+## Đối soát 281 chênh lệch · 22/10/2026
+
+Đối chiếu lại 281 điểm sản lượng bằng bảng đã đọc và bài gốc VSA: 271 điểm có số nguồn chính xác, 10 điểm chỉ có số làm tròn. Hồ sơ nằm trong `sources.workbook_four.comparisons[].review` và `public/steel-reconciliation.csv`; giữ nguyên số Excel, số đối chiếu ban đầu, số được kiểm tra, trang/ảnh, SHA-256 và lý do. Hai xung đột giá than tháng 2–3/2026 được theo dõi riêng; chưa xác nhận cùng chuẩn giá. Không tuyên bố đã giải thích nguyên nhân khác biệt FiinPro/VSA khi thiếu bản nguồn của Excel.
+
+12 điểm quý I/2025 đều được kiểm tra trực tiếp bảng PDF. Chênh lệch tổng sản xuất/bán hàng bằng chênh lệch tôn mạ trong từng tháng, nhưng chưa xác định doanh nghiệp hoặc phiên bản gây khác biệt. Sửa 5 số đối chiếu cũ sang số chính xác trong bảng; riêng bán hàng 3/2025 là 3.021.475 thay cho số làm tròn 3.021.000. Bộ đọc VSA và khôi phục kho cũ giờ đánh dấu `approximate` nhất quán để số làm tròn không lấn số bảng chính xác.
+
+Thêm 9 quan sát: HRC sản xuất 4/2025 (xấp xỉ); tổng sản xuất/bán hàng tháng 7/2026; bốn chỉ tiêu lũy kế 7 tháng; quặng sắt bình quân tháng 7–8/2026 theo VNSTEEL. Giữ độ làm tròn. Giá quặng CFR Trung Quốc không ghi hàm lượng Fe được tách riêng, không nối vào chuẩn 62% Fe. Chưa có đủ số chính xác để lấp các sản phẩm tháng 4/2025 và 7–9/2026; không nội suy từ lũy kế hay phần trăm tăng trưởng.
+
+Ghi thêm mâu thuẫn HRC 4/2026 giữa bài tin 916.092 và PDF 961.092 tấn; số bảng PDF được giữ, nguyên nhân đảo số chưa có đính chính. Bảng đối soát trên giao diện có bộ lọc năm/trạng thái và liên kết báo cáo. Bản xuất bản cùng lịch đám mây bảo toàn hồ sơ này qua `reviewedAt`.
+
