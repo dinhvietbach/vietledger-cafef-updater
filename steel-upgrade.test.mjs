@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {mergeSteel,emptySteel,steelIndicators,steelQuality,combineSteelSeries,selectSteelSeries,referenceSteelSeries,cumulativeSteelReferences} from './steel-data.mjs';
-import {reviewedSeries,parseVsaExpanded,isVsaIndustryPost} from './steel-reviewed.mjs';
+import {reviewedSeries,parseVsaExpanded,isVsaIndustryPost,parseWorldsteel,worldsteelLinks} from './steel-reviewed.mjs';
 const review=JSON.parse(fs.readFileSync(new URL('./steel-reviewed.json',import.meta.url)));
 const seed=JSON.parse(fs.readFileSync(new URL('./steel-seed.json',import.meta.url)));
 
@@ -213,8 +213,28 @@ test('cumulative references never claim a monthly actual or use rounded/workbook
 
 test('new primary and attributed observations preserve frequency, scope and source precision',()=>{
  const w=seed.series.filter(s=>s.basis==='reviewed-worldsteel');assert.equal(w.length,2);
- assert.deepEqual(w.find(s=>s.frequency==='month').observations.map(o=>[o.period,o.value,o.approximate]),[['2026-07',2700000,true],['2026-08',2700000,true]]);
+ assert.deepEqual(w.find(s=>s.frequency==='month').observations.map(o=>[o.period,o.value,o.approximate]),[['2026-07',2700000,true],['2026-08',2700000,true],['2026-09',2600000,true]]);
  const nkg=seed.series.filter(s=>s.basis==='reviewed-cafef-nkg');assert.equal(nkg.length,2);assert.ok(nkg.every(s=>s.entity==='NKG'&&s.product==='steel_unspecified'&&s.observations[0].qualifier==='>'));
  for(const p of ['2016-06','2016-09']){const c=seed.sources.workbook_four.comparisons.find(c=>c.period===p&&c.product==='construction');assert.equal(c.review.cumulativeReference.value,c.file);assert.equal(c.review.causeResolved,false);}
  assert.equal(seed.series.flatMap(s=>s.observations).filter(o=>o.cumulativeDerived).length,0);
+});
+
+test('Worldsteel parses only Vietnam, closed periods, million-tonne units and verified releases',()=>{
+ const url='https://worldsteel.org/media/press-releases/2026/september-2026-crude-steel-production/',checkedAt='2026-10-24T09:00:00Z';
+ const html='<h1>September 2026 crude steel production</h1><p>23 October 2026 Brussels, Belgium</p><table><tr><th>Sep 2026 (Mt)</th><th>Jan-Sep 2026 (Mt)</th></tr><tr><td>China</td><td>73.6</td><td>0.1</td><td>724.8</td><td>-2.9</td></tr><tr><td>Viet Nam</td><td>2.6</td><td>29.1</td><td>23.2</td><td>29.1</td></tr></table>';
+ const rows=parseWorldsteel(html,{url,checkedAt});assert.deepEqual(rows.map(s=>[s.frequency,s.observations[0].value]),[['month',2600000],['ytd',23200000]]);assert.ok(rows.every(s=>s.observations[0].approximate&&s.observations[0].hash.length===64));
+ for(const altered of [html.replaceAll('(Mt)','(kt)'),html.replace('<td>Viet Nam</td>','<td>Thailand</td>'),html.replace('<td>2.6</td>','<td>n/a</td>'),html.replace('23 October','25 October'),html.replace('<h1>September','<h1>August')])assert.throws(()=>parseWorldsteel(altered,{url,checkedAt}));
+ assert.throws(()=>parseWorldsteel(html,{url,checkedAt:'2026-09-30T00:00:00Z'}));
+ const aug=url.replaceAll('september','august');assert.deepEqual(worldsteelLinks(`<a href="${aug}">Aug</a><a href="${url}">Sep</a><a href="${url}">dup</a><a href="${url.replace('worldsteel.org','example.com')}">bad</a>`,url,checkedAt),[url,aug]);
+ assert.deepEqual(worldsteelLinks(`<a\nhref=${url} class=stretched-link>Read more</a>`,url,checkedAt),[url]);
+});
+
+test('October research preserves observed prices, company scope and cumulative history',()=>{
+ const point=(id,period)=>seed.series.find(s=>s.id===id).observations.find(o=>o.period===period);
+ assert.equal(point('hrc.price.reviewed-2mm-cfr-vietnam.month','2026-09').value,542.5);
+ assert.equal(point('coking_coal.price.reviewed-plv-hcc-fob-australia.month','2026-08').value,224.8);
+ assert.equal(point('iron.price.reviewed-62fe-cfr-north-china.month','2026-09').value,98.6);
+ assert.equal(point('construction.production.reviewed-vsa.ytd','2018-04').value,3195340);
+ const company=seed.series.find(s=>s.basis==='reviewed-vnsteel-company');assert.equal(company.entity,'TVN');assert.equal(company.frequency,'ytd');assert.equal(company.observations[0].value,3460000);assert.equal(company.observations[0].approximate,true);
+ assert.equal(seed.completionAudit.oct24Research.newStoredPoints,103);
 });

@@ -127,3 +127,12 @@ Thêm 9 quan sát: HRC sản xuất 4/2025 (xấp xỉ); tổng sản xuất/bá
 
 Ghi thêm mâu thuẫn HRC 4/2026 giữa bài tin 916.092 và PDF 961.092 tấn; số bảng PDF được giữ, nguyên nhân đảo số chưa có đính chính. Bảng đối soát trên giao diện có bộ lọc năm/trạng thái và liên kết báo cáo. Bản xuất bản cùng lịch đám mây bảo toàn hồ sơ này qua `reviewedAt`.
 
+# Bổ sung ngày 24/10/2026
+
+- Thêm 103 điểm nguồn mới từ 8 tài liệu: Worldsteel tháng 9/2026, giá bình quân tháng 8–9/2026 trên nhãn biểu đồ VNSTEEL, tiêu thụ 9 tháng VNSTEEL và bảng VSA lũy kế 2016–2018. Tổng nhập rà soát 115 ô, gồm các ô trùng dùng để đối chiếu.
+- Các bảng lịch sử tạo thêm 19 số dư lũy kế trong chế độ tham khảo. Không cộng các điểm LK vào độ phủ số tháng thực tế.
+- Chuẩn giá tách theo quy cách và địa điểm: HRC 2 mm CFR Việt Nam; than mỡ PLV HCC FOB Úc; quặng 62% Fe CFR Bắc Trung Quốc; phôi CFR Đông Nam Á; HMS 1/2 80:20 CFR Việt Nam nhập Hoa Kỳ. Chỉ đọc nhãn số rõ, không đo chiều cao đường biểu đồ để tạo số công bố.
+- Giá quặng 96,5 trên infographic tháng 8 và 97,1 ở VNSTEEL News 66 được giữ riêng vì chuẩn/đơn vị chưa đồng nhất. Chưa xác nhận nguyên nhân chênh lệch.
+- Worldsteel tự kiểm tra danh mục hằng ngày trong lịch cập nhật đã có. Đọc hai bản gần nhất, xác nhận kỳ, đơn vị Mt, dòng Viet Nam, ngày công bố, tháng đã kết thúc; giữ số trước khi nguồn lỗi/đổi cấu trúc. Số tháng và lũy kế tách riêng, giữ làm tròn.
+- Chưa hoàn tất bảng chi tiết toàn ngành tháng 4/2025 và 7–9/2026, chưa giải quyết toàn bộ nguyên nhân Excel lệch, chưa đủ mọi tháng 2015–2026.
+

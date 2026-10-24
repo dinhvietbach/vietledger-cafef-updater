@@ -1,4 +1,28 @@
 import {seriesDefinition,PRODUCT_BY_ID,cleanText,vnNumber} from './steel-data.mjs';
+import {createHash} from 'node:crypto';
+
+const EN_MONTHS=['january','february','march','april','may','june','july','august','september','october','november','december'];
+export function worldsteelLinks(html,base,checkedAt=new Date().toISOString()){
+ return [...new Set([...html.matchAll(/href\s*=\s*(?:"([^"]+)"|'([^']+)'|([^\s>]+))/gi)].flatMap(m=>{try{const u=new URL(m[1]||m[2]||m[3],base),p=u.pathname.match(/^\/media\/press-releases\/(20\d{2})\/([a-z]+)-(20\d{2})-crude-steel-production\/$/);if(u.protocol!=='https:'||u.hostname!=='worldsteel.org'||!p||p[1]!==p[3]||!EN_MONTHS.includes(p[2]))return[];const period=p[3]+'-'+String(EN_MONTHS.indexOf(p[2])+1).padStart(2,'0');return period>= '2015-01'&&period<checkedAt.slice(0,7)?[u.href]:[];}catch{return[];}}))].sort((a,b)=>{const period=u=>{const m=u.match(/\/([a-z]+)-(20\d{2})-crude/);return m[2]+'-'+String(EN_MONTHS.indexOf(m[1])+1).padStart(2,'0');};return period(b).localeCompare(period(a));});
+}
+export function parseWorldsteel(html,{url,checkedAt=new Date().toISOString()}={}){
+ const h=String(html),u=new URL(url),m=u.pathname.match(/\/(20\d{2})\/([a-z]+)-(20\d{2})-crude-steel-production\/$/);
+ if(u.protocol!=='https:'||u.hostname!=='worldsteel.org'||!m||m[1]!==m[3]||!EN_MONTHS.includes(m[2]))throw Error('URL công bố Worldsteel không hợp lệ');
+ const period=m[3]+'-'+String(EN_MONTHS.indexOf(m[2])+1).padStart(2,'0');
+ if(period<'2015-01'||period>=checkedAt.slice(0,7))throw Error('Kỳ Worldsteel chưa kết thúc');
+ const title=cleanText(h.match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/i)?.[1]||'').toLowerCase();
+ if(!title.includes(`${m[2]} ${m[3]} crude steel production`))throw Error('Tiêu đề Worldsteel không khớp kỳ');
+ const tables=[...h.matchAll(/<table\b[^>]*>[\s\S]*?<\/table>/gi)].map(x=>x[0]);
+ const table=tables.find(t=>/Viet\s*Nam/i.test(cleanText(t))&&/\(Mt\)/i.test(cleanText(t)));
+ if(!table)throw Error('Chưa có dòng Việt Nam trong bảng Worldsteel; giữ dữ liệu trước');
+ const row=[...table.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi)].map(r=>[...r[1].matchAll(/<t[dh]\b[^>]*>([\s\S]*?)<\/t[dh]>/gi)].map(c=>cleanText(c[1]).trim())).find(r=>/^Viet\s*Nam(?:\s*\(e\))?$/i.test(r[0]||''));
+ if(!row||row.length!==5||!/^\d+(?:\.\d+)?$/.test(row[1])||!/^\d+(?:\.\d+)?$/.test(row[3]))throw Error('Bảng Worldsteel đổi cấu trúc');
+ const values=[Number(row[1])*1e6,Number(row[3])*1e6];if(values[0]<=0||values[0]>20e6||values[1]<values[0]||values[1]>240e6)throw Error('Số Worldsteel ngoài miền kiểm tra');
+ const published=cleanText(h).match(/(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December)\s+(20\d{2})\s+Brussels/i);
+ const publishedAt=published?published[3]+'-'+String(EN_MONTHS.indexOf(published[2].toLowerCase())+1).padStart(2,'0')+'-'+published[1].padStart(2,'0'):null;
+ if(!publishedAt||publishedAt>checkedAt.slice(0,10))throw Error('Ngày công bố Worldsteel chưa xác minh');
+ return ['month','ytd'].map((frequency,i)=>{const s=seriesDefinition('crude_steel','production','reviewed-worldsteel');return {...s,id:s.id+'.'+frequency,frequency,entity:'industry',unit:'tấn',scope:'Thép thô Việt Nam theo Worldsteel; tách khỏi thép thành phẩm và phôi.',sourceLabel:'Worldsteel · công bố trực tiếp',method:'Đọc dòng Viet Nam trong bảng công bố tháng. Giữ độ làm tròn triệu tấn; lũy kế không thay thế số riêng tháng.',observations:[{period,value:values[i],url,source:'worldsteel',publishedAt,checkedAt,hash:createHash('sha256').update(h).digest('hex'),kind:'reported-table',approximate:true,qualifier:'≈',estimated:/\(e\)/i.test(row[0]),evidenceUrl:url,evidence:row.join(' | '),note:`Bảng ghi ${row[i===0?1:3]} triệu tấn, ${frequency==='month'?'riêng tháng':'lũy kế từ tháng 1'}. Giữ số làm tròn của nguồn; không suy số chính xác từ tỷ lệ tăng trưởng.`}]};});
+}
 
 export function reviewedSeries(review){
  return review.tables.flatMap(t=>{

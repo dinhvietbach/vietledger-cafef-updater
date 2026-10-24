@@ -6,7 +6,7 @@ import {fileURLToPath} from 'node:url';
 import {execFileSync} from 'node:child_process';
 import {emptySteel,mergeSteel,parseTrade,parseVsa,seriesDefinition,TRADE_CODES,monthRange,cleanText} from './steel-data.mjs';
 import {parseAustralia,parseSteelOnlineChart,newestReqEdition,AU_PAGE,AU_EDITION,AU_FILE,STEELONLINE_PAGE} from './steel-extra.mjs';
-import {parseVsaExpanded,parseVsaHistoricalTotals,isVsaIndustryPost} from './steel-reviewed.mjs';
+import {parseVsaExpanded,parseVsaHistoricalTotals,isVsaIndustryPost,worldsteelLinks,parseWorldsteel} from './steel-reviewed.mjs';
 const ROOT=path.dirname(fileURLToPath(import.meta.url));
 const DATA=process.env.DATA_DIR||path.join(ROOT,'data');
 const FILE=path.join(DATA,'steel.json');
@@ -53,6 +53,23 @@ async function refresh({backfill=false,download=fetchSteel,reports=[]}={}){
  const sources={worldbank:{name:'World Bank · Pink Sheet',url:WB_PAGE},vsa:{name:'Hiệp hội Thép Việt Nam (VSA)',url:'https://vsa.com.vn/'},comtrade:{name:'UN Comtrade · Việt Nam / Thế giới',url:'https://comtradeplus.un.org/'}};data.sources={...data.sources,...sources};
  async function update(id,fn){const before=data.checks[id]||{},snapshot=new Map(data.series.flatMap(s=>s.observations.map(o=>[s.id+'|'+o.period,o.value])));try{await fn();let added=0,revised=0;for(const s of data.series)for(const o of s.observations){const key=s.id+'|'+o.period;if(!snapshot.has(key))added++;else if(snapshot.get(key)!==o.value)revised++;}data.checks[id]={...before,lastAttempt:now,lastSuccess:now,added,revised,lastDataChange:added||revised?now:before.lastDataChange||null,error:null};}catch(e){data.checks[id]={...before,lastAttempt:now,error:String(e.message).slice(0,240)};console.warn('DATA NGÀNH',id,e.message);}saveSteel(data);}
  // REQ publishes quarterly; inspect once a day, retaining the historical archive on failure.
+ if(data.checks.worldsteel?.lastAttempt?.slice(0,10)!==now.slice(0,10))await update('worldsteel',async()=>{
+  const year=Number(now.slice(0,4)),catalog=`https://worldsteel.org/media/press-releases/${year}/`;
+  let links=worldsteelLinks((await download(catalog)).toString(),catalog,now);
+  if(links.length<2){const previous=`https://worldsteel.org/media/press-releases/${year-1}/`;links.push(...worldsteelLinks((await download(previous)).toString(),previous,now));}
+  if(!links.length)throw Error('Chưa tìm thấy công bố tháng Worldsteel; giữ số đã lưu');
+  const docs=new Map(data.documents.map(d=>[d.url,d]));let imported=0;
+  for(const url of [...new Set(links)].slice(0,2)){
+   const html=(await download(url)).toString();
+   // Some older releases list ten countries without Viet Nam. That is a coverage gap, not zero production.
+   if(!/<td\b[^>]*>\s*Viet\s*Nam(?:\s*\(e\))?\s*<\/td>/i.test(html))continue;
+   const rows=parseWorldsteel(html,{url,checkedAt:now});data=mergeSteel(data,rows,{now});imported+=rows.length;
+   docs.set(url,{url,title:'Worldsteel · Thép thô Việt Nam '+rows[0].observations[0].period,source:'worldsteel',publishedAt:rows[0].observations[0].publishedAt,hash:sha(Buffer.from(html)),note:'Tự đọc số tháng và lũy kế; giữ nguyên mức làm tròn triệu tấn.'});
+  }
+  if(!imported)throw Error('Hai công bố mới nhất chưa có dòng Việt Nam; giữ số trước');
+  data.documents=[...docs.values()].sort((a,b)=>(b.publishedAt||'').localeCompare(a.publishedAt||''));
+  data.sources.worldsteel={name:'Worldsteel · Thép thô Việt Nam',url:catalog,mode:'Kiểm tra hằng ngày trong lịch cập nhật; chỉ nhập kỳ đã kết thúc, đúng dòng Việt Nam. Thiếu dòng hoặc đổi cấu trúc giữ số trước.'};
+ });
  if(data.checks.australia?.lastAttempt?.slice(0,10)!==now.slice(0,10))await update('australia',async()=>{
   const html=(await download(AU_PAGE)).toString(),edition=newestReqEdition(html,now)||AU_EDITION;
   const page=(await download(edition)).toString(),link=[...page.matchAll(/href=["']([^"']+historical-data\.xlsx)["']/gi)].map(m=>new URL(m[1],edition)).find(u=>u.protocol==='https:'&&u.hostname==='www.industry.gov.au');
