@@ -66,9 +66,32 @@ export function mergeSteel(previous,incoming,{now=new Date().toISOString()}={}){
   map.set(next.id,{...old,...next,observations:[...points.values()].sort((a,b)=>a.period.localeCompare(b.period))});
  }
  result.series=[...map.values()];
+ // The July 2018 VSA article explicitly excludes HRC in its production scope.
+ // Preserve the old sales extraction, but quarantine its unresolved scope even
+ // when an older public snapshot is restored by the scheduled updater.
+ for(const s of [...result.series].filter(s=>s.product==='all_steel')){
+  const affected=s.observations.filter(o=>o.source==='vsa'&&o.period==='2018-07'&&o.url?.includes('/tinh-hinh-thi-truong-thep-viet-nam-thang-7-2018-va-7-thang-nam-2018/'));
+  if(!affected.length)continue;
+  s.observations=s.observations.filter(o=>!affected.includes(o));
+  const id='steel_unspecified.'+s.metric+'.vsa-scope-review.'+(s.frequency||'month');
+  let dest=result.series.find(x=>x.id===id);
+  if(!dest){dest={...s,id,product:'steel_unspecified',basis:'vsa-scope-review',label:'Thép · phạm vi cần xác minh · '+(s.metric==='sales'?'Bán hàng':s.metric),scope:'Bài VSA tháng 7/2018 loại HRC khỏi sản xuất; phạm vi bán hàng/xuất khẩu cần xác minh.',observations:[]};result.series.push(dest);}
+  for(const o of affected)if(!dest.observations.some(p=>p.period===o.period))dest.observations.push({...o,scopeUnverified:true,scope:dest.scope,raw:{...o.raw,originalSeries:s.id},note:'Giữ số của bài nguồn, tách khỏi tổng toàn ngành vì phạm vi HRC chưa rõ. Không dùng tính tăng trưởng hay suy tháng từ lũy kế. '+(o.note||'')});
+ }
  // Migrate restored snapshots written before the VSA parser tagged rounding.
  for(const s of result.series)for(const o of s.observations)if(o.source==='vsa'&&/Số làm tròn theo đơn vị/.test(o.note||''))o.approximate=true;
  result.updatedAt=now;return result;
+}
+export function steelDocumentIndex(data){
+ const base=u=>{try{const x=new URL(u);x.hash='';return x.href;}catch{return'';}},used=new Map();
+ for(const s of data.series||[])for(const o of s.observations||[]){
+  if(o.modelEstimated||o.cumulativeDerived||o.provisional||o.source?.startsWith('workbook'))continue;
+  for(const url of new Set([base(o.url),base(o.evidenceUrl)].filter(Boolean))){
+   if(!used.has(url))used.set(url,new Map());
+   used.get(url).set(s.id+'|'+o.period,{period:o.period,frequency:s.frequency||'month'});
+  }
+ }
+ return (data.documents||[]).map(d=>{const points=[...(used.get(base(d.url))?.values()||[])],periods=points.map(p=>p.period).sort((a,b)=>periodMonth(a).localeCompare(periodMonth(b)));return {...d,extractedPoints:points.length,reviewStatus:points.length?'has-data':'pending',firstPeriod:periods[0]||null,lastPeriod:periods.at(-1)||null,frequencies:[...new Set(points.map(p=>p.frequency))]};});
 }
 export function growthAt(observations,period,months){const now=observations.find(o=>o.period===period);const d=new Date(periodMonth(period)+'-01T00:00:00Z');d.setUTCMonth(d.getUTCMonth()-months);const m=d.toISOString().slice(0,7),key=period.includes('Q')?m.slice(0,4)+'-Q'+Math.ceil(Number(m.slice(5))/3):period.length===4?m.slice(0,4):m;const prev=observations.find(o=>o.period===key);return now&&prev&&!now.approximate&&!prev.approximate&&!now.scopeUnverified&&!prev.scopeUnverified&&!now.provisional&&!prev.provisional&&!now.modelEstimated&&!prev.modelEstimated&&prev.value>0?(now.value/prev.value-1)*100:null;}
 export function seriesCoverage(series,to=new Date().toISOString().slice(0,7)){const months=periodRange('2015-01',to,series.frequency);const points=series.observations.filter(o=>months.includes(o.period));return {count:points.length,total:months.length,first:points[0]?.period||null,last:points.at(-1)?.period||null,missing:months.filter(m=>!points.some(o=>o.period===m))};}

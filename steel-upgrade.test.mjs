@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {mergeSteel,emptySteel,steelIndicators,steelQuality,combineSteelSeries,selectSteelSeries,referenceSteelSeries,cumulativeSteelReferences} from './steel-data.mjs';
-import {reviewedSeries,parseVsaExpanded,isVsaIndustryPost,parseWorldsteel,worldsteelLinks} from './steel-reviewed.mjs';
+import {mergeSteel,emptySteel,steelIndicators,steelQuality,combineSteelSeries,selectSteelSeries,referenceSteelSeries,cumulativeSteelReferences,steelDocumentIndex} from './steel-data.mjs';
+import {reviewedSeries,parseVsaExpanded,isVsaIndustryPost,parseWorldsteel,worldsteelLinks,vnsteelReportLinks} from './steel-reviewed.mjs';
 const review=JSON.parse(fs.readFileSync(new URL('./steel-reviewed.json',import.meta.url)));
 const seed=JSON.parse(fs.readFileSync(new URL('./steel-seed.json',import.meta.url)));
 
@@ -237,4 +237,34 @@ test('October research preserves observed prices, company scope and cumulative h
  assert.equal(point('construction.production.reviewed-vsa.ytd','2018-04').value,3195340);
  const company=seed.series.find(s=>s.basis==='reviewed-vnsteel-company');assert.equal(company.entity,'TVN');assert.equal(company.frequency,'ytd');assert.equal(company.observations[0].value,3460000);assert.equal(company.observations[0].approximate,true);
  assert.equal(seed.completionAudit.oct24Research.newStoredPoints,103);
+});
+
+test('latest source additions keep PSI cumulative labels separate and preserve July prices',()=>{
+ const july=seed.series.find(s=>s.id==='hrc.price.reviewed-2mm-cfr-vietnam.month').observations.find(o=>o.period==='2026-07');
+ assert.equal(july.value,531.2);assert.match(july.scope,/2 mm CFR/);assert.equal(july.kind,'reported-average');
+ const psi=seed.series.filter(s=>s.basis==='reviewed-psi-vsa');assert.equal(psi.flatMap(s=>s.observations).length,28);assert.ok(psi.every(s=>['ytd','quarter'].includes(s.frequency)));
+ assert.ok(psi.flatMap(s=>s.observations).every(o=>o.approximate&&o.raw.page&&o.url.includes('#page=')));
+ assert.equal(psi.find(s=>s.product==='hrc'&&s.metric==='production').observations.find(o=>o.period==='2026-07').value,6400000);
+ assert.equal(seed.completionAudit.oct25Research.newStoredPoints,57);
+ assert.ok(!seed.series.filter(s=>s.product==='all_steel'&&s.frequency==='ytd').flatMap(s=>s.observations).some(o=>o.period==='2018-05'&&[6698893,1568826].includes(o.value)));
+});
+
+test('old snapshot restoration cannot reintroduce the unresolved July 2018 total scope',()=>{
+ const old={id:'all_steel.sales.vsa',product:'all_steel',metric:'sales',basis:'vsa',unit:'tấn',observations:[{period:'2018-07',value:1521096,source:'vsa',url:'https://vsa.com.vn/tinh-hinh-thi-truong-thep-viet-nam-thang-7-2018-va-7-thang-nam-2018/'}]};
+ const data=mergeSteel(emptySteel(),[old]);assert.equal(data.series.find(s=>s.id===old.id).observations.length,0);
+ const moved=data.series.find(s=>s.product==='steel_unspecified');assert.equal(moved.observations[0].value,1521096);assert.equal(moved.observations[0].scopeUnverified,true);
+ const again=mergeSteel(data,[old]);assert.equal(again.series.flatMap(s=>s.observations).length,1);assert.equal(again.series.find(s=>s.id===old.id).observations.length,0);
+});
+
+test('document review status counts attributed active source points, not Excel or estimates',()=>{
+ const url='https://example.org/report.pdf',series=[{id:'p',frequency:'ytd',observations:[{period:'2026-07',value:1,url:url+'#page=3',evidenceUrl:url,source:'vsa'},{period:'2026-08',value:2,url,source:'vietledger-model',modelEstimated:true},{period:'2026-09',value:3,url,source:'workbook-four'}]}];
+ const docs=steelDocumentIndex({documents:[{url,title:'Reviewed'},{url:'https://example.org/new',extractedPoints:99}],series});
+ assert.equal(docs[0].extractedPoints,1);assert.equal(docs[0].reviewStatus,'has-data');assert.equal(docs[0].firstPeriod,'2026-07');assert.deepEqual(docs[0].frequencies,['ytd']);assert.equal(docs[1].reviewStatus,'pending');assert.equal(docs[1].extractedPoints,0);
+ const mixed=steelDocumentIndex({documents:[{url}],series:[...series,{id:'q',frequency:'quarter',observations:[{period:'2026-Q2',value:1,url,source:'vsa'}]}]})[0];assert.equal(mixed.firstPeriod,'2026-Q2');assert.equal(mixed.lastPeriod,'2026-07');
+});
+
+test('VNSTEEL discovery keeps only observed monthly reports on the official host',()=>{
+ const path='/tin-thi-truong-thep/tieu-thu-thep-7662.html',title='Tiêu thụ thép thành phẩm 9 tháng 2026 của VNSTEEL';
+ const html=`<a href="${path}">${title}</a><a href="${path}">${title}</a><a href="https://evil.test${path}">${title}</a><a href="${path}?redirect=other">${title}</a><a href="/tin-thi-truong-thep/gia-123.html">Giá HRC tháng 9</a>`;
+ assert.deepEqual(vnsteelReportLinks(html),[{url:'https://www.vnsteel.vn'+path,title,source:'vnsteel'}]);
 });

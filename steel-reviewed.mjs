@@ -2,6 +2,15 @@ import {seriesDefinition,PRODUCT_BY_ID,cleanText,vnNumber} from './steel-data.mj
 import {createHash} from 'node:crypto';
 
 const EN_MONTHS=['january','february','march','april','may','june','july','august','september','october','november','december'];
+export function vnsteelReportLinks(html,base='https://www.vnsteel.vn/tin-thi-truong-thep/'){
+ const docs=new Map();
+ for(const a of String(html).matchAll(/<a\b([^>]+)>([\s\S]*?)<\/a>/gi)){
+  const href=a[1].match(/\bhref\s*=\s*["']([^"']+)["']/i)?.[1],title=cleanText(a[2]).trim();
+  if(!href||!/(?:tháng\s*\d|\d+\s*tháng)/i.test(title)||!/VNSTEEL/i.test(title)||!/(?:tiêu thụ|kết quả sản xuất)/i.test(title))continue;
+  try{const u=new URL(href,base);if(u.protocol==='https:'&&u.hostname==='www.vnsteel.vn'&&/^\/tin-thi-truong-thep\/[a-z0-9-]+-\d+\.html$/.test(u.pathname)&&!u.search&&!u.hash)docs.set(u.href,{url:u.href,title,source:'vnsteel'});}catch{}
+ }
+ return [...docs.values()].slice(0,6);
+}
 export function worldsteelLinks(html,base,checkedAt=new Date().toISOString()){
  return [...new Set([...html.matchAll(/href\s*=\s*(?:"([^"]+)"|'([^']+)'|([^\s>]+))/gi)].flatMap(m=>{try{const u=new URL(m[1]||m[2]||m[3],base),p=u.pathname.match(/^\/media\/press-releases\/(20\d{2})\/([a-z]+)-(20\d{2})-crude-steel-production\/$/);if(u.protocol!=='https:'||u.hostname!=='worldsteel.org'||!p||p[1]!==p[3]||!EN_MONTHS.includes(p[2]))return[];const period=p[3]+'-'+String(EN_MONTHS.indexOf(p[2])+1).padStart(2,'0');return period>= '2015-01'&&period<checkedAt.slice(0,7)?[u.href]:[];}catch{return[];}}))].sort((a,b)=>{const period=u=>{const m=u.match(/\/([a-z]+)-(20\d{2})-crude/);return m[2]+'-'+String(EN_MONTHS.indexOf(m[1])+1).padStart(2,'0');};return period(b).localeCompare(period(a));});
 }
@@ -37,8 +46,11 @@ export function reviewedSeries(review){
    if(d.source==='nkg-official')s.sourceLabel='Nam Kim · công bố doanh nghiệp';
    if(d.source==='worldsteel')s.sourceLabel='Worldsteel · công bố trực tiếp';
    if(d.source==='cafef-reported')s.sourceLabel='CafeF · dẫn VSA / thông tin Nam Kim';
+   if(d.source==='psi-vsa')s.sourceLabel='PSI · tổng hợp FiinPro / VSA';
+   if(t.metric==='sales_domestic')s.label=PRODUCT_BY_ID[product].name+' · Tiêu thụ nội địa';
+   if(t.metric==='export_share')s.label=PRODUCT_BY_ID[product].name+' · Tỷ trọng xuất khẩu';
    s.method='Số công bố tại bảng/nhãn/đoạn đã đọc trực tiếp; giữ độ làm tròn của nguồn. Các báo cáo trích cùng nguồn gốc không phải đối soát độc lập.';
-   s.observations=[{period:t.period,value,url:d.url+(Number.isInteger(t.page)?'#page='+t.page:''),source:d.source,publishedAt:d.publishedAt,checkedAt:d.reviewedAt,hash:d.hash,kind:t.kind||'reported-table',upstream:d.upstream,approximate:Boolean(t.approximate),qualifier:t.qualifier||'',evidenceUrl:t.evidenceUrl,raw:{document:t.document,page:t.page||null,row:i+1,reportedValue:value,sumDifference:t.sumDifference??null},evidence:t.evidence||`${t.page?'Trang '+t.page+'; ':''}${t.frequency==='ytd'?'lũy kế từ tháng 1 đến ':''}${t.period}; đơn vị ${t.unit}.`,note:(t.note||'')+(t.sumDifference?` Tổng nhóm chênh ${t.sumDifference} tấn với tổng nguồn; giữ nguyên số gốc.`:'')}];
+   s.observations=[{period:t.period,value,url:d.url+(Number.isInteger(t.page)?'#page='+t.page:''),source:d.source,sourceLabel:s.sourceLabel,scope:t.scope,publishedAt:d.publishedAt,checkedAt:d.reviewedAt,hash:d.hash,kind:t.kind||'reported-table',upstream:d.upstream,approximate:Boolean(t.approximate),qualifier:t.qualifier||'',evidenceUrl:t.evidenceUrl,raw:{document:t.document,page:t.page||null,row:i+1,reportedValue:value,sumDifference:t.sumDifference??null},evidence:t.evidence||`${t.page?'Trang '+t.page+'; ':''}${t.frequency==='ytd'?'lũy kế từ tháng 1 đến ':''}${t.period}; đơn vị ${t.unit}.`,note:(t.note||'')+(t.sumDifference?` Tổng nhóm chênh ${t.sumDifference} tấn với tổng nguồn; giữ nguyên số gốc.`:'')}];
    return s;
   });
  });

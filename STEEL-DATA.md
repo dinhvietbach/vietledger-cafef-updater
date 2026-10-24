@@ -136,3 +136,11 @@ Ghi thêm mâu thuẫn HRC 4/2026 giữa bài tin 916.092 và PDF 961.092 tấn;
 - Worldsteel tự kiểm tra danh mục hằng ngày trong lịch cập nhật đã có. Đọc hai bản gần nhất, xác nhận kỳ, đơn vị Mt, dòng Viet Nam, ngày công bố, tháng đã kết thúc; giữ số trước khi nguồn lỗi/đổi cấu trúc. Số tháng và lũy kế tách riêng, giữ làm tròn.
 - Chưa hoàn tất bảng chi tiết toàn ngành tháng 4/2025 và 7–9/2026, chưa giải quyết toàn bộ nguyên nhân Excel lệch, chưa đủ mọi tháng 2015–2026.
 
+## Bổ sung ngày 25/10/2026 (giờ Việt Nam)
+
+- Thêm 57 điểm nguồn từ 8 tài liệu đã đọc: 5 giá bình quân tháng 7/2026 VNSTEEL, 28 số PSI (lũy kế 7 tháng 2024–2026 và tỷ trọng xuất khẩu quý), 24 số tháng/lũy kế VSA 2018. Mỗi điểm giữ kỳ, đơn vị, URL, trang/ảnh, SHA-256 và mức làm tròn. Chuỗi PSI tách riêng vì dùng FiinPro/VSA, không coi là xác minh độc lập.
+- Lưu riêng một số bán hàng VSA tháng 7/2018 trong nhóm phạm vi cần xác minh: bài loại HRC ở sản xuất nhưng không nhắc lại ở bán hàng. Di trú được áp dụng khi phục hồi snapshot cũ; giữ số và nguồn, không dùng làm tổng toàn ngành. Hai số lũy kế bán hàng/xuất khẩu tháng 5 trùng bảng tháng 4 và sai chữ kỳ được ghi vào hồ sơ, chưa nhập thành tháng 5.
+- Thư viện nguồn có tìm kiếm và lọc đã trích/chưa trích. Đếm điểm đang có trong dữ liệu, bỏ ước tính và các dòng Excel dẫn lại; trạng thái đã có số không đồng nghĩa trích hết tài liệu. Chi tiết từng điểm và CSV ưu tiên phạm vi của chính quan sát đó.
+- Danh mục bản tin tháng VNSTEEL được kiểm tra hằng ngày trong lịch hiện có. Chỉ thêm liên kết quan sát được trên tên miền chính thức, không tự đo đường biểu đồ hay nhập số ảnh chưa đối soát. Lỗi nguồn giữ kho trước.
+- Vẫn thiếu bảng chi tiết tháng 4/2025 và 7–9/2026 theo đầy đủ sản phẩm. 281 trường hợp Excel chưa xác định hết nguyên nhân; không thay bằng số ước đoán không có nhãn.
+

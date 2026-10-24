@@ -6,7 +6,7 @@ import {fileURLToPath} from 'node:url';
 import {execFileSync} from 'node:child_process';
 import {emptySteel,mergeSteel,parseTrade,parseVsa,seriesDefinition,TRADE_CODES,monthRange,cleanText} from './steel-data.mjs';
 import {parseAustralia,parseSteelOnlineChart,newestReqEdition,AU_PAGE,AU_EDITION,AU_FILE,STEELONLINE_PAGE} from './steel-extra.mjs';
-import {parseVsaExpanded,parseVsaHistoricalTotals,isVsaIndustryPost,worldsteelLinks,parseWorldsteel} from './steel-reviewed.mjs';
+import {parseVsaExpanded,parseVsaHistoricalTotals,isVsaIndustryPost,worldsteelLinks,parseWorldsteel,vnsteelReportLinks} from './steel-reviewed.mjs';
 const ROOT=path.dirname(fileURLToPath(import.meta.url));
 const DATA=process.env.DATA_DIR||path.join(ROOT,'data');
 const FILE=path.join(DATA,'steel.json');
@@ -52,6 +52,14 @@ async function refresh({backfill=false,download=fetchSteel,reports=[]}={}){
  let data=readSteel();const now=new Date().toISOString();
  const sources={worldbank:{name:'World Bank · Pink Sheet',url:WB_PAGE},vsa:{name:'Hiệp hội Thép Việt Nam (VSA)',url:'https://vsa.com.vn/'},comtrade:{name:'UN Comtrade · Việt Nam / Thế giới',url:'https://comtradeplus.un.org/'}};data.sources={...data.sources,...sources};
  async function update(id,fn){const before=data.checks[id]||{},snapshot=new Map(data.series.flatMap(s=>s.observations.map(o=>[s.id+'|'+o.period,o.value])));try{await fn();let added=0,revised=0;for(const s of data.series)for(const o of s.observations){const key=s.id+'|'+o.period;if(!snapshot.has(key))added++;else if(snapshot.get(key)!==o.value)revised++;}data.checks[id]={...before,lastAttempt:now,lastSuccess:now,added,revised,lastDataChange:added||revised?now:before.lastDataChange||null,error:null};}catch(e){data.checks[id]={...before,lastAttempt:now,error:String(e.message).slice(0,240)};console.warn('DATA NGÀNH',id,e.message);}saveSteel(data);}
+ if(data.checks.vnsteel_catalog?.lastAttempt?.slice(0,10)!==now.slice(0,10))await update('vnsteel_catalog',async()=>{
+  const catalog='https://www.vnsteel.vn/tin-thi-truong-thep/',links=vnsteelReportLinks((await download(catalog)).toString(),catalog);
+  if(!links.length)throw Error('Danh mục VNSTEEL chưa nhận diện bản tin tháng; giữ tài liệu trước');
+  const docs=new Map(data.documents.map(d=>[d.url,d]));
+  for(const d of links)if(!docs.has(d.url))docs.set(d.url,{...d,publishedAt:'',discoveredAt:now,note:'Tự phát hiện báo cáo tháng VNSTEEL. Bảng ảnh cần đọc và đối soát trước khi nhập số; không suy giá từ đường biểu đồ.'});
+  data.documents=[...docs.values()].sort((a,b)=>(b.publishedAt||b.discoveredAt||'').localeCompare(a.publishedAt||a.discoveredAt||''));
+  data.sources.vnsteel_catalog={name:'VNSTEEL · Báo cáo tháng',url:catalog,mode:'Tự kiểm tra danh mục mỗi ngày trong lịch có sẵn. Báo cáo ảnh mới được đưa vào thư viện; số ảnh cần rà soát trước khi nhập.'};
+ });
  // REQ publishes quarterly; inspect once a day, retaining the historical archive on failure.
  if(data.checks.worldsteel?.lastAttempt?.slice(0,10)!==now.slice(0,10))await update('worldsteel',async()=>{
   const year=Number(now.slice(0,4)),catalog=`https://worldsteel.org/media/press-releases/${year}/`;
