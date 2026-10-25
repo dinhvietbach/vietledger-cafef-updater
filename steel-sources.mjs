@@ -48,20 +48,20 @@ export function refreshSteel(options={}){if(busy)return busy;busy=refresh(option
 export function pdfSeries(rows,report,checkedAt=new Date().toISOString()){
  return rows.map(row=>{const s=seriesDefinition(row.product,row.metric,'vsa');s.scope=`Số thành viên VSA, theo bảng KIS trích dẫn. ${row.product==='coated'?'Tôn mạ và sơn phủ màu.':row.product==='pipe'?'Ống thép.':'Thép xây dựng.'}`;s.observations=[{period:row.period,value:row.value,url:(report.pdfUrl||report.documentUrl)+'#page='+row.page,source:'kis-vsa',checkedAt,publishedAt:report.date,evidence:row.evidence,note:`Bảng nguồn VSA trong báo cáo KIS, trang ${row.page}. ${row.metric==='sales'?'Bán hàng gồm nội địa và xuất khẩu.':''}`}];return s;});
 }
-async function refresh({backfill=false,download=fetchSteel,reports=[]}={}){
+async function refresh({backfill=false,rapid=false,download=fetchSteel,reports=[]}={}){
  let data=readSteel();const now=new Date().toISOString();
  const sources={worldbank:{name:'World Bank · Pink Sheet',url:WB_PAGE},vsa:{name:'Hiệp hội Thép Việt Nam (VSA)',url:'https://vsa.com.vn/'},comtrade:{name:'UN Comtrade · Việt Nam / Thế giới',url:'https://comtradeplus.un.org/'}};data.sources={...data.sources,...sources};
  async function update(id,fn){const before=data.checks[id]||{},snapshot=new Map(data.series.flatMap(s=>s.observations.map(o=>[s.id+'|'+o.period,o.value])));try{await fn();let added=0,revised=0;for(const s of data.series)for(const o of s.observations){const key=s.id+'|'+o.period;if(!snapshot.has(key))added++;else if(snapshot.get(key)!==o.value)revised++;}data.checks[id]={...before,lastAttempt:now,lastSuccess:now,added,revised,lastDataChange:added||revised?now:before.lastDataChange||null,error:null};}catch(e){data.checks[id]={...before,lastAttempt:now,error:String(e.message).slice(0,240)};console.warn('DATA NGÀNH',id,e.message);}saveSteel(data);}
- if(data.checks.vnsteel_catalog?.lastAttempt?.slice(0,10)!==now.slice(0,10))await update('vnsteel_catalog',async()=>{
+ if(rapid||data.checks.vnsteel_catalog?.lastAttempt?.slice(0,10)!==now.slice(0,10))await update('vnsteel_catalog',async()=>{
   const catalog='https://www.vnsteel.vn/tin-thi-truong-thep/',links=vnsteelReportLinks((await download(catalog)).toString(),catalog);
   if(!links.length)throw Error('Danh mục VNSTEEL chưa nhận diện bản tin tháng; giữ tài liệu trước');
   const docs=new Map(data.documents.map(d=>[d.url,d]));
   for(const d of links)if(!docs.has(d.url))docs.set(d.url,{...d,publishedAt:'',discoveredAt:now,note:'Tự phát hiện báo cáo tháng VNSTEEL. Bảng ảnh cần đọc và đối soát trước khi nhập số; không suy giá từ đường biểu đồ.'});
   data.documents=[...docs.values()].sort((a,b)=>(b.publishedAt||b.discoveredAt||'').localeCompare(a.publishedAt||a.discoveredAt||''));
-  data.sources.vnsteel_catalog={name:'VNSTEEL · Báo cáo tháng',url:catalog,mode:'Tự kiểm tra danh mục mỗi ngày trong lịch có sẵn. Báo cáo ảnh mới được đưa vào thư viện; số ảnh cần rà soát trước khi nhập.'};
+  data.sources.vnsteel_catalog={name:'VNSTEEL · Báo cáo tháng',url:catalog,mode:'Lượt nhanh dự kiến mỗi 30 phút và lịch chung. Báo cáo ảnh mới được đưa vào thư viện; số ảnh cần rà soát trước khi nhập.'};
  });
  // REQ publishes quarterly; inspect once a day, retaining the historical archive on failure.
- if(data.checks.worldsteel?.lastAttempt?.slice(0,10)!==now.slice(0,10))await update('worldsteel',async()=>{
+ if(rapid||data.checks.worldsteel?.lastAttempt?.slice(0,10)!==now.slice(0,10))await update('worldsteel',async()=>{
   const year=Number(now.slice(0,4)),catalog=`https://worldsteel.org/media/press-releases/${year}/`;
   let links=worldsteelLinks((await download(catalog)).toString(),catalog,now);
   if(links.length<2){const previous=`https://worldsteel.org/media/press-releases/${year-1}/`;links.push(...worldsteelLinks((await download(previous)).toString(),previous,now));}
@@ -76,9 +76,9 @@ async function refresh({backfill=false,download=fetchSteel,reports=[]}={}){
   }
   if(!imported)throw Error('Hai công bố mới nhất chưa có dòng Việt Nam; giữ số trước');
   data.documents=[...docs.values()].sort((a,b)=>(b.publishedAt||'').localeCompare(a.publishedAt||''));
-  data.sources.worldsteel={name:'Worldsteel · Thép thô Việt Nam',url:catalog,mode:'Kiểm tra hằng ngày trong lịch cập nhật; chỉ nhập kỳ đã kết thúc, đúng dòng Việt Nam. Thiếu dòng hoặc đổi cấu trúc giữ số trước.'};
+  data.sources.worldsteel={name:'Worldsteel · Thép thô Việt Nam',url:catalog,mode:'Lượt nhanh dự kiến mỗi 30 phút; chỉ nhập kỳ đã kết thúc, đúng dòng Việt Nam. Thiếu dòng hoặc đổi cấu trúc giữ số trước.'};
  });
- if(data.checks.australia?.lastAttempt?.slice(0,10)!==now.slice(0,10))await update('australia',async()=>{
+ if(!rapid&&data.checks.australia?.lastAttempt?.slice(0,10)!==now.slice(0,10))await update('australia',async()=>{
   const html=(await download(AU_PAGE)).toString(),edition=newestReqEdition(html,now)||AU_EDITION;
   const page=(await download(edition)).toString(),link=[...page.matchAll(/href=["']([^"']+historical-data\.xlsx)["']/gi)].map(m=>new URL(m[1],edition)).find(u=>u.protocol==='https:'&&u.hostname==='www.industry.gov.au');
   if(!link)throw Error('REQ chưa tìm thấy bảng lịch sử; giữ số đã lưu');
@@ -89,13 +89,13 @@ async function refresh({backfill=false,download=fetchSteel,reports=[]}={}){
  await update('steelonline',async()=>{
   const incoming=[];for(const [id,region] of [[12,'miền Bắc'],[14,'miền Nam'],[15,'miền Trung']])incoming.push(...parseSteelOnlineChart(JSON.parse((await download(`https://steelonline.vn/api/price-list-chart?id=${id}`)).toString()),{id,region,checkedAt:now}));
   if(incoming.some(s=>!s.observations.length))throw Error('SteelOnline chưa có báo giá xác minh');
-  data=mergeSteel(data,incoming,{now});data.sources.steelonline={...data.sources.steelonline,name:'SteelOnline · Hòa Phát',url:STEELONLINE_PAGE,mode:'Tự kiểm tra 6 khung giờ; lưu báo giá có ngày, không giả định bình quân tháng.'};
+  data=mergeSteel(data,incoming,{now});data.sources.steelonline={...data.sources.steelonline,name:'SteelOnline · Hòa Phát',url:STEELONLINE_PAGE,mode:'Lượt nhanh dự kiến mỗi 30 phút; lưu báo giá có ngày, không giả định bình quân tháng.'};
  });
  // Keep original brokerage links discoverable even when a chart has no extractable labels.
  if(reports.length){const docs=new Map(data.documents.map(d=>[d.url,d]));for(const r of reports.filter(r=>/thép/i.test(r.title||'')&&/^https:\/\//.test(r.pdfUrl||r.documentUrl||''))){const url=r.pdfUrl||r.documentUrl;if(!docs.has(url))docs.set(url,{title:r.title,url,publishedAt:r.date||'',source:r.sourceCode||'broker',note:'Báo cáo nguồn; chỉ nhập số có kỳ, đơn vị và phạm vi xác minh. Không chuyển dự báo thành thực tế.'});}data.documents=[...docs.values()].sort((a,b)=>(b.publishedAt||'').localeCompare(a.publishedAt||''));}
- await update('worldbank',async()=>{const html=(await download(WB_PAGE)).toString();const found=html.match(/https:\/\/thedocs\.worldbank\.org\/[^"\s<>]+CMO-Historical-Data-Monthly\.xlsx/i)?.[0]||WB_FILE;data=mergeSteel(data,parseWorldBank(await download(found),{url:found,checkedAt:now}),{now});});
+ if(!rapid)await update('worldbank',async()=>{const html=(await download(WB_PAGE)).toString();const found=html.match(/https:\/\/thedocs\.worldbank\.org\/[^"\s<>]+CMO-Historical-Data-Monthly\.xlsx/i)?.[0]||WB_FILE;data=mergeSteel(data,parseWorldBank(await download(found),{url:found,checkedAt:now}),{now});});
  await update('vsa',async()=>{const docs=new Map(data.documents.map(d=>[d.url,d]));for(let page=1;page<=(backfill?6:1);page++){const url=`https://vsa.com.vn/wp-json/wp/v2/posts?search=${encodeURIComponent('tháng')}&per_page=100&page=${page}`;const posts=JSON.parse((await download(url)).toString());if(!Array.isArray(posts))throw Error('Sai cấu trúc bản tin VSA');for(const p of posts){if(!isVsaIndustryPost(p))continue;const rows=[...parseVsa(p,now),...parseVsaExpanded(p,now),...parseVsaHistoricalTotals(p,now)];data=mergeSteel(data,rows,{now});const link=p.link.replace(/^http:/,'https:');docs.set(link,{...docs.get(link),title:cleanText(p.title.rendered),url:link,publishedAt:p.date,source:'vsa',extractedPoints:rows.length,note:'Tự nhập các số có kỳ và phạm vi rõ trong văn bản; bảng/ảnh cần rà soát riêng.'});}if(posts.length<100)break;}data.documents=[...docs.values()].sort((a,b)=>b.publishedAt.localeCompare(a.publishedAt));});
- if(data.checks.vietnambiz?.lastAttempt?.slice(0,10)!==now.slice(0,10))await update('vietnambiz',async()=>{
+ if(rapid||data.checks.vietnambiz?.lastAttempt?.slice(0,10)!==now.slice(0,10))await update('vietnambiz',async()=>{
   const catalog='https://vietnambiz.vn/chu-de/bao-cao-doc-quyen-vietnambiz-253.htm';
   const html=(await download(catalog)).toString(),docs=new Map(data.documents.map(d=>[d.url,d]));
   const links=[...html.matchAll(/<a\b[^>]*href=["']([^"']*bao-cao-thi-truong-thep[^"']+\.htm)["'][^>]*>([\s\S]*?)<\/a>/gi)];
@@ -105,9 +105,9 @@ async function refresh({backfill=false,download=fetchSteel,reports=[]}={}){
    docs.set(u.href,{url:u.href,title,source:'vietnambiz',publishedAt:'',discoveredAt:now,reviewStatus:'pending',note:'Mới tìm thấy tài liệu. Cần đọc và đối soát bảng trước khi nhập số; thời gian phát hiện không phải ngày công bố.'});
   }
   data.documents=[...docs.values()].sort((a,b)=>(b.publishedAt||b.discoveredAt||'').localeCompare(a.publishedAt||a.discoveredAt||''));
-  data.sources.vietnambiz={name:'VietnamBiz · Báo cáo thị trường thép',url:catalog,mode:'Kiểm tra danh mục hằng ngày; giữ liên kết báo cáo mới. Bảng ảnh/PDF chưa xác minh không tự nhập thành số.'};
+  data.sources.vietnambiz={name:'VietnamBiz · Báo cáo thị trường thép',url:catalog,mode:'Lượt nhanh dự kiến mỗi 30 phút; giữ liên kết báo cáo mới. Bảng ảnh/PDF chưa xác minh không tự nhập thành số.'};
  });
- if(reports.length)await update('kis',async()=>{
+ if(!rapid&&reports.length)await update('kis',async()=>{
   data.pdfChecked||={};const candidates=reports.filter(r=>r.sourceCode==='KIS'&&/thép/i.test(r.title||'')&&(r.pdfUrl||r.documentUrl)).sort((a,b)=>b.date.localeCompare(a.date));
   const docs=new Map(data.documents.map(d=>[d.url,d]));
   for(const report of candidates.filter(r=>!data.pdfChecked[r.pdfUrl||r.documentUrl]).slice(0,backfill?30:4)){
@@ -121,6 +121,6 @@ async function refresh({backfill=false,download=fetchSteel,reports=[]}={}){
   }
   data.documents=[...docs.values()].sort((a,b)=>b.publishedAt.localeCompare(a.publishedAt));
  });
- await update('comtrade',async()=>{const all=monthRange('2015-01',now.slice(0,7)).slice(0,-1);const recent=all.slice(-6);const missing=all.filter(p=>!data.tradeChecked?.[p]);const older=all.slice(0,-6);const rotation=older.length?older[Math.floor(Date.parse(now)/86400000)%older.length]:null;const periods=backfill?all:[...new Set([...recent,...missing.slice(0,3),...(rotation?[rotation]:[])])];data.tradeChecked||={};for(const period of periods){const url=tradeUrl(period),b=await download(url);const payload=JSON.parse(b);data=mergeSteel(data,parseTrade(payload,{period,url,checkedAt:now,hash:sha(b)}),{now});data.tradeChecked[period]={checkedAt:now,count:payload.count};saveSteel(data);await new Promise(r=>setTimeout(r,1500));}});
+ if(!rapid)await update('comtrade',async()=>{const all=monthRange('2015-01',now.slice(0,7)).slice(0,-1);const recent=all.slice(-6);const missing=all.filter(p=>!data.tradeChecked?.[p]);const older=all.slice(0,-6);const rotation=older.length?older[Math.floor(Date.parse(now)/86400000)%older.length]:null;const periods=backfill?all:[...new Set([...recent,...missing.slice(0,3),...(rotation?[rotation]:[])])];data.tradeChecked||={};for(const period of periods){const url=tradeUrl(period),b=await download(url);const payload=JSON.parse(b);data=mergeSteel(data,parseTrade(payload,{period,url,checkedAt:now,hash:sha(b)}),{now});data.tradeChecked[period]={checkedAt:now,count:payload.count};saveSteel(data);await new Promise(r=>setTimeout(r,1500));}});
  data.updatedAt=now;return saveSteel(data);
 }

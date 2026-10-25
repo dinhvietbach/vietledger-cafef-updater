@@ -265,3 +265,14 @@ export function parseVsa(post,checkedAt=new Date().toISOString()){
  if(tm){const period=`${tm[2]}-${tm[1].padStart(2,'0')}`;const start=text.search(new RegExp(`Tháng\\s+${Number(tm[1])}\\/${tm[2]}\\s*:`,'i'));if(start>=0){const block=text.slice(start).split(/Tính chung|Tính lũy kế|Cả năm|Quý [IV]/i)[0];for(const [metric,re] of [['production',/Sản xuất (?:sản phẩm )?thép (?:thành phẩm(?: các loại)?|các loại)\s+đạt\s+([\d.,]+)\s*(triệu|ngàn|nghìn)?\s*tấn/i],['sales',/Bán hàng thép (?:thành phẩm(?: các loại)?|các loại)(?: trong nước)?\s+đạt\s+([\d.,]+)\s*(triệu|ngàn|nghìn)?\s*tấn/i]]){const m=block.match(re);if(m){const s=seriesDefinition('all_steel',metric,'vsa');s.observations=[{period,value:vnNumber(m[1])*(m[2]==='triệu'?1e6:m[2]?1e3:1),url,source:'vsa',checkedAt,publishedAt:post.date,evidence:m[0],approximate:Boolean(m[2]),note:m[2]?'Số làm tròn theo đơn vị trong bản tin VSA.':'Theo bản tin VSA.'}];out.push(s);}}}}
  return out.filter(s=>s.observations[0].period>='2015-01');
 }
+
+// Calendar boundaries follow Vietnam, including an open tab crossing midnight/month end.
+export function steelHistoryRange(now=new Date(),months=null){
+ const parts=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Ho_Chi_Minh',year:'numeric',month:'2-digit'}).formatToParts(now);
+ const year=Number(parts.find(p=>p.type==='year').value),month=Number(parts.find(p=>p.type==='month').value);
+ const to=year+'-'+String(month).padStart(2,'0');
+ if(months===null)return {from:'2016-01',to};
+ if(!Number.isInteger(months)||months<1)throw Error('Invalid history length');
+ const start=new Date(Date.UTC(year,month-months,1)).toISOString().slice(0,7);
+ return {from:start<'2016-01'?'2016-01':start,to};
+}
