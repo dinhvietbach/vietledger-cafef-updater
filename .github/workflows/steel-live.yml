@@ -1,0 +1,41 @@
+name: Check steel sources every 30 minutes
+on:
+  workflow_dispatch:
+  schedule:
+    # Avoid the busiest top-of-hour interval. Best effort, not a real-time SLA.
+    - cron: '17,47 * * * *'
+permissions:
+  contents: read
+concurrency:
+  # Serialize with the full CafeF publisher, preserving its newest financial data.
+  group: vietledger-cafef-production
+  cancel-in-progress: false
+jobs:
+  steel:
+    if: github.event_name == 'workflow_dispatch' || vars.ENABLE_CAFEF_SCHEDULE == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      DATA_DIR: /tmp/vietledger-steel-fast-data
+      PUBLIC_SITE_URL: https://vietledger.pages.dev/
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Verify history and preservation rules
+        run: node --test steel-live.test.mjs
+      - name: Check fast sources and preserve current financial assets
+        id: collect
+        run: node --use-system-ca steel-live-sync.mjs
+      - name: Publish only changed industry data
+        if: steps.collect.outputs.changed == 'true'
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          node --use-system-ca steel-live-sync.mjs --verify-base
+          npx --yes wrangler@4.149.0 pages deploy release/steel-live --project-name vietledger --branch main
