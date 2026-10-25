@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import {steelHistoryRange} from './steel-data.mjs';
-import {steelContentSignature,overlayManifest} from './steel-live-sync.mjs';
+import {steelContentSignature,overlayManifest,fetchPublicAsset} from './steel-live-sync.mjs';
 test('History defaults to 2016 and follows Vietnam month boundaries',()=>{
  assert.deepEqual(steelHistoryRange(new Date('2026-10-31T16:59:59Z')),{from:'2016-01',to:'2026-10'});
  assert.deepEqual(steelHistoryRange(new Date('2026-10-31T17:00:00Z')),{from:'2016-01',to:'2026-11'});
@@ -21,6 +21,15 @@ test('Industry overlay retains every financial asset and scheduler state',()=>{
  const old=structuredClone(base),next=overlayManifest(base,{updatedAt:'2026-10-25'},'/data/'+'a'.repeat(64)+'.bin','2026-10-25');
  for(const key of ['companies','earnings','analysis','industries','research'])assert.deepEqual(next[key],base[key]);
  assert.deepEqual(next.status.scheduler,base.status.scheduler);assert.deepEqual(base,old);assert.throws(()=>overlayManifest(base,{},'/../../secret','2026'));
+});
+test('Preserving Pages HTML uses its canonical URL and still refuses corrupt immutable assets',async()=>{
+ const requests=[];
+ const request=async (url,options)=>{requests.push(url.href);assert.equal(options.redirect,'error');if(url.pathname.endsWith('.html'))throw Error('unexpected redirect');return new Response(url.pathname==='/'?'<!doctype html><title>VietLedger</title>':'{}');};
+ assert.match((await fetchPublicAsset('index.html',request)).toString(),/VietLedger/);
+ assert.equal(requests[0],'https://vietledger.pages.dev/');
+ await fetchPublicAsset('manifest.json',request);assert.ok(requests.includes('https://vietledger.pages.dev/manifest.json'));
+ await assert.rejects(fetchPublicAsset('data/'+'a'.repeat(64)+'.bin',request),/hash mismatch/);
+ await assert.rejects(fetchPublicAsset('../private',request),/Unexpected public asset/);
 });
 test('Fast collector skips large historical APIs and retains history on source errors',async()=>{
  const dir=fs.mkdtempSync(path.join(os.tmpdir(),'steel-fast-test-'));process.env.DATA_DIR=dir;

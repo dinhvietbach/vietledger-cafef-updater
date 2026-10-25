@@ -29,17 +29,20 @@ export function overlayManifest(base,steel,asset,now){
  m.status={...m.status,generatedAt:now,lastFinished:m.version};
  return m;
 }
-const staticFiles=['404.html','analysis-data.mjs','analysis-ui.js','analysis.css','app.js','earnings-ui.js','earnings.css','earnings.mjs','financial-charts.css','financial-charts.js','financial-charts.mjs','growth-ui.js','growth.mjs','index.html','public-data.js','public-data.mjs','ratios-ui.js','ratios.css','ratios.mjs','robots.txt','steel-data.mjs','steel-four-workbooks.csv','steel-industry-workbook-source.csv','steel-reconciliation.csv','steel-ui.js','steel-workbook-source.csv','steel.css','style.css'];
-async function get(name){
+const staticFiles=['analysis-data.mjs','analysis-ui.js','analysis.css','app.js','earnings-ui.js','earnings.css','earnings.mjs','financial-charts.css','financial-charts.js','financial-charts.mjs','growth-ui.js','growth.mjs','index.html','public-data.js','public-data.mjs','ratios-ui.js','ratios.css','ratios.mjs','robots.txt','steel-data.mjs','steel-four-workbooks.csv','steel-industry-workbook-source.csv','steel-reconciliation.csv','steel-ui.js','steel-workbook-source.csv','steel.css','style.css'];
+export async function fetchPublicAsset(name,request=fetch){
  assert.ok(name==='manifest.json'||staticFiles.includes(name)||/^data\/[a-f0-9]{64}\.bin$/.test(name),'Unexpected public asset path');
  for(let n=0;n<3;n++)try{
-  const r=await fetch(new URL(name,BASE),{redirect:'error',cache:'no-store',signal:AbortSignal.timeout(60000)});
+  // Pages redirects *.html to clean URLs. Fetch the canonical home page directly;
+  // keep rejecting redirects for manifests and immutable data assets.
+  const r=await request(new URL(name==='index.html'?'':name,BASE),{redirect:'error',cache:'no-store',signal:AbortSignal.timeout(60000)});
   assert.equal(r.status,200,`HTTP ${r.status}: ${name}`);
   const b=Buffer.from(await r.arrayBuffer());assert.ok(b.length<25e6,'Asset exceeds Pages limit');
   if(name.startsWith('data/'))assert.equal(hash(b),path.basename(name,'.bin'),'Public asset hash mismatch');
   return b;
- }catch(e){if(n===2)throw e;}
+ }catch(e){if(n===2)throw Error(`Unable to preserve ${name}: ${e.message}${e.cause?.message?' ('+e.cause.message+')':''}`,{cause:e});}
 }
+const get=fetchPublicAsset;
 async function main(){
  assert.equal(process.env.CI,'true','Run only in the approved GitHub workflow');
  assert.equal(process.env.PUBLIC_SITE_URL,BASE);
@@ -69,6 +72,8 @@ async function main(){
  for(const name of assets)assert.equal(hash(fs.readFileSync(path.join(out,name))),path.basename(name,'.bin'));
  fs.writeFileSync(path.join(out,'manifest.json'),JSON.stringify(next));
  fs.writeFileSync(path.join(out,'.nojekyll'),'');
+ // Same generated fallback as the full build; /404.html itself is redirected by Pages.
+ fs.writeFileSync(path.join(out,'404.html'),'<!doctype html><html lang="vi"><meta charset="utf-8"><title>Không tìm thấy</title><p>Không tìm thấy trang. <a href="/">Về VietLedger</a></p></html>');
  fs.writeFileSync(path.join(out,'_headers'),"/*\n  Cache-Control: no-cache\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  X-Frame-Options: SAMEORIGIN\n  Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'self'\n/data/*\n  Content-Type: application/octet-stream\n  Cache-Control: public, max-age=31536000, immutable\n");
  assert.equal(hash(await get('manifest.json')),receipt.baseManifestHash,'Public site advanced during collection; discard this overlay');
  if(process.env.GITHUB_OUTPUT)fs.appendFileSync(process.env.GITHUB_OUTPUT,'changed=true\n');
